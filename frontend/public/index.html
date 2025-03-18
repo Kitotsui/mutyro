@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Screen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="auth-container w-full max-w-md px-4">
+     
+        <div id="login-section" class="bg-white rounded-lg shadow-md p-8">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Login</h2>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">E-mail</label>
+                    <input type="email" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Senha</label>
+                    <input type="password" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                        <label class="ml-2 text-sm text-gray-600">Lembrar-me</label>
+                    </div>
+                    <a href="#" onclick="showSection('forgot-section')" class="text-sm text-blue-500 hover:underline">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
+                    Entrar
+                </button>
+            </form>
+            <p class="text-center mt-4 text-gray-600">
+                Não tem conta? 
+                <a href="#" onclick="showSection('signup-section')" class="text-blue-500 hover:underline">Cadastre-se</a>
+            </p>
+        </div>
+
+ 
+        <div id="signup-section" class="bg-white rounded-lg shadow-md p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Criar Conta</h2>
+            <form id="signupForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Nome</label>
+                    <input type="text" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">E-mail</label>
+                    <input type="email" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Senha</label>
+                    <input type="password" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Confirmar Senha</label>
+                    <input type="password" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200">
+                    Cadastrar
+                </button>
+            </form>
+            <p class="text-center mt-4 text-gray-600">
+                Já tem conta? 
+                <a href="#" onclick="showSection('login-section')" class="text-blue-500 hover:underline">Faça login</a>
+            </p>
+        </div>
+
+    
+        <div id="forgot-section" class="bg-white rounded-lg shadow-md p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Recuperar Senha</h2>
+            <form id="forgotForm">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">E-mail</label>
+                    <input type="email" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 transition duration-200">
+                    Enviar Link de Recuperação
+                </button>
+            </form>
+            <p class="text-center mt-4 text-gray-600">
+                Lembrou da senha? 
+                <a href="#" onclick="showSection('login-section')" class="text-blue-500 hover:underline">Voltar ao login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+      
+            document.querySelectorAll('[id$="-section"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+   
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+   
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+            
+                alert('Formulário enviado!'); 
+            });
+        });
+    </script>
+</body>
+</html>
