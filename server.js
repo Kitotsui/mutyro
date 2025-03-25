@@ -5,7 +5,7 @@ import express from "express";
 const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-  
+
 
 //Routers
 import mutiraoRoute from './routes/mutiraoRoute.js';
@@ -49,3 +49,4 @@ try {
     process.exit(1);
   }
 
+//MONGO_URL=mongodb+srv://Rogerio:password@cluster0.7p5tr.mongodb.net/Mutyro?retryWrites=true&w=majority&appName=Cluster0
