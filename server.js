@@ -1,19 +1,15 @@
 import * as dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
+const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
-// Carregue as variáveis de ambiente PRIMEIRO
-dotenv.config();
-
-// Verifique se as variáveis estão carregadas (apenas para debug)
-console.log('MONGO_URL:', process.env.MONGO_URL);
-console.log('NODE_ENV:', process.env.NODE_ENV);
-
-const app = express();
-
 //Routers
 import mutiraoRoute from './routes/mutiraoRoute.js';
+
+//Middlewares
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 
 if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
@@ -37,11 +33,8 @@ app.use('*', (req, res) => {
     res.status(404).json({error: 'Rota não encontrada!'});
 });
 
-//Esse tem que ser o último middleware
-app.use((error, req, res, next) => {
-    console.log(error);
-    res.status(500).json({error: error.message});
-});
+app.use(errorHandlerMiddleware);
+
 
 const port = process.env.PORT || 5100;
 

@@ -1,3 +1,5 @@
+import Mutirao from '../models/MutiraoModel.js';
+
 import { nanoid } from 'nanoid';
 
 let mutiroes = [
@@ -10,12 +12,7 @@ export const getMutiroes = (req, res) => {
 }
 
 export const createMutirao = async (req, res) => {
-    const {nome, data, local} = req.body;
-    const mutirao = {id: nanoid(10), nome, data, local};
-    if(!nome || !data || !local) {
-        return res.status(400).json({error: "Informe nome, data e local do mutirão!"});
-    }
-    mutiroes.push(mutirao);
+    const mutirao = await Mutirao.create(req.body);
     res.status(201).json({mutirao});
 }
 
