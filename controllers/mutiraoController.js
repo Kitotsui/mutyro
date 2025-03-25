@@ -1,4 +1,4 @@
-import Mutirao from '../models/MutiraoModel.js';
+import Mutirao from '../models/mutiraoModel.js';
 
 import { nanoid } from 'nanoid';
 
