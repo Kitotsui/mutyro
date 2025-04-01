@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.section`
   nav {
@@ -11,9 +11,14 @@ const Wrapper = styled.section`
   }
   .page {
     min-height: calc(100vh - var(--nav-height));
-    display: grid;
+    /* display: grid; */
     align-items: center;
     margin-top: -3rem;
+    /*  */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: var(--nav-height);
   }
   h1 {
     font-weight: 700;

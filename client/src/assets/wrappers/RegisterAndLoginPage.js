@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.section`
-  min-height: 100vh;
+  min-height: fit-content;
   display: grid;
   align-items: center;
   .logo {
@@ -10,6 +10,8 @@ const Wrapper = styled.section`
     margin-bottom: 1.38rem;
   }
   .form {
+    margin: 0 auto;
+    max-height: fit-content;
     max-width: 400px;
     border-top: 5px solid var(--primary-300);
   }
@@ -18,12 +20,20 @@ const Wrapper = styled.section`
     margin-bottom: 1.38rem;
   }
   p {
-    margin-top: 1rem;
     text-align: center;
-    line-height: 1.5;
+    line-height: 1rem;
+    color: var(--dark-color);
+    margin: 0 auto;
   }
   .btn {
     margin-top: 1rem;
+  }
+
+  .btn-link {
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
   }
   .member-btn {
     color: var(--primary-300);
