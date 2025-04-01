@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/images/mutyrologo.svg";
-import Wrapper from "../assets/wrappers/NavBar";
+import Wrapper from "../assets/wrappers/Navbar";
 import { Login, Register } from "../pages";
 
 const NavBar = () => {
