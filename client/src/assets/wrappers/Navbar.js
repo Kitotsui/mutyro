@@ -1,53 +1,6 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  /* height: var(--nav-height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
-  background: var(--background-secondary-color);
-  .nav-center {
-    display: flex;
-    width: 90vw;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .toggle-btn {
-    background: transparent;
-    border-color: transparent;
-    font-size: 1.75rem;
-    color: var(--primary-500);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  .logo-text {
-    display: none;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    width: 100px;
-  }
-  .btn-container {
-    display: flex;
-    align-items: center;
-  }
-  @media (min-width: 992px) {
-    position: sticky;
-    top: 0;
-    .nav-center {
-      width: 90%;
-    }
-    .logo {
-      display: none;
-    }
-    .logo-text {
-      display: block;
-    }
-  } */
-
   /* Navbar */
   .navbar {
     background: var(--light-color); /*Temp*/
@@ -64,11 +17,6 @@ const Wrapper = styled.div`
     box-shadow: var(--shadow-2);
   }
 
-  /* .navbar.navbar-scroll {
-    background-color: rgba(13, 24, 44, 0.8);
-    backdrop-filter: blur(10px);
-  } */
-
   .navbar-flex {
     display: flex;
     justify-content: space-between;
@@ -82,11 +30,11 @@ const Wrapper = styled.div`
     font-weight: 600;
   }
 
-  .navbar a {
+  .navbar .nav-link {
     color: var(--dark-color);
   }
 
-  .navbar a:hover {
+  .navbar .nav-link:hover {
     color: var(--secondary-color);
   }
 
@@ -126,11 +74,24 @@ const Wrapper = styled.div`
     z-index: 1000;
   }
 
-  .register-link {
-    width: 7rem;
+  .cta-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .btn {
+    font-size: 14px;
+    color: white;
+    width: 6rem;
     padding: 0.8rem;
     text-align: center;
     margin: 0 auto;
+  }
+
+  .login-link {
+    color: var(--dark-color);
+    background-color: var(--light-color);
   }
 
   .modal-content {

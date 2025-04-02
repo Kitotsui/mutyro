@@ -40,34 +40,42 @@ const NavBar = () => {
           <div className={`main-menu-items ${isOpen ? "open" : ""}`}>
             <ul className="main-menu-list">
               <li>
-                <a href="/">Menu</a>
+                <a href="/" className="nav-link">
+                  Menu
+                </a>
               </li>
               <li>
-                <a href="#">Menu</a>
+                <a href="#" className="nav-link">
+                  Menu
+                </a>
               </li>
               <li>
-                <a href="#">Menu</a>
+                <a href="#" className="nav-link">
+                  Menu
+                </a>
               </li>
               <li>
-                <a href="#">Menu</a>
+                <a href="#" className="nav-link">
+                  Menu
+                </a>
               </li>
               <li>
-                <Link
-                  to="/register"
-                  className="btn register-link"
-                  onClick={openRegisterModal}
-                >
-                  Cadastro
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="btn register-link"
-                  onClick={openLoginModal}
-                >
-                  Login
-                </Link>
+                <div className="cta-btns">
+                  <Link
+                    to="/register"
+                    className="btn register-link"
+                    onClick={openRegisterModal}
+                  >
+                    Cadastro
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="btn login-link"
+                    onClick={openLoginModal}
+                  >
+                    Login
+                  </Link>
+                </div>
               </li>
             </ul>
           </div>

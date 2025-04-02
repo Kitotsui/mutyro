@@ -12,7 +12,6 @@ const Wrapper = styled.div`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    margin-bottom: 3rem;
     /* padding: 2rem 0; */
     /*  */
     display: flex;
@@ -25,10 +24,11 @@ const Wrapper = styled.div`
 
   .hero-content {
     align-items: center;
-    gap: 1.5rem; /* Adds spacing between items */
+    gap: 1.5rem;
   }
 
   .hero-cta {
+    position: relative;
     display: flex;
     max-width: var(--max-width);
     flex-direction: row;
@@ -42,9 +42,11 @@ const Wrapper = styled.div`
   }
 
   p {
+    font-family: Montserrat;
+    font-weight: 500;
+    color: var(--dark-color);
     padding-right: 3rem;
     font-style: italic;
-    color: white;
     position: absolute;
     z-index: 1;
     right: 0;
@@ -62,19 +64,23 @@ const Wrapper = styled.div`
     pointer-events: none;
     background: rgba(
       255,
-      145,
-      0,
-      0.5
+      210,
+      149,
+      0.6
     ); /* Adjust opacity here (0 = transparent, 1 = solid) */
   }
 
   .hero h1 {
+    line-height: 3rem;
+    font-size: 8.5rem;
     color: orange;
     text-shadow: 6px 1px rgba(0, 153, 255, 1);
     z-index: 1;
     font-family: "Bebas Neue";
   }
   .hero h2 {
+    line-height: 4rem;
+    font-size: 2.5rem;
     color: white;
     text-shadow: 6px 1px rgba(0, 153, 255, 1);
     z-index: 1;
@@ -84,15 +90,23 @@ const Wrapper = styled.div`
     position: absolute; /* Position the SVG at the bottom */
     bottom: 0; /* Align to the bottom of the parent */
     left: 0;
-    right: 0;
     max-width: var(--max-width);
+    transform: scaleY(0.6) translateY(150px);
   }
 
-  .register-link {
-    width: 7rem;
+  .btn {
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    width: 6rem;
     padding: 0.8rem;
     text-align: center;
     margin: 0 auto;
+  }
+
+  .login-link {
+    color: var(--dark-color);
+    background-color: var(--light-color);
   }
 
   .modal-overlay {
@@ -124,6 +138,14 @@ const Wrapper = styled.div`
     padding: 0;
   }
 
+  @media (max-width: 1300px) {
+    p {
+      width: 30vw;
+      padding-left: 2rem;
+      margin-left: 2rem;
+    }
+  }
+
   @media (max-width: 768px) {
     p {
       max-width: var(--max-width);
@@ -143,6 +165,7 @@ const Wrapper = styled.div`
     .hero-cta {
       flex-direction: row;
       gap: 1rem;
+      padding-bottom: 3rem;
     }
 
     .hero {
@@ -153,10 +176,10 @@ const Wrapper = styled.div`
     }
 
     .hero h1 {
-      font-size: 4rem;
+      font-size: 5.8rem;
     }
     .hero h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
   }
 `;

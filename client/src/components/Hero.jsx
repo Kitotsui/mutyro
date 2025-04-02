@@ -20,9 +20,18 @@ const Hero = () => {
           <div className="hero-content">
             <div className="hero-text">
               <h1>Mutyro</h1>
-              <h2>Juntos fazemos a diferença.</h2>
+              <h2>Juntos fazemos a diferença</h2>
             </div>
             <ul className="hero-cta">
+              <li className="hero-cta-item">
+                <Link
+                  to="#"
+                  className="btn login-link"
+                  onClick={() => setLoginOpen(true)}
+                >
+                  Login
+                </Link>
+              </li>
               <li className="hero-cta-item">
                 <Link
                   to="#"
@@ -30,15 +39,6 @@ const Hero = () => {
                   onClick={() => setRegisterOpen(true)}
                 >
                   Cadastro
-                </Link>
-              </li>
-              <li className="hero-cta-item">
-                <Link
-                  to="#"
-                  className="btn register-link"
-                  onClick={() => setLoginOpen(true)}
-                >
-                  Login
                 </Link>
               </li>
               <li className="hero-quotation">
