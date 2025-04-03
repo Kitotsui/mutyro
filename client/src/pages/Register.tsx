@@ -23,7 +23,7 @@ const Register = () => {
         <button type="submit" className="btn btn-block">
           submit
         </button>
-        <p>Já é membro?</p>
+        <span>Já é membro?</span>
         <Link to="/login" className="btn btn-link">
           Login
         </Link>

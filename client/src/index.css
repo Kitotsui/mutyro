@@ -185,7 +185,7 @@ ul {
   cursor: pointer;
   color: var(--white);
   background: var(--primary-100);
-  /* border: transparent; */
+  border: transparent;
   border-radius: 16px;
   letter-spacing: var(--letter-spacing);
   padding: 0.375rem 0.75rem;

@@ -19,19 +19,16 @@ const Wrapper = styled.section`
     text-align: center;
     margin-bottom: 1.38rem;
   }
-  p {
+  span {
+    font-size: 12px;
+    font-weight: 500;
     text-align: center;
-    line-height: 1rem;
     color: var(--dark-color);
-    margin: 0 auto;
-  }
-  .btn {
-    margin-top: 1rem;
   }
 
-  .btn-link {
+  .btn {
     display: block;
-    margin-top: 1rem;
+    margin: 10px auto;
     width: 100%;
     text-align: center;
   }

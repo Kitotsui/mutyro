@@ -17,7 +17,7 @@ const Login = () => {
         <button type="button" className="btn btn-block">
           Esqueci minha senha
         </button>
-        <p>Ainda não tem conta?</p>
+        <span>Ainda não tem conta?</span>
         <Link to="/register" className="btn btn-link">
           Cadastre-se
         </Link>

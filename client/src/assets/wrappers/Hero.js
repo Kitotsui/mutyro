@@ -41,7 +41,24 @@ const Wrapper = styled.div`
     align-items: flex-start; /* Align text & buttons to the left */
   }
 
+  p::before,
+  p::after {
+    color: var(--dark-color);
+  }
+
+  p::before {
+    content: "❝ ";
+  }
+  p::after {
+    content: "❞";
+  }
+
   p {
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4),
+      -2px -2px 4px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+    font-style: italic;
+    text-shadow: rgba(0, 153, 255, 2);
     font-family: Montserrat;
     font-weight: 500;
     color: var(--dark-color);
@@ -74,7 +91,7 @@ const Wrapper = styled.div`
     line-height: 3rem;
     font-size: 8.5rem;
     color: orange;
-    text-shadow: 6px 1px rgba(0, 153, 255, 1);
+    text-shadow: 7px 1px rgba(0, 153, 255, 1);
     z-index: 1;
     font-family: "Bebas Neue";
   }
@@ -82,7 +99,7 @@ const Wrapper = styled.div`
     line-height: 4rem;
     font-size: 2.5rem;
     color: white;
-    text-shadow: 6px 1px rgba(0, 153, 255, 1);
+    text-shadow: 3px 1px rgba(0, 153, 255);
     z-index: 1;
     font-family: "Bebas Neue";
   }
@@ -90,8 +107,10 @@ const Wrapper = styled.div`
     position: absolute; /* Position the SVG at the bottom */
     bottom: 0; /* Align to the bottom of the parent */
     left: 0;
+    width: 100%;
     max-width: var(--max-width);
-    transform: scaleY(0.6) translateY(150px);
+    height: auto;
+    max-height: 25vh;
   }
 
   .btn {
@@ -138,6 +157,12 @@ const Wrapper = styled.div`
     padding: 0;
   }
 
+  .ctn-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
   @media (max-width: 1300px) {
     p {
       width: 30vw;
@@ -148,38 +173,47 @@ const Wrapper = styled.div`
 
   @media (max-width: 768px) {
     p {
+      white-space: normal;
+      word-wrap: break-word;
+      min-width: 20rem;
       max-width: var(--max-width);
       font-size: 0.9rem;
+      font-weight: 600;
       text-align: center;
       padding: 0 auto;
-      margin: 5rem auto;
+      margin: 1rem auto;
     }
 
     .hero-content {
       display: flex;
-      flex-direction: column; /* Switch to column on smaller screens */
-      text-align: left; /* Center text */
-      gap: 1rem; /* Reduce spacing */
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
     }
 
     .hero-cta {
-      flex-direction: row;
-      gap: 1rem;
-      padding-bottom: 3rem;
+      align-self: center;
+      width: 70vw;
+      align-items: center;
+      flex-direction: column;
+      gap: 0rem;
     }
 
     .hero {
+      overflow-y: hidden;
       flex-direction: column;
       text-align: center;
       justify-content: center;
-      padding: var(--nav-height) 2rem 4rem;
+      padding: var(--nav-height) auto;
     }
 
     .hero h1 {
-      font-size: 5.8rem;
+      line-height: 3rem;
+      font-size: 7rem;
     }
     .hero h2 {
-      font-size: 1.8rem;
+      line-height: 2rem;
+      font-size: 2rem;
     }
   }
 `;
