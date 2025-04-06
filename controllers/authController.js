@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import Usuario from "../models/usuarioModel.js";
 import { senhaHash, compararSenha } from "../utils/senhaUtils.js";
+import { createJWT } from "../utils/tokenUtils.js"; 
 import { UnauthenticatedError } from "../errors/customErrors.js";
 
 
@@ -26,5 +27,15 @@ export const login = async (req, res) => {
     const usuarioValido = usuario && (await compararSenha(req.body.senha, usuario.senha));
     if(!usuarioValido) throw new UnauthenticatedError('Email ou senha incorretos!');
 
-    res.send("Login");
+    const token = createJWT({userId: usuario._id, nome: usuario.nome, isAdmin: usuario.isAdmin});
+    
+    const oneDAY = 1000 * 60 * 60 * 24;
+    // Definindo o cookie com o token JWT
+
+res.cookie('token', token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + oneDAY),
+        secure: process.env.NODE_ENV === 'production', // Define como true se estiver em ambiente de produção
+});
+    res.status(StatusCodes.OK).json({msg: 'Login realizado com sucesso!', });
 };

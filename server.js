@@ -13,6 +13,7 @@ import authRoute from './routes/authRoute.js';
 
 //Middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import {authenticateUser} from './middleware/authMiddleware.js';
 
 //Configurações
 if(process.env.NODE_ENV === 'development') {
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 //Rotas
-app.use('/api/v1/mutiroes', mutiraoRoute);
+app.use('/api/v1/mutiroes', authenticateUser, mutiraoRoute);
 app.use('/api/v1/auth', authRoute);
 
 // Rotas de erro tem que vir depois das Rotas do CRUD

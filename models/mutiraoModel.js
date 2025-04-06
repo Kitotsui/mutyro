@@ -20,6 +20,11 @@ const MutiraoSchema = new mongoose.Schema(
             default: 'default location',
         },
     },*/
+    criadoPor: {
+      type: mongoose.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import Mutirao from '../models/mutiraoModel.js';
 
 import { nanoid } from 'nanoid';
@@ -7,8 +8,10 @@ let mutiroes = [
     {id: nanoid(), nome: "Mutirão de pintura", data: "2021-09-02", local: "Escola municipal"},
 ]
 
-export const getMutiroes = (req, res) => {
-    res.status(200).json({mutiroes});
+export const getMutiroes = async (req, res) => {
+    //console.log(req);
+    const mutiroes = await Mutirao.find({});
+    res.status(StatusCodes.OK).json({mutiroes});
 }
 
 export const createMutirao = async (req, res) => {

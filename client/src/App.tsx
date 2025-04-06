@@ -4,7 +4,8 @@ import {
   Register,
   Login,
   Landing,
-  Error
+  Error,
+  //User
 } from "./pages";
 
 const router = createBrowserRouter([
@@ -42,7 +43,11 @@ const router = createBrowserRouter([
   {
     path: "/error",
     element: <Error />,
-  },
+  }
+  /*{
+    path: "user",
+    element: <User />,
+  }*/
 ]);
 
 const App = () => {
