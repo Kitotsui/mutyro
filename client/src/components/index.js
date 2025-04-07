@@ -5,3 +5,6 @@ export { default as NavBar } from "./NavBar";
 export { default as Footer } from "./Footer";
 export { default as Blog } from "./Blog";
 export { default as Quote } from "./Quote";
+export { default as FilterBar } from "./FilterBar";
+export { default as Carousel } from "./Carousel";
+export { default as Card } from "./Card";

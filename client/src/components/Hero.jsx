@@ -1,5 +1,4 @@
 import { useState } from "react";
-import img1 from "../assets/images/community.jpg";
 import { Login, Register } from "../pages";
 import { Quote } from "../components";
 import Wrapper from "../assets/wrappers/Hero";
@@ -24,23 +23,24 @@ const Hero = () => {
             </div>
             <ul className="hero-cta">
               <li className="hero-cta-item">
-                <Link
-                  to="#"
-                  className="btn login-link"
-                  onClick={() => setLoginOpen(true)}
-                >
-                  Login
-                </Link>
+                <div className="ctn-btns">
+                  <Link
+                    to="#"
+                    className="btn login-link"
+                    onClick={() => setLoginOpen(true)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="#"
+                    className="btn register-link"
+                    onClick={() => setRegisterOpen(true)}
+                  >
+                    Cadastro
+                  </Link>
+                </div>
               </li>
-              <li className="hero-cta-item">
-                <Link
-                  to="#"
-                  className="btn register-link"
-                  onClick={() => setRegisterOpen(true)}
-                >
-                  Cadastro
-                </Link>
-              </li>
+              <li className="hero-cta-item"></li>
               <li className="hero-quotation">
                 <Quote />
               </li>
@@ -50,10 +50,11 @@ const Hero = () => {
             className="wave"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 320"
+            preserveAspectRatio="none" // Esta linha que corrigiu o problema da altura do SVG - garante que as proporções não sejam mantidas
           >
             <path
               fill="#f9fafb"
-              fill-opacity="1"
+              fillOpacity="1"
               d="M0,192L60,170.7C120,149,240,107,360,85.3C480,64,600,64,720,101.3C840,139,960,213,1080,224C1200,235,1320,181,1380,154.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
             ></path>
           </svg>
