@@ -1,137 +1,173 @@
-import styled from "styled-components";
 import logo from "../assets/images/mutyroinnerlogotextless.png";
+import Wrapper from "../assets/wrappers/Blog";
 
-const Wrapper = styled.div`
-  padding: 0 1rem;
+import { FilterBar, Carousel, Card } from "../components";
+import mutiroesData from "../data/mutiroes";
+import { useState, useEffect, useRef } from "react";
 
-  .filter-nav-btn {
-    width: 50px;
-    height: 50px;
-    background: #ff9c39; /* Change to match your design */
-    color: white;
-    border: none;
-    border-radius: 50%; /* Makes it a perfect circle */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem; /* Adjust icon size */
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .filter-nav-btn:hover {
-    background: darkred; /* Slightly darker on hover */
-  }
-
-  .filter-nav-btn i {
-    pointer-events: none; /* Ensures the icon doesn't interfere with clicks */
-  }
-
-  span {
-    font-weight: 700;
-    color: #ff9c39;
-    line-height: 2rem;
-  }
-
-  ul {
-    justify-content: space-evenly;
-    display: grid;
-    grid-auto-flow: column;
-    gap: 5rem;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  li {
-    position: relative;
-    text-align: center;
-    padding-bottom: 10px;
-  }
-
-  @media (max-width: 950px) {
-    ul {
-      gap: 2rem;
-    }
-
-    li:nth-child(n + 7):not(:last-child) {
-      display: none;
-    }
-  }
-
-  @media (max-width: 767px) {
-    li:nth-child(n + 5):not(:last-child) {
-      display: none;
-    }
-  }
-
-  /* BLOG CARDS */
-  .blog-heading {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    padding: 3rem 2rem;
-    margin-bottom: 15rem;
-  }
-
-  .blog-heading img {
-    max-height: 50px;
-    width: auto;
-  }
-  .blog-heading h2 {
-    font-size: 36px;
-    font-weight: 500;
-    color: var(--dark-color);
-  }
-`;
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const Blog = () => {
+  const [mutiroes, setMutiroes] = useState([]);
+
+  const wasDragging = useRef(false);
+
+  const [date, setDate] = useState(new Date());
+
+  const socialCards = [
+    {
+      label: "#Bem-Estar",
+      text: "Ajudar faz bem pro outro e pra você.",
+    },
+    {
+      label: "#Crescimento",
+      text: "Você aprende e evolui",
+    },
+    {
+      label: "#Conexão",
+      text: "Conheça gente incrível",
+    },
+    {
+      label: "#Propósito",
+      text: "Faça suas horas valerem mais.",
+    },
+  ];
+
+  useEffect(() => {
+    setMutiroes(mutiroesData);
+  }, []);
+
   return (
     <Wrapper>
-      {/* TO DO: SEPARAR AS SESSÕES ABAIXO EM COMPONENTES SEPARADOS */}
-      {/* FILTER NAV */}
-      <div>
-        <ul>
-          <li>
-            <i className="fas fa-chevron-left"></i>
-          </li>
-          <li>
-            <button className="filter-nav-btn">
-              <i className="fas fa-heartbeat"></i>
-            </button>
-            <span>Saúde</span>
-          </li>
-          <li>|</li>
-          <li>
-            <button className="filter-nav-btn">
-              <i className="fas fa-heartbeat"></i>
-            </button>
-            <span>Saúde</span>
-          </li>
-          <li>|</li>
-          <li>
-            <button className="filter-nav-btn">
-              <i className="fas fa-heartbeat"></i>
-            </button>
-            <span>Saúde</span>
-          </li>
-          <li>|</li>
-          <li>
-            <button className="filter-nav-btn">
-              <i className="fas fa-heartbeat"></i>
-            </button>
-            <span>Saúde</span>
-          </li>
-          <li>
-            <i className="fas fa-chevron-right"></i>
-          </li>
-        </ul>
-      </div>
-
+      <FilterBar />
       {/* BLOG CARDS */}
       <div className="blog-heading">
-        <img src={logo} alt="Blog Heading Logo" />
+        <img src={logo} alt="Blog Heading Logo" draggable={false} />
         <h2>Mutirões Ativos</h2>
+      </div>
+      <div className="carousel-container">
+        <div className="carousel-label-wrapper">
+          <span className="carousel-label">Novidades</span>
+        </div>
+        <Carousel>
+          {mutiroes.map((mutirao) => {
+            const { id, image, title, date, user } = mutirao;
+            return (
+              <Card
+                key={id}
+                id={id}
+                image={image}
+                title={title}
+                date={date}
+                user={user}
+                wasDraggingRef={wasDragging}
+              />
+            );
+          })}
+        </Carousel>
+      </div>
+
+      {/* Próximos Mutirões */}
+      <div className="next-events-wrapper">
+        <div className="left-column">
+          <h2>Próximos Mutirões</h2>
+          <h5>Link para uma página</h5>
+          <button>Calendário Completo</button>
+        </div>
+
+        <div className="calendar-column">
+          <div className="calendar-wrapper">
+            <Calendar
+              onChange={setDate}
+              value={date}
+              showNeighboringMonth={true}
+              next2Label={null}
+              prev2Label={null}
+              formatShortWeekday={(locale, date) =>
+                date.toLocaleDateString(locale, { weekday: "narrow" })
+              }
+            />
+          </div>
+        </div>
+
+        <div className="right-column">
+          <ul className="next-events-list">
+            <li>
+              <time dateTime="2024-05-12">
+                {new Date("2024-05-12").toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
+              <h3>Doação de Alimentos</h3>
+            </li>
+            <li>
+              <time dateTime="2024-05-12">
+                {new Date("2024-05-12").toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
+              <h3>Doação de Alimentos</h3>
+            </li>
+            <li>
+              <time dateTime="2024-05-12">
+                {new Date("2024-05-12").toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
+              <h3>Doação de Alimentos</h3>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* #Mutyro Cards */}
+      <div className="social-wrapper">
+        <svg
+          className="wave wave-top"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="#f9fafb"
+            fillOpacity="1"
+            d="M0,192L60,170.7C120,149,240,107,360,85.3C480,64,600,64,720,101.3C840,139,960,213,1080,224C1200,235,1320,181,1380,154.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+          ></path>
+        </svg>
+        <div className="social-content">
+          <h2>#Mutyro</h2>
+          <div className="card-row">
+            {socialCards.map((card, index) => (
+              <div key={index} className="social-card">
+                <div className="card-label">
+                  <h4>{card.label}</h4>
+                </div>
+                <div className="card-text">
+                  <p>{card.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <svg
+          className="wave"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none" // Esta linha que corrigiu o problema da altura do SVG - garante que as proporções não sejam mantidas
+        >
+          <path
+            fill="#f9fafb"
+            fillOpacity="1"
+            d="M0,192L60,170.7C120,149,240,107,360,85.3C480,64,600,64,720,101.3C840,139,960,213,1080,224C1200,235,1320,181,1380,154.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+          ></path>
+        </svg>
       </div>
     </Wrapper>
   );

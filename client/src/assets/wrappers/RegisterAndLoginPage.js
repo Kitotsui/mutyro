@@ -13,10 +13,11 @@ const Wrapper = styled.section`
     margin: 0 auto;
     max-height: fit-content;
     max-width: 400px;
-    border-top: 5px solid var(--primary-300);
   }
   h4 {
-    text-align: center;
+    font-size: 56px;
+    font-weight: 500;
+    text-align: left;
     margin-bottom: 1.38rem;
   }
   span {
@@ -24,6 +25,12 @@ const Wrapper = styled.section`
     font-weight: 500;
     text-align: center;
     color: var(--dark-color);
+  }
+
+  input::placeholder {
+    color: var(--grey-600);
+    font-weight: 600;
+    opacity: 1;
   }
 
   .btn {
@@ -36,6 +43,13 @@ const Wrapper = styled.section`
     color: var(--primary-300);
     letter-spacing: var(--letter-spacing);
     margin-left: 0.25rem;
+  }
+
+  .link-esqueci {
+    color: var(--grey-500);
+    font-weight: 600;
+    display: block;
+    padding: 15px 0;
   }
 `;
 export default Wrapper;

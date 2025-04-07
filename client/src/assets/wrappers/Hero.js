@@ -7,7 +7,7 @@ const Wrapper = styled.div`
     /* width: 100%; */
     /* padding: 11.5rem 2rem 8rem; */
     color: white;
-    overflow-x: hidden;
+    overflow: hidden;
     background-image: url("../src/assets/images/community.jpg");
     background-size: cover;
     background-position: center;
@@ -67,7 +67,8 @@ const Wrapper = styled.div`
     position: absolute;
     z-index: 1;
     right: 0;
-    max-width: 100%;
+    max-width: 20rem;
+    max-height: 10rem;
   }
 
   .hero::before {
@@ -111,6 +112,7 @@ const Wrapper = styled.div`
     max-width: var(--max-width);
     height: auto;
     max-height: 25vh;
+    margin-bottom: -2px;
   }
 
   .btn {
@@ -161,14 +163,6 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
-  }
-
-  @media (max-width: 1300px) {
-    p {
-      width: 30vw;
-      padding-left: 2rem;
-      margin-left: 2rem;
-    }
   }
 
   @media (max-width: 768px) {
