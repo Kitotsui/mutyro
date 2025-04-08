@@ -1,29 +1,31 @@
 import mongoose from "mongoose";
+import { MUTIRAO_STATUS, MUTIRAO_TIPOS } from "../utils/constantes.js";
 
 const MutiraoSchema = new mongoose.Schema(
   {
-    nome: String,
+    titulo: String,
     data: String,
+    descricao: String,
     local: String,
-    /*mutiraoStatus: {
-            type: String,
-            enum: Object.values(MUTIRAO_STATUS),
-            default: MUTIRAO_STATUS.PENDING,
-        },
-        mutiraoType: {
-            type: String,
-            enum: Object.values(MUTIRAO_TYPE),
-            default: MUTIRAO_TYPE.COMMUNITY,
-        },
-        location: {
-            type: String,
-            default: 'default location',
-        },
-    },*/
+    materiais: String,
+    tarefas: [String],
+    
+    mutiraoStatus: {
+      type: String,
+      enum: Object.values(MUTIRAO_STATUS),
+      default: MUTIRAO_STATUS.PENDING,
+    },
+
+    mutiraoTipo: {
+      type: String,
+      enum: Object.values(MUTIRAO_TIPOS),
+      default: MUTIRAO_TIPOS.SOCIAL,
+    },
+
     criadoPor: {
       type: mongoose.Types.ObjectId,
       ref: "Usuario",
-      required: true,
+      //required: true,
     },
   },
   { timestamps: true }

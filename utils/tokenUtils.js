@@ -6,3 +6,8 @@ export const createJWT = (payload) => {
     });  
     return token;
 };
+
+export const verifyJWT = (token) => {
+  const decodificado = jwt.verify(token, process.env.JWT_SECRET);
+  return decodificado;
+};

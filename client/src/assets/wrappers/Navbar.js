@@ -48,6 +48,7 @@ const Wrapper = styled.div`
     object-fit: contain; /* Ensures the aspect ratio is maintained */
     position: relative; /* Allows the logo to "leak" without affecting the layout */
     bottom: -35px;
+    z-index: 1100;
   }
 
   .toggle-btn {
@@ -109,6 +110,18 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    .cta-btns {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      font-size: 16px !important;
+      width: 100%;
+      max-width: 200px;
+      padding: 12px;
+    }
+
     .toggle-btn {
       color: var(--primary-color);
 
@@ -120,16 +133,25 @@ const Wrapper = styled.div`
       top: var(--nav-height);
       right: 0;
       width: 100%;
-      background: rgba(13, 109, 235, 0.3);
-      backdrop-filter: blur(10px);
-      display: none;
+      background: rgba(255, 192, 90, 0.3);
+      backdrop-filter: blur(8px);
+      display: flex;
       flex-direction: column;
       text-align: center;
       padding: 1rem;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: transform 0.3s ease-in-out;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .main-menu-items.open {
-      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
     }
 
     .main-menu-list {

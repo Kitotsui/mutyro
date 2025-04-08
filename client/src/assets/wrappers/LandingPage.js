@@ -29,7 +29,7 @@ const Wrapper = styled.section`
   }
   p {
     line-height: 2;
-    color: var(--text-secondary-color);
+    color: var(--dark-color);
     margin-bottom: 1.5rem;
     max-width: 35em;
   }
@@ -39,9 +39,7 @@ const Wrapper = styled.section`
   .main-img {
     display: none;
   }
-  .btn {
-    padding: 0.75rem 1rem;
-  }
+
   @media (min-width: 992px) {
     .page {
       grid-template-columns: 1fr 400px;

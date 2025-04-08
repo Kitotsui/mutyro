@@ -1,4 +1,4 @@
-import { Logo, FormRow } from "../components";
+import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 
 import { Link } from "react-router-dom";
@@ -7,17 +7,26 @@ const Login = () => {
   return (
     <Wrapper>
       <form className="form">
-        <Logo />
         <h4>Login</h4>
-        <FormRow type="email" name="email" defaultValue="rogerio@gmail.com" />
-        <FormRow type="password" name="password" defaultValue="secret123" />
+        <FormRow
+          placeHolder="Usuário ou Email"
+          type="email"
+          name=""
+          defaultValue="rogerio@gmail.com"
+        />
+        <FormRow
+          placeHolder="Senha"
+          type="password"
+          name=""
+          defaultValue="secret123"
+        />
         <button type="submit" className="btn btn-block">
-          submit
+          Login
         </button>
-        <button type="button" className="btn btn-block">
+        <Link type="button" className="link-esqueci">
           Esqueci minha senha
-        </button>
-        <p>Ainda não tem conta?</p>
+        </Link>
+        <span>Ainda não tem conta?</span>
         <Link to="/register" className="btn btn-link">
           Cadastre-se
         </Link>

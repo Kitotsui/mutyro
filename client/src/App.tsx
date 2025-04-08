@@ -8,9 +8,11 @@ import {
   //User
 } from "./pages";
 
+import {action as registerAction} from "./pages/Register";
+
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <HomeLayout />,
     errorElement: <Error />,
     children: [
@@ -19,14 +21,15 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "/register",
+        path: 'register',
         element: <Register />,
+        action: registerAction,
       },
       {
-        path: "/login",
+        path: 'login',
         element: <Login />,
       },
-    ]
+    ],
   },
   {
     path: "/register",
@@ -43,7 +46,7 @@ const router = createBrowserRouter([
   {
     path: "/error",
     element: <Error />,
-  }
+  },
   /*{
     path: "user",
     element: <User />,
