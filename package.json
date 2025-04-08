@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
-    "dev": "nodemon server.js",
-    "watch": "node --watch server.js "
+    "server": "nodemon server",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.37.3",
+    "concurrent": "^0.3.2",
     "concurrently": "^8.0.1",
     "cookie-parser": "^1.4.6",
     "datauri": "^4.1.0",

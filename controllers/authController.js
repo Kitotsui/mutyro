@@ -39,3 +39,11 @@ res.cookie('token', token, {
 });
     res.status(StatusCodes.OK).json({msg: 'Login realizado com sucesso!', });
 };
+
+export const logout = (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: 'Logout realizado com sucesso!' });
+};
