@@ -5,7 +5,7 @@ import {
   Login,
   Landing,
   Error,
-  //User
+  User
 } from "./pages";
 
 const router = createBrowserRouter([
@@ -43,11 +43,12 @@ const router = createBrowserRouter([
   {
     path: "/error",
     element: <Error />,
-  }
-  /*{
-    path: "user",
+  },
+  
+  {
+    path: "/user",
     element: <User />,
-  }*/
+  }
 ]);
 
 const App = () => {

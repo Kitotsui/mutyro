@@ -28,6 +28,7 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 2rem;
     font-weight: 600;
+    padding-botton:50px
   }
 
   .navbar .nav-link {
@@ -43,13 +44,13 @@ const Wrapper = styled.div`
   }
 
   .navbar #navbar-logo {
-    max-height: 150px; /* Make the logo larger (adjust as needed) */
-    max-width: 100%; /* Ensures the logo doesn’t overflow horizontally */
-    object-fit: contain; /* Ensures the aspect ratio is maintained */
-    position: relative; /* Allows the logo to "leak" without affecting the layout */
-    bottom: -35px;
-    z-index: 1100;
-  }
+  max-height: 100px; /* Ajuste de tamanho menor */
+  max-width: 100%;
+  object-fit: contain;
+  position: relative;
+  bottom: 0; /* Remova o deslocamento vertical */
+  z-index: auto; /* Ou algo como 1, se precisar ficar acima de algo específico */
+}
 
   .toggle-btn {
     background: none;
