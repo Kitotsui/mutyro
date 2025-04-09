@@ -5,7 +5,7 @@ import {
   Login,
   Landing,
   Error,
-  //User
+  User
 } from "./pages";
 
 import {action as registerAction} from "./pages/Register";
@@ -46,11 +46,11 @@ const router = createBrowserRouter([
   {
     path: "/error",
     element: <Error />,
-  },
+  }
   /*{
     path: "user",
     element: <User />,
-  }*/
+  }
 ]);
 
 const App = () => {
