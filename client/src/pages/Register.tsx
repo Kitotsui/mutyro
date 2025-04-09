@@ -50,23 +50,43 @@ const Register = () => {
     const isSubmitting = navigation.state === "submitting";
   return (
     <Wrapper>
-      <form className="form">
-        <Logo />
+      <Form method="post" action="/register" className="form">
         <h4>Cadastro</h4>
-        <FormRow type="text" name="name" defaultValue="Rogério" />
         <FormRow
           type="text"
-          name="lastName"
-          labelText="last name"
-          defaultValue="Coutinho"
+          placeHolder="Nome"
+          name="nome"
+          defaultValue="joao"
         />
-        <FormRow type="text" name="location" defaultValue="Minas Gerais" />
-        <FormRow type="email" name="email" defaultValue="rogerio@gmail.com" />
+        <FormRow
+          placeHolder="Email"
+          type="email"
+          name="email"
+          defaultValue="joao@gmail.com"
+        />
+        <FormRow
+          type="text"
+          placeHolder="CPF"
+          name="cpf"
+          defaultValue="00000000000"
+        />
 
-        <FormRow type="password" name="password" defaultValue="secret123" />
+        <FormRow
+          type="password"
+          placeHolder="Senha"
+          name=""
+          defaultValue="secret123"
+        />
+        <FormRow
+          type="password"
+          placeHolder="Confirmar Senha"
+          name="senha"
+          defaultValue="secret123"
+        />
 
-        <button type="submit" className="btn btn-block">
-          submit
+        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
+          {isSubmitting ? 'submitting...' : 'submit'}
+          Cadastrar
         </button>
         <span>Já é membro?</span>
         <Link to="/login" className="btn btn-link">
