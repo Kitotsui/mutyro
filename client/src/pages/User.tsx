@@ -1,4 +1,4 @@
-import Wrapper from "../assets/Wrappers/UserPage.js";
+import Wrapper from "../assets/wrappers/UserPage.js";
 import { NavBar, Blog, Footer } from "../components";
 import ProfileCard from "../components/ProfileCard";
 import CalendarSection from "../components/CalendarSection";
