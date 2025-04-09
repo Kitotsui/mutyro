@@ -59,6 +59,5 @@ try {
     process.exit(1);
   }
 
-//MONGO_URL=mongodb+srv://Rogerio:password@cluster0.7p5tr.mongodb.net/Mutyro?retryWrites=true&w=majority&appName=Cluster0
 
 //MONGO_URL=mongodb+srv://joaohenriquelamounier:125491jh@cluster1.g7wlbab.mongodb.net/MUTYRO?retryWrites=true&w=majority&appName=Cluster1
