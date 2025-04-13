@@ -8,3 +8,5 @@ export { default as Quote } from "./Quote";
 export { default as FilterBar } from "./FilterBar";
 export { default as Carousel } from "./Carousel";
 export { default as Card } from "./Card";
+export { default as UserCard } from "./UserCard";
+export { default as MutiraoItem } from "./MutiraoItem";

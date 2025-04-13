@@ -5,7 +5,9 @@ import {
   Login,
   Landing,
   Error,
-  //User
+  User,
+  NovoMutirao,
+  VisualizarMutirao
 } from "./pages";
 
 import {action as registerAction} from "./pages/Register";
@@ -29,6 +31,18 @@ const router = createBrowserRouter([
         path: 'login',
         element: <Login />,
       },
+      {
+        path: 'user',
+        element: <User />,
+      },
+      {
+        path: 'novo-mutirao',
+        element: <NovoMutirao />,
+      },
+      {
+        path: 'mutirao/:id',
+        element: <VisualizarMutirao />,
+      }
     ],
   },
   {
@@ -47,10 +61,19 @@ const router = createBrowserRouter([
     path: "/error",
     element: <Error />,
   },
-  /*{
+  {
     path: "user",
     element: <User />,
-  }*/
+  },
+  {
+    path: "novo-mutirao",
+    element: <NovoMutirao />,
+  },
+  {
+    path: "mutirao/:id",
+    element: <VisualizarMutirao />,
+  }
+
 ]);
 
 const App = () => {

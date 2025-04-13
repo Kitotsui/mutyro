@@ -1,6 +1,5 @@
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -23,7 +22,7 @@ const Login = () => {
         <button type="submit" className="btn btn-block">
           Login
         </button>
-        <Link type="button" className="link-esqueci">
+        <Link to="/forgot-password" type="button" className="link-esqueci">
           Esqueci minha senha
         </Link>
         <span>Ainda não tem conta?</span>
