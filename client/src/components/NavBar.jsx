@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/images/mutyrologo.svg";
 import Wrapper from "../assets/wrappers/Navbar";
-import { Login, Register} from "../pages";
+import { Login, Register } from "../pages";
 
 const NavBar = () => {
   const [isRegisterOpen, setRegisterOpen] = useState(false);
@@ -10,13 +10,13 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openRegisterModal = (e) => {
-    e.preventDefault(); 
-    setRegisterOpen(true); 
+    e.preventDefault();
+    setRegisterOpen(true);
   };
 
   const openLoginModal = (e) => {
-    e.preventDefault(); 
-    setLoginOpen(true); 
+    e.preventDefault();
+    setLoginOpen(true);
   };
 
   return (
@@ -88,7 +88,12 @@ const NavBar = () => {
             className="modal-content"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
           >
-            <Register />
+            <Register
+              switchToLogin={() => {
+                setRegisterOpen(false);
+                setLoginOpen(true);
+              }}
+            />
           </div>
         </div>
       )}
@@ -100,7 +105,12 @@ const NavBar = () => {
             className="modal-content"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
           >
-            <Login />
+            <Login
+              switchToRegister={() => {
+                setLoginOpen(false);
+                setRegisterOpen(true);
+              }}
+            />
           </div>
         </div>
       )}

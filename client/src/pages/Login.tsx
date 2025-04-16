@@ -2,7 +2,11 @@ import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+type Props = {
+  switchToRegister?: () => void;
+};
+
+const Login = ({ switchToRegister }: Props) => {
   return (
     <Wrapper>
       <form className="form">
@@ -26,9 +30,13 @@ const Login = () => {
           Esqueci minha senha
         </Link>
         <span>Ainda não tem conta?</span>
-        <Link to="/register" className="btn btn-link">
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={switchToRegister}
+        >
           Cadastre-se
-        </Link>
+        </button>
       </form>
     </Wrapper>
   );

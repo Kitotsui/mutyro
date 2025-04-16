@@ -7,14 +7,14 @@ import {
   Error,
   User,
   NovoMutirao,
-  VisualizarMutirao
+  VisualizarMutirao,
 } from "./pages";
 
-import {action as registerAction} from "./pages/Register";
+import { action as registerAction } from "./pages/Register";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <HomeLayout />,
     errorElement: <Error />,
     children: [
@@ -23,26 +23,26 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: 'register',
+        path: "register",
         element: <Register />,
         action: registerAction,
       },
       {
-        path: 'login',
+        path: "login",
         element: <Login />,
       },
       {
-        path: 'user',
+        path: "user",
         element: <User />,
       },
       {
-        path: 'novo-mutirao',
+        path: "novo-mutirao",
         element: <NovoMutirao />,
       },
       {
-        path: 'mutirao/:id',
+        path: "mutirao/:id",
         element: <VisualizarMutirao />,
-      }
+      },
     ],
   },
   {
@@ -72,8 +72,7 @@ const router = createBrowserRouter([
   {
     path: "mutirao/:id",
     element: <VisualizarMutirao />,
-  }
-
+  },
 ]);
 
 const App = () => {

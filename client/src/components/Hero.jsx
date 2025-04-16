@@ -65,8 +65,23 @@ const Hero = () => {
       {(isRegisterOpen || isLoginOpen) && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            {isRegisterOpen && <Register />}
-            {isLoginOpen && <Login />}
+            {isRegisterOpen && (
+              <Register
+                closeModal={closeModal}
+                switchToLogin={() => {
+                  setRegisterOpen(false);
+                  setLoginOpen(true);
+                }}
+              />
+            )}
+            {isLoginOpen && (
+              <Login
+                switchToRegister={() => {
+                  setLoginOpen(false);
+                  setRegisterOpen(true);
+                }}
+              />
+            )}
           </div>
         </div>
       )}

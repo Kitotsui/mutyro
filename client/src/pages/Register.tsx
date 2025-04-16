@@ -2,7 +2,7 @@ import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import { Form, redirect, useNavigation, Link } from "react-router-dom";
 import customFetch from "../utils/customFetch";
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 
 type ApiError = {
   response?: {
@@ -33,8 +33,8 @@ export const action = async ({ request }: { request: Request }) => {
 
   try {
     await customFetch.post("/auth/cadastro", data);
-    toast.success('Cadastro realizado com sucesso!');
-    return redirect("/login");
+    toast.success("Cadastro realizado com sucesso!");
+    return redirect("/user");
   } catch (error: unknown) {
     // Tipagem explícita
     const apiError = error as ApiError; // Type assertion
@@ -45,12 +45,16 @@ export const action = async ({ request }: { request: Request }) => {
   }
 };
 
-const Register = () => {
-    const navigation = useNavigation();
-    const isSubmitting = navigation.state === "submitting";
+type Props = {
+  switchToLogin?: () => void;
+};
+
+const Register = ({ switchToLogin }: Props) => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   return (
     <Wrapper>
-      <Form method="post" action="/register" className="form">
+      <form method="post" action="/register" className="form">
         <h4>Cadastro</h4>
         <FormRow
           type="text"
@@ -74,25 +78,24 @@ const Register = () => {
         <FormRow
           type="password"
           placeHolder="Senha"
-          name=""
+          name="senha"
           defaultValue="secret123"
         />
         <FormRow
           type="password"
           placeHolder="Confirmar Senha"
-          name="senha"
+          name="confirmarSenha"
           defaultValue="secret123"
         />
 
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
-          {isSubmitting ? 'submitting...' : 'submit'}
-          Cadastrar
+          {isSubmitting ? "Cadastrando..." : "Cadastrar"}
         </button>
         <span>Já é membro?</span>
-        <Link to="/login" className="btn btn-link">
+        <button type="button" className="btn btn-link" onClick={switchToLogin}>
           Login
-        </Link>
-      </Form>
+        </button>
+      </form>
     </Wrapper>
   );
 };

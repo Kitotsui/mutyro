@@ -4,16 +4,12 @@ const Wrapper = styled.div`
   .hero {
     position: relative;
     height: 80vh;
-    /* width: 100%; */
-    /* padding: 11.5rem 2rem 8rem; */
     color: white;
     overflow: hidden;
     background-image: url("../src/assets/images/community.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* padding: 2rem 0; */
-    /*  */
     display: flex;
     align-items: center;
     justify-content: flex-start;

@@ -5,7 +5,7 @@ const Landing = () => {
   return (
     <Wrapper>
       <div className="container">
-        <NavBar />
+        {/* <NavBar /> */}
         <Hero />
         <Blog />
         <Footer />
