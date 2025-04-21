@@ -34,7 +34,7 @@ export const action = async ({ request }: { request: Request }) => {
   try {
     await customFetch.post("/auth/cadastro", data);
     toast.success("Cadastro realizado com sucesso!");
-    return redirect("/user");
+    return redirect("/login");
   } catch (error: unknown) {
     // Tipagem explícita
     const apiError = error as ApiError; // Type assertion
@@ -54,7 +54,7 @@ const Register = ({ switchToLogin }: Props) => {
   const isSubmitting = navigation.state === "submitting";
   return (
     <Wrapper>
-      <form method="post" action="/register" className="form">
+      <Form method="post" action="/register" className="form">
         <h4>Cadastro</h4>
         <FormRow
           type="text"
@@ -79,13 +79,13 @@ const Register = ({ switchToLogin }: Props) => {
           type="password"
           placeHolder="Senha"
           name="senha"
-          defaultValue="secret123"
+          defaultValue="88888888"
         />
         <FormRow
           type="password"
           placeHolder="Confirmar Senha"
           name="confirmarSenha"
-          defaultValue="secret123"
+          defaultValue="88888888"
         />
 
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
@@ -95,7 +95,7 @@ const Register = ({ switchToLogin }: Props) => {
         <button type="button" className="btn btn-link" onClick={switchToLogin}>
           Login
         </button>
-      </form>
+      </Form>
     </Wrapper>
   );
 };

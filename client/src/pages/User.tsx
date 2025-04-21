@@ -5,6 +5,40 @@ import UserSidebar from "../components/UserSidebar";
 import MutiroesList from "../components/MutiroesList";
 import { useState } from "react";
 
+import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import customFetch from "../utils/customFetch";
+
+type Usuario = {
+  nome: string;
+  //username: string;
+};
+
+//loader pega as informacoes antes renderizar o componente
+export const loader = async () => {
+  try {
+    const objeto = await customFetch('/usuarios/atual-usuario');
+    const mutiroesRes = await customFetch("/mutiroes");
+
+    const usuario = objeto.data.usuario;
+    const mutirao = mutiroesRes.data.mutiroes;
+    
+    return { usuario, mutirao };
+  } catch (error) {
+    return redirect('/'); //se a atenticacao falhar, redireciona para a pagina inicial
+  }
+};
+
+type Mutirao = {
+  id: number;
+  titulo: string;
+  data: string;
+  descricao: string;
+  local: string;
+  tarefas: string[];
+  mutiraoStatus: string;
+  mutiraoTipo: string;
+  criadoPor: string;
+};
 // Mock data - Simulação do banco de dados
 export const mockMutiroes = [
   {
@@ -66,19 +100,21 @@ export const mockMutiroes = [
 ];
 
 const User = () => {
+  const { usuario, mutirao } = useLoaderData() as { usuario: Usuario; mutirao: Mutirao[] };
+  
   const [date, setDate] = useState(new Date());
 
-  const mockUser = {
+  /*const mockUser = {
     name: "João",
     username: "joao123"
-  };
+  };*/
 
   return (
     <Wrapper>
       <div className="min-h-screen">
         {/*<NavBar />*/}
         <main>
-          <UserProfile user={mockUser} />
+          <UserProfile user={usuario} />
 
           <div className="content-grid">
             <UserSidebar 
@@ -86,7 +122,7 @@ const User = () => {
               onDateChange={setDate}
               interesses={["Saúde", "TI"]}
             />
-            <MutiroesList mutiroes={mockMutiroes} />
+            <MutiroesList mutiroes={mutirao} />
           </div>
         </main>
       </div>
