@@ -10,10 +10,12 @@ import {
   VisualizarMutirao,
 } from "./pages";
 
-import { action as registerAction } from './pages/Register';
-import { action as loginAction } from './pages/Login';
-import {loader as userLoader} from './pages/User';  
+import { action as registerAction } from "./pages/Register";
+import { action as loginAction } from "./pages/Login";
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
+
+import { loader as userLoader } from "./pages/User";
+import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,7 @@ const router = createBrowserRouter([
       {
         path: "mutirao/:id",
         element: <VisualizarMutirao />,
+        loader: visualizarMutiraoLoader,
       },
     ],
   },

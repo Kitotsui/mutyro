@@ -7,9 +7,9 @@ const MutiraoSchema = new mongoose.Schema(
     data: String,
     descricao: String,
     local: String,
-    materiais: String,
+    materiais: [String],
     tarefas: [String],
-    
+
     mutiraoStatus: {
       type: String,
       enum: Object.values(MUTIRAO_STATUS),

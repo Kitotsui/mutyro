@@ -11,13 +11,15 @@ import {
   updateMutirao,
   createMutirao,
   deleteMutirao,
+  getTodosMutiroes,
 } from "../controllers/mutiraoController.js";
 
 router.route("/").get(getMutiroes).post(validateMutiraoInput, createMutirao);
+router.route("/todos").get(getTodosMutiroes);
 router
   .route("/:id")
   .get(validateIdParam, getMutirao)
   .patch(validateMutiraoInput, validateIdParam, updateMutirao)
-  .delete(validateIdParam,deleteMutirao);
+  .delete(validateIdParam, deleteMutirao);
 
 export default router;

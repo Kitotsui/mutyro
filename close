@@ -1,0 +1,157 @@
+[33mcommit 4d6d73e4d2d3c899a957995235783f942f1602a1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbruno/landing-page-redesign[m[33m, [m[1;31morigin/bruno/landing-page-redesign[m[33m)[m
+Author: brunoaaveloso <brunoaaveloso@gmail.com>
+Date:   Sun Apr 6 21:58:56 2025 -0300
+
+    Correções diversas de CSS em conformidade com o design no protótipo do FIgma e criação de componentes da landing page que estavam faltando
+
+[33mcommit b3c77d58d4bdcba77fbeac6f543ee14a96355e0d[m
+Author: brunoaaveloso <brunoaaveloso@gmail.com>
+Date:   Thu Apr 3 17:16:32 2025 -0300
+
+    Ajustes nas curvas do svg de separação de conteúdo e adição de alguns elementos na landing page, como submenu horizontal e carrossel de cards (somente o título por enquanto).
+
+[33mcommit c13cedb7abb94a7d8dca396f7d51e0ce2405cad4[m
+Author: Projeto Mutyro <brunoaaveloso@gmail.com>
+Date:   Tue Apr 1 21:56:01 2025 -0300
+
+    Ajustes de CSS na Landing Page
+
+[33mcommit 3730c55ed35664458bcaddb7301bf039b2b5c065[m
+Author: Projeto Mutyro <brunoaaveloso@gmail.com>
+Date:   Tue Apr 1 20:00:43 2025 -0300
+
+    Correção de pequeno erro no código e adição das fontes no index.html
+
+[33mcommit 69ba01029e99d87436081c1908bce2f213465ca8[m
+Author: brunoaaveloso <brunoaaveloso@gmail.com>
+Date:   Tue Apr 1 17:14:24 2025 -0300
+
+    Correção e redesign da landing-page
+    
+    Ajuste do layout da seção hero para melhorar a responsividade em dispositivos móveis.
+    Alinhamento e estilo dos botões ajustados para um design mais consistente.
+    Adicionados media queries para melhorar a exibição em diferentes tamanhos de tela.
+
+[33mcommit 3c195ff46bd6aaaee3e5c3510786e042e742d1e6[m[33m ([m[1;32mmain[m[33m)[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 25 21:41:00 2025 -0300
+
+    Renomeação de classe mutiraoModel.js
+
+[33mcommit 69d5a752fa6018a2a29019a94859ee0218d286fa[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 25 19:04:55 2025 -0300
+
+    Modificação no server.js
+
+[33mcommit db4fe2cb906909cfbc2a99d04cbeb43ac4afce32[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 25 19:03:21 2025 -0300
+
+    Adicionado cadastro de usuário e Login, autenticação de email e senha e senha com Hash.
+
+[33mcommit da89e5ce5d4c672e3d10f32a2fbeb5188154ef76[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 25 00:17:06 2025 -0300
+
+    Adicionado controller e model mutirao e erros customizaveis
+
+[33mcommit 5b3f94bf78ed2c952862796a8f4663e5f7194946[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 18:17:13 2025 -0300
+
+    Criado controllers e routes para comunicação com o backend, configurado o MongoDB e o mongoose para integração e depuração do banco de dados
+
+[33mcommit 6f283334d4dba73201d6d46a97b938f9d10857a8[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 01:41:24 2025 -0300
+
+    Exclusão de arquivos desnecessários
+
+[33mcommit 5c39250e65ed7755524735a097bc9be7ef0292f5[m
+Merge: c06f93c 668d35f
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 01:35:06 2025 -0300
+
+    Mudança na estrutura das pastas para adicionar
+    o backend
+
+[33mcommit c06f93c1905b8ede2d49f3ab93c62a116c456b1a[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 01:31:40 2025 -0300
+
+    Mudança na estrutura das pastas para adicionar o backend
+
+[33mcommit 668d35f713091b0079fd4d086a4d9e830fa03348[m
+Merge: f174369 fb94422
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 00:41:18 2025 -0300
+
+    Merge branch 'main' of https://github.com/Kitotsui/mutyro
+
+[33mcommit f17436998757b3f5fcd212fbb7a8667f548122a4[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Mon Mar 24 00:38:16 2025 -0300
+
+    Estrutura inicial do projeto, landing page, login e cadastro. Também foi adicionado algumas páginas iniciais mas ainda sem estruturação.
+
+[33mcommit fb9442259523720f75046e4cd9a66607332f3e0a[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Mon Mar 24 00:34:44 2025 -0300
+
+    Delete data
+
+[33mcommit a1f587357682622e5da066555e38fc36d9a5f474[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Mon Mar 24 00:33:40 2025 -0300
+
+    Delete README.md
+
+[33mcommit 8c51375cf4b21c65b683a7798b3e67f3df4d3740[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Mon Mar 24 00:32:33 2025 -0300
+
+    Delete frontend directory
+
+[33mcommit 2b89b222eb0dd7e7fb548ba49a639363744ba218[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Mon Mar 24 00:32:26 2025 -0300
+
+    Delete backend directory
+
+[33mcommit da5b47236d4bed7e8c248f785ce14e9259439722[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Tue Mar 18 21:20:39 2025 -0300
+
+    Update README.md
+
+[33mcommit 4c63e75c2efe0219b1f3de34b2ab6c9c247548a0[m
+Merge: 11415ed 5f1baf0
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 18 20:54:21 2025 -0300
+
+    Estruturação do projeto
+
+[33mcommit 11415eddfe010b6b8c12d87b2d491266cfdad992[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 18 20:53:10 2025 -0300
+
+    Estruturação do projeto
+
+[33mcommit 076296dfb74d826ef22289bee7460da00ff9620d[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 18 20:10:55 2025 -0300
+
+    Adicionado estrutura de pastas do projeto
+
+[33mcommit d9184a603df4d7b065785fbc80fd7870360b9f57[m
+Author: Rogério <rogerio_c.o.jr@outlook.com>
+Date:   Tue Mar 18 19:35:00 2025 -0300
+
+    Primeiro commit: Adicionado README.md e criado o repositório para utilização dos participantes
+
+[33mcommit 5f1baf0f3e425edbcff6a46f9be5f6c48c3154fc[m
+Author: Rogério Coutinho Oliveira Junior <135075315+Kitotsui@users.noreply.github.com>
+Date:   Tue Feb 11 20:07:53 2025 -0300
+
+    Initial commit
