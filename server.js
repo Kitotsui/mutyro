@@ -7,6 +7,10 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
+//Swagger
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swaggerConfig.js";
+
 //Routers
 import mutiraoRoute from './routes/mutiraoRoute.js';
 import authRoute from './routes/authRoute.js';
@@ -15,6 +19,8 @@ import userRouter from "./routes/userRouter.js";
 //Middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import {authenticateUser} from './middleware/authMiddleware.js';
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Configurações
 if(process.env.NODE_ENV === 'development') {

@@ -22,6 +22,13 @@ const MutiraoSchema = new mongoose.Schema(
       default: MUTIRAO_TIPOS.SOCIAL,
     },
 
+    inscritos: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Usuario",
+      },
+    ],
+
     criadoPor: {
       type: mongoose.Types.ObjectId,
       ref: "Usuario",

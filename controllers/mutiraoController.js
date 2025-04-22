@@ -42,3 +42,27 @@ export const deleteMutirao = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ message: "Mutirão deletado com sucesso!" });
 };
+
+export const inscreverUsuario = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
+    $addToSet: { inscritos: userId },
+  });
+  res
+    .status(StatusCodes.OK)
+    .json(`Usuário ${userId} inscrito com sucesso no mutirão ${id} !`);
+};
+
+export const cancelarInscricao = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
+    $pull: { inscritos: userId },
+  });
+  res
+    .status(StatusCodes.OK)
+    .json(
+      `Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`
+    );
+};

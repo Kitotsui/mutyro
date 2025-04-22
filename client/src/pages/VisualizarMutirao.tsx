@@ -15,6 +15,7 @@ interface Mutirao {
   tarefas: string[];
   mutiraoStatus: string;
   mutiraoTipo: string;
+  inscritos?: string[];
   criadoPor: CriadoPorInfo;
 }
 
@@ -35,6 +36,7 @@ interface Material {
 
 interface VisualizarMutiraoLoaderData {
   mutirao: Mutirao;
+  isInscrito: boolean;
 }
 
 export const loader = async ({
@@ -52,11 +54,31 @@ export const loader = async ({
   try {
     console.log(`Loader: Buscando mutirão ID: ${id}`);
     const response = await customFetch(`/mutiroes/${id}`);
+    const mutirao = response.data.mutirao;
+    if (!mutirao) {
+      throw new Response("Mutirão não encontrado.", { status: 404 });
+    }
 
-    const mutirao = response.data.mutirao; // Ajuste se necessário
+    let currentUserId: string | null = null;
+    let isInscrito = false; // Default
+    try {
+      const userResponse = await customFetch("/usuarios/atual-usuario");
+      currentUserId = userResponse.data.usuario._id;
+    } catch (userError: any) {
+      console.warn(
+        "Loader: Usuário não autenticado ou erro ao buscar usuário atual.",
+        userError?.response?.status
+      );
+    }
+
+    if (currentUserId && mutirao.inscritos?.includes(currentUserId)) {
+      isInscrito = true;
+    }
 
     console.log("Loader: Mutirão carregado:", mutirao);
-    return { mutirao };
+    console.log("Loader: Status inicial de inscrição:", isInscrito);
+
+    return { mutirao, isInscrito };
   } catch (error: any) {
     console.error(`Erro no loader ao buscar ID ${id}:`, error);
     const status = error?.response?.status;
@@ -77,7 +99,8 @@ export const loader = async ({
 
 const VisualizarMutirao = () => {
   const navigate = useNavigate();
-  const { mutirao } = useLoaderData() as VisualizarMutiraoLoaderData;
+  const { mutirao, isInscrito: initialIsInscrito } =
+    useLoaderData() as VisualizarMutiraoLoaderData;
   // const { id } = useParams();
   const [isInscrito, setIsInscrito] = useState(false);
   const [aceitouTermo, setAceitouTermo] = useState(false);
@@ -88,6 +111,7 @@ const VisualizarMutirao = () => {
   const [materiaisSelecionados, setMateriaisSelecionados] = useState<{
     [key: string]: boolean;
   }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (mutirao?.materiais && Array.isArray(mutirao.materiais)) {
@@ -122,24 +146,43 @@ const VisualizarMutirao = () => {
     }));
   };
 
-  const handleInscricao = () => {
+  const handleInscricao = async () => {
     if (!aceitouTermo) {
       alert("Por favor, aceite o termo de participação antes de se inscrever.");
       return;
     }
 
+    if (isSubmitting) return; // Evitar cliques duplos
+
+    setIsSubmitting(true); // Inicia o feedback de carregamento
+
+    // Pega os materiais selecionados (mesmo que não vá enviar agora)
     const materiaisSelecionadosNomes = Object.entries(materiaisSelecionados)
       .filter(([nome, selecionado]) => selecionado)
       .map(([nome, selecionado]) => nome);
-
-    console.log("Inscrição/Cancelamento:", !isInscrito);
     console.log(
-      "Habilidades selecionadas:",
-      habilidades.filter((h) => h.checked).map((h) => h.nome)
+      "Materiais selecionados (NÃO enviados nesta versão):",
+      materiaisSelecionadosNomes
     );
-    console.log("Materiais selecionados:", materiaisSelecionadosNomes);
+    // const habilidadesSelecionadasNomes = habilidades.filter(h => h.checked).map(h => h.nome);
+    // console.log("Habilidades selecionadas (NÃO enviadas):", habilidadesSelecionadasNomes);
 
-    setIsInscrito((prev) => !prev);
+    try {
+      if (!isInscrito) {
+        await customFetch.post(`/mutiroes/${mutirao._id}/inscrever`);
+        setIsInscrito(true);
+        alert("Inscrição realizada com sucesso!");
+      } else {
+        await customFetch.delete(`/mutiroes/${mutirao._id}/cancelar`);
+        setIsInscrito(false);
+        alert("Inscrição cancelada.");
+      }
+    } catch (error) {
+      console.error("Erro ao processar inscrição/cancelamento:", error);
+      alert(`Ocorreu um erro: ${error || "Tente novamente."}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -296,13 +339,17 @@ const VisualizarMutirao = () => {
                   Voltar
                 </button>
                 <button
-                  className={`submit-btn ${!aceitouTermo ? "disabled" : ""}`}
+                  className={`submit-btn ${
+                    !aceitouTermo || isSubmitting ? "disabled" : ""
+                  }`}
                   onClick={handleInscricao}
-                  disabled={!aceitouTermo}
+                  disabled={!aceitouTermo || isSubmitting}
                 >
-                  {isInscrito
+                  {isSubmitting
+                    ? "Processando..."
+                    : isInscrito
                     ? "Cancelar Participação"
-                    : "Quero Ser Voluntário"}
+                    : "Quero Ser Voluntário"}{" "}
                 </button>
               </div>
             </div>
