@@ -12,7 +12,10 @@ import {
   createMutirao,
   deleteMutirao,
   getTodosMutiroes,
+  inscreverUsuario,
+  cancelarInscricao,
 } from "../controllers/mutiraoController.js";
+
 /**
  * @swagger
  * tags:
@@ -115,10 +118,69 @@ router.route("/todos").get(getTodosMutiroes);
  *       200:
  *         description: Mutirão deletado com sucesso
  */
+
 router
   .route("/:id")
   .get(validateIdParam, getMutirao)
   .patch(validateMutiraoInput, validateIdParam, updateMutirao)
   .delete(validateIdParam, deleteMutirao);
+
+/**
+ * @swagger
+ * /mutiroes/{id}/inscrever:
+ *   post:
+ *     summary: Inscreve um usuário no mutirão
+ *     tags: [Mutiroes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               usuarioId:
+ *                 type: string
+ *                 description: ID do usuário a ser inscrito
+ *     responses:
+ *       200:
+ *         description: Usuário inscrito com sucesso no mutirão
+ */
+router.route("/:id/inscrever").post(validateIdParam, inscreverUsuario);
+
+/**
+ * @swagger
+ * /mutiroes/{id}/cancelar:
+ *   delete:
+ *     summary: Cancela a inscrição de um usuário no mutirão
+ *     tags: [Mutiroes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               usuarioId:
+ *                 type: string
+ *                 description: ID do usuário a ter a inscrição cancelada
+ *     responses:
+ *       200:
+ *         description: Inscrição cancelada com sucesso
+ */
+router.route("/:id/cancelar").delete(validateIdParam, cancelarInscricao);
 
 export default router;
