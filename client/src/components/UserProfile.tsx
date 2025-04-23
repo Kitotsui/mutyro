@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 interface UserProfileProps {
   user: {
-    name: string;
-    username: string;
+    nome: string;
+    //username: string;
   };
 }
 
@@ -17,7 +17,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
           className="profile-image"
         />
         <div className="welcome-text">
-          <h1>Bem vindo, {user.name}! 👋</h1>
+          <h1>Bem vindo, {user.nome}! 👋</h1>
           <p>
             Comece criando um mutirão ou encontre um para se voluntariar. Juntos, podemos transformar o mundo!
           </p>

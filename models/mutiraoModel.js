@@ -7,9 +7,9 @@ const MutiraoSchema = new mongoose.Schema(
     data: String,
     descricao: String,
     local: String,
-    materiais: String,
+    materiais: [String],
     tarefas: [String],
-    
+
     mutiraoStatus: {
       type: String,
       enum: Object.values(MUTIRAO_STATUS),
@@ -21,6 +21,13 @@ const MutiraoSchema = new mongoose.Schema(
       enum: Object.values(MUTIRAO_TIPOS),
       default: MUTIRAO_TIPOS.SOCIAL,
     },
+
+    inscritos: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Usuario",
+      },
+    ],
 
     criadoPor: {
       type: mongoose.Types.ObjectId,

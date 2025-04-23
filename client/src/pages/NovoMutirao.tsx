@@ -1,7 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/NovoMutirao";
-import { NavBar } from "../components";
+import { Form, useNavigation, redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import customFetch from "../utils/customFetch";
+
+export const action = async ({ request }: { request: Request }) => {
+  const formData = await request.formData();
+
+  // Transforma os dados do form em objeto
+  const tarefas = formData.getAll("tarefas") as string[];
+
+  const mutirao = {
+    titulo: formData.get("titulo"),
+    data: formData.get("data"),
+    horario: formData.get("horario"),
+    descricao: formData.get("descricao"),
+    local: formData.get("local"),
+    materiais: formData.get("materiais") || "",
+    tarefas: tarefas.filter(Boolean),
+    mutiraoTipo: formData.get("tipo"),
+  };
+
+  try {
+    await customFetch.post("/mutiroes", mutirao);
+    toast.success("Mutirão criado com sucesso!");
+    return redirect("/user");
+  } catch (err: any) {
+    toast.error(err?.response?.data?.msg || "Erro ao criar mutirão");
+    return err;
+  }
+};
 
 interface FormData {
   titulo: string;
@@ -17,14 +46,14 @@ interface FormData {
 const NovoMutirao = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
-    titulo: '',
-    data: '',
-    horario: '',
-    descricao: '',
-    local: '',
-    materiais: '',
-    tarefas: [''],
-    tipo: 'limpeza'
+    titulo: "",
+    data: "",
+    horario: "",
+    descricao: "",
+    local: "",
+    materiais: "",
+    tarefas: [""],
+    tipo: "limpeza",
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -34,47 +63,51 @@ const NovoMutirao = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleTarefaChange = (index: number, value: string) => {
     const novasTarefas = [...formData.tarefas];
     novasTarefas[index] = value;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tarefas: novasTarefas
+      tarefas: novasTarefas,
     }));
   };
 
   const adicionarTarefa = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tarefas: [...prev.tarefas, '']
+      tarefas: [...prev.tarefas, ""],
     }));
   };
 
   const removerTarefa = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tarefas: prev.tarefas.filter((_, i) => i !== index)
+      tarefas: prev.tarefas.filter((_, i) => i !== index),
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /*const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       // TODO: Implementar chamada à API
-      console.log('Dados do formulário:', formData);
-      navigate('/mutiroes');
+      console.log("Dados do formulário:", formData);
+      navigate("/mutiroes");
     } catch (error) {
-      console.error('Erro ao criar mutirão:', error);
+      console.error("Erro ao criar mutirão:", error);
     }
-  };
+  };*/
 
   return (
     <Wrapper>
@@ -84,14 +117,14 @@ const NovoMutirao = () => {
           <main>
             <h2>Seu mutirão está quase pronto!</h2>
             <div className="form-container">
-              <form onSubmit={handleSubmit}>
+              <Form method="post" >
                 <div className="image-section">
                   <h3>Capa do Mutirão</h3>
                   <div className="image-upload">
                     {selectedImage ? (
-                      <img 
-                        src={URL.createObjectURL(selectedImage)} 
-                        alt="Preview" 
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Preview"
                         className="preview-image"
                       />
                     ) : (
@@ -99,7 +132,13 @@ const NovoMutirao = () => {
                         <span>Foto</span>
                       </div>
                     )}
-                    <button type="button" className="upload-btn" onClick={() => document.getElementById('foto-input')?.click()}>
+                    <button
+                      type="button"
+                      className="upload-btn"
+                      onClick={() =>
+                        document.getElementById("foto-input")?.click()
+                      }
+                    >
                       Enviar foto
                     </button>
                     <input
@@ -107,7 +146,7 @@ const NovoMutirao = () => {
                       id="foto-input"
                       accept="image/*"
                       onChange={handleImageChange}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                   </div>
                 </div>
@@ -183,8 +222,11 @@ const NovoMutirao = () => {
                       <div key={index} className="tarefa-input">
                         <input
                           type="text"
+                          name="tarefas"
                           value={tarefa}
-                          onChange={(e) => handleTarefaChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handleTarefaChange(index, e.target.value)
+                          }
                           placeholder="Descreva a tarefa"
                           required
                         />
@@ -199,13 +241,20 @@ const NovoMutirao = () => {
                         )}
                       </div>
                     ))}
-                    <button type="button" className="add-btn" onClick={adicionarTarefa}>
+                    <button
+                      type="button"
+                      className="add-btn"
+                      onClick={adicionarTarefa}
+                    >
                       Adicionar Tarefa
                     </button>
                   </div>
 
                   <div className="form-group">
-                    <label>Necessita de Ferramentas, Materiais e (ou) Habilidades Específicas?</label>
+                    <label>
+                      Necessita de Ferramentas, Materiais e (ou) Habilidades
+                      Específicas?
+                    </label>
                     <div className="radio-group">
                       <label>
                         <input
@@ -213,7 +262,9 @@ const NovoMutirao = () => {
                           name="necessitaMateriais"
                           value="sim"
                           checked={!!formData.materiais}
-                          onChange={() => setFormData(prev => ({ ...prev, materiais: ' ' }))}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, materiais: " " }))
+                          }
                         />
                         Sim
                       </label>
@@ -223,7 +274,9 @@ const NovoMutirao = () => {
                           name="necessitaMateriais"
                           value="nao"
                           checked={!formData.materiais}
-                          onChange={() => setFormData(prev => ({ ...prev, materiais: '' }))}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, materiais: "" }))
+                          }
                         />
                         Não
                       </label>
@@ -247,31 +300,39 @@ const NovoMutirao = () => {
                       onChange={handleChange}
                       required
                     >
-                      <option value="limpeza">Limpeza</option>
-                      <option value="construcao">Construção</option>
-                      <option value="plantio">Plantio</option>
-                      <option value="manutencao">Manutenção</option>
-                      <option value="outro">Outro</option>
+                      <option value="SOCIAL">Social</option>
+                      <option value="CONSTRUCAO/REFORMA">Construcao / Reforma</option>
+                      <option value="AMBIENTAL/AGRICOLA">Ambiental / Agricola</option>
+                      <option value="CULTURA/EDUCACAO">Cultura / Educacao</option>
+                      <option value="SAUDE">Saúde</option>
+                      <option value="TECNOLOGIA">Tecnologia</option>
                     </select>
                   </div>
 
                   <div className="terms">
                     <label>
                       <input type="checkbox" required />
-                      Eu concordo em organizar este mutirão de forma responsável, respeitando as diretrizes da comunidade e garantindo um ambiente seguro e inclusivo para todos os participantes.
+                      Eu concordo em organizar este mutirão de forma
+                      responsável, respeitando as diretrizes da comunidade e
+                      garantindo um ambiente seguro e inclusivo para todos os
+                      participantes.
                     </label>
                   </div>
                 </div>
 
                 <div className="button-group">
-                  <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => navigate(-1)}
+                  >
                     Cancelar
                   </button>
                   <button type="submit" className="submit-btn">
                     Criar Mutirão
                   </button>
                 </div>
-              </form>
+              </Form>
             </div>
           </main>
         </div>
@@ -280,4 +341,4 @@ const NovoMutirao = () => {
   );
 };
 
-export default NovoMutirao; 
+export default NovoMutirao;

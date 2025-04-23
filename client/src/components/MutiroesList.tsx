@@ -2,12 +2,10 @@ import { Link } from "react-router-dom";
 import Wrapper from "../assets/wrappers/MutiroesList";
 
 interface Mutirao {
-  id: number;
-  title: string;
-  date: string;
-  description: string;
-  author: string;
-  image: string;
+  _id: string;
+  titulo: string;
+  data: string;
+  descricao: string;
 }
 
 interface MutiroesListProps {
@@ -21,13 +19,17 @@ const MutiroesList = ({ mutiroes }: MutiroesListProps) => {
         <h2>Últimos Mutirões</h2>
         <div className="mutiroes-grid">
           {mutiroes.map((mutirao) => (
-            <Link to={`/mutirao/${mutirao.id}`} key={mutirao.id} className="mutirao-card">
-              <img src={mutirao.image} alt={mutirao.title} />
+            <Link
+              to={`/mutirao/${mutirao._id}`}
+              key={mutirao._id}
+              className="mutirao-card"
+            >
+              {/*<img src={mutirao.image} alt={mutirao.title} />*/}
               <div className="mutirao-info">
-                <h3>{mutirao.title}</h3>
-                <p className="date">{mutirao.date}</p>
-                <p className="description">{mutirao.description}</p>
-                <p className="author">Por {mutirao.author}</p>
+                <h3>{mutirao.titulo}</h3>
+                <p className="date">{mutirao.data}</p>
+                <p className="description">{mutirao.descricao}</p>
+                {/*<p className="author">Por {mutirao.author}</p>*/}
               </div>
             </Link>
           ))}
@@ -37,4 +39,4 @@ const MutiroesList = ({ mutiroes }: MutiroesListProps) => {
   );
 };
 
-export default MutiroesList; 
+export default MutiroesList;

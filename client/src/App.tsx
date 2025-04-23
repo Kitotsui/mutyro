@@ -11,6 +11,11 @@ import {
 } from "./pages";
 
 import { action as registerAction } from "./pages/Register";
+import { action as loginAction } from "./pages/Login";
+import { action as novoMutiraoAction } from "./pages/NovoMutirao";
+
+import { loader as userLoader } from "./pages/User";
+import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
 
 const router = createBrowserRouter([
   {
@@ -30,18 +35,22 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+        action: loginAction,
       },
       {
         path: "user",
         element: <User />,
+        loader: userLoader,
       },
       {
         path: "novo-mutirao",
         element: <NovoMutirao />,
+        action: novoMutiraoAction,
       },
       {
         path: "mutirao/:id",
         element: <VisualizarMutirao />,
+        loader: visualizarMutiraoLoader,
       },
     ],
   },
