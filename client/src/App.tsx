@@ -1,8 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   HomeLayout,
-  Register,
-  Login,
   Landing,
   Error,
   User,
@@ -10,10 +8,7 @@ import {
   VisualizarMutirao,
 } from "./pages";
 
-import { action as registerAction } from "./pages/Register";
-import { action as loginAction } from "./pages/Login";
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
-
 import { loader as userLoader } from "./pages/User";
 import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
 
@@ -26,16 +21,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-        action: registerAction,
-      },
-      {
-        path: "login",
-        element: <Login />,
-        action: loginAction,
       },
       {
         path: "user",
@@ -53,14 +38,6 @@ const router = createBrowserRouter([
         loader: visualizarMutiraoLoader,
       },
     ],
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
   },
   {
     path: "/landing",

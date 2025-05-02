@@ -1,33 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/mutyrologo.svg";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
-import { Login, Register } from "../pages";
+import logo from "../assets/images/mutyrologo.svg";
 
 const NavBar = () => {
-  const [isRegisterOpen, setRegisterOpen] = useState(false);
-  const [isLoginOpen, setLoginOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const openRegisterModal = (e) => {
+  const handleLoginClick = (e) => {
     e.preventDefault();
-    setRegisterOpen(true);
+    setShowLogin(true);
+    setShowRegister(false);
+    setIsOpen(false);
   };
 
-  const openLoginModal = (e) => {
+  const handleRegisterClick = (e) => {
     e.preventDefault();
-    setLoginOpen(true);
+    setShowRegister(true);
+    setShowLogin(false);
+    setIsOpen(false);
+  };
+
+  const handleCloseModals = () => {
+    setShowLogin(false);
+    setShowRegister(false);
   };
 
   return (
     <Wrapper>
       <nav className="navbar">
         <div className="navbar-flex container">
-          <a href="/" aria-label="Logo Home">
+          <Link to="/" aria-label="Logo Home">
             <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
-          </a>
+          </Link>
 
-          {/* Botão de Menu para Mobile */}
           <button
             className="toggle-btn"
             onClick={() => setIsOpen(!isOpen)}
@@ -36,81 +45,56 @@ const NavBar = () => {
             ☰
           </button>
 
-          {/* Menu Principal */}
           <div className={`main-menu-items ${isOpen ? "open" : ""}`}>
             <ul className="main-menu-list">
               <li>
-                <a href="/" className="nav-link">
-                  Menu
-                </a>
+                <Link to="/" className="nav-link">
+                  Início
+                </Link>
               </li>
               <li>
-                <a href="#" className="nav-link">
-                  Menu
-                </a>
+                <Link to="/mutiroes" className="nav-link">
+                  Mutirões
+                </Link>
               </li>
               <li>
-                <a href="#" className="nav-link">
-                  Menu
-                </a>
-              </li>
-              <li>
-                <a href="#" className="nav-link">
-                  Menu
-                </a>
+                <Link to="/sobre" className="nav-link">
+                  Sobre
+                </Link>
               </li>
               <li>
                 <div className="cta-btns">
-                  <Link
-                    to="/register"
+                  <button
                     className="btn register-link"
-                    onClick={openRegisterModal}
+                    onClick={handleRegisterClick}
                   >
                     Cadastro
-                  </Link>
-                  <Link
-                    to="/login"
+                  </button>
+                  <button
                     className="btn login-link"
-                    onClick={openLoginModal}
+                    onClick={handleLoginClick}
                   >
                     Login
-                  </Link>
+                  </button>
                 </div>
               </li>
             </ul>
           </div>
         </div>
       </nav>
-      {/* Registration Modal */}
-      {isRegisterOpen && (
-        <div className="modal-overlay" onClick={() => setRegisterOpen(false)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
-          >
-            <Register
-              switchToLogin={() => {
-                setRegisterOpen(false);
-                setLoginOpen(true);
-              }}
-            />
+
+      {showLogin && (
+        <div className="modal-overlay" onClick={handleCloseModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <Login switchToRegister={handleRegisterClick} />
           </div>
         </div>
       )}
 
-      {/* Login Modal */}
-      {isLoginOpen && (
-        <div className="modal-overlay" onClick={() => setLoginOpen(false)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
-          >
-            <Login
-              switchToRegister={() => {
-                setLoginOpen(false);
-                setRegisterOpen(true);
-              }}
-            />
+      {showRegister && (
+        <div className="modal-overlay" onClick={handleCloseModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <Register switchToLogin={handleLoginClick} />
           </div>
         </div>
       )}

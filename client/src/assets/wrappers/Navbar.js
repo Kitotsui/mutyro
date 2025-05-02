@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     align-items: center;
   }
   .navbar {
-    background: var(--light-color); /*Temp*/
+    background: var(--light-color);
     color: white;
     padding: 1rem 2rem;
     position: fixed;
@@ -51,10 +51,10 @@ const Wrapper = styled.div`
   }
 
   .navbar #navbar-logo {
-    max-height: 150px; /* Make the logo larger (adjust as needed) */
-    max-width: 100%; /* Ensures the logo doesn’t overflow horizontally */
-    object-fit: contain; /* Ensures the aspect ratio is maintained */
-    position: relative; /* Allows the logo to "leak" without affecting the layout */
+    max-height: 150px;
+    max-width: 100%;
+    object-fit: contain;
+    position: relative;
     bottom: -35px;
     z-index: 1100;
   }
@@ -65,7 +65,7 @@ const Wrapper = styled.div`
     font-size: 2rem;
     cursor: pointer;
     color: white;
-    display: none; /* Escondido no desktop */
+    display: none;
   }
 
   .modal-overlay {
@@ -75,8 +75,8 @@ const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
     transform: translateY(0);
-    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-    backdrop-filter: blur(5px); /* Blur effect */
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,8 +132,7 @@ const Wrapper = styled.div`
 
     .toggle-btn {
       color: var(--primary-color);
-
-      display: block; /* Mostra o botão hambúrguer */
+      display: block;
     }
 
     .main-menu-items {
@@ -147,7 +146,6 @@ const Wrapper = styled.div`
       flex-direction: column;
       text-align: center;
       padding: 1rem;
-
       opacity: 0;
       transform: translateY(-10px);
       transition: transform 0.3s ease-in-out;
@@ -172,4 +170,5 @@ const Wrapper = styled.div`
     }
   }
 `;
+
 export default Wrapper;
