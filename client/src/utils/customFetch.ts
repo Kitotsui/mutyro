@@ -10,4 +10,16 @@ const customFetch = axios.create({
   withCredentials: true,
 });
 
+// Interceptor para respostas
+customFetch.interceptors.response.use(
+  (response) => {
+    console.log('Resposta recebida:', response);
+    return response;
+  },
+  (error) => {
+    console.error('Erro na requisição:', error);
+    return Promise.reject(error);
+  }
+);
+
 export default customFetch;

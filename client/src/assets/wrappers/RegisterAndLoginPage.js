@@ -36,7 +36,7 @@ const Wrapper = styled.section`
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    background: var(--grey-50);
+    background: var(--grey-150);
     border: 1px solid transparent;
     transition: all 0.2s;
     outline: none;

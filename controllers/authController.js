@@ -32,12 +32,24 @@ export const login = async (req, res) => {
     const oneDAY = 1000 * 60 * 60 * 24;
     // Definindo o cookie com o token JWT
 
-res.cookie('token', token, {
+    res.cookie('token', token, {
         httpOnly: true,
         expires: new Date(Date.now() + oneDAY),
         secure: process.env.NODE_ENV === 'production', // Define como true se estiver em ambiente de produção
-});
-    res.status(StatusCodes.OK).json({msg: 'Login realizado com sucesso!', });
+    });
+
+    // Enviando os dados do usuário na resposta
+    const usuarioResposta = {
+        _id: usuario._id,
+        nome: usuario.nome,
+        email: usuario.email,
+        isAdmin: usuario.isAdmin
+    };
+
+    res.status(StatusCodes.OK).json({
+        msg: 'Login realizado com sucesso!',
+        usuario: usuarioResposta
+    });
 };
 
 export const logout = (req, res) => {

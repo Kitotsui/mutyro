@@ -7,6 +7,7 @@ import {
   NovoMutirao,
   VisualizarMutirao,
 } from "./pages";
+import { AuthProvider } from "./context/AuthContext";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
@@ -62,7 +63,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 };
 
 export default App;

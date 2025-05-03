@@ -1,24 +1,35 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
 import logo from "../assets/images/mutyrologo.svg";
+import { useAuth } from "../context/AuthContext";
 
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { usuario, logout } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('Estado do usuário na NavBar:', usuario);
+  }, [usuario]);
 
   const handleLoginClick = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setShowLogin(true);
     setShowRegister(false);
     setIsOpen(false);
   };
 
   const handleRegisterClick = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setShowRegister(true);
     setShowLogin(false);
     setIsOpen(false);
@@ -27,6 +38,13 @@ const NavBar = () => {
   const handleCloseModals = () => {
     setShowLogin(false);
     setShowRegister(false);
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await logout();
+    setIsOpen(false);
+    navigate('/');
   };
 
   return (
@@ -64,18 +82,26 @@ const NavBar = () => {
               </li>
               <li>
                 <div className="cta-btns">
-                  <button
-                    className="btn register-link"
-                    onClick={handleRegisterClick}
-                  >
-                    Cadastro
-                  </button>
-                  <button
-                    className="btn login-link"
-                    onClick={handleLoginClick}
-                  >
-                    Login
-                  </button>
+                  {!usuario ? (
+                    <>
+                      <button
+                        className="btn register-link"
+                        onClick={handleRegisterClick}
+                      >
+                        Cadastro
+                      </button>
+                      <button
+                        className="btn login-link"
+                        onClick={handleLoginClick}
+                      >
+                        Login
+                      </button>
+                    </>
+                  ) : (
+                    <button className="btn login-link" onClick={handleLogout}>
+                      Sair
+                    </button>
+                  )}
                 </div>
               </li>
             </ul>

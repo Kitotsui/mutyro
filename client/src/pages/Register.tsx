@@ -1,7 +1,9 @@
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
+import { Form, useNavigation } from "react-router-dom";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 type ApiError = {
   response?: {
@@ -13,20 +15,51 @@ type ApiError = {
 };
 
 type Props = {
-  switchToLogin?: () => void;
+  switchToLogin?: (e?: React.MouseEvent) => void;
 };
 
 const Register = ({ switchToLogin }: Props) => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+  const { setUsuario } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     
     try {
-      await customFetch.post("/auth/register", data);
-      toast.success("Cadastro realizado com sucesso!");
-      window.location.href = "/user";
+      // Primeiro faz o cadastro
+      const response = await customFetch.post("/auth/cadastro", data);
+      console.log('Resposta do cadastro:', response);
+      
+      if (response.data && response.data.msg) {
+        toast.success(response.data.msg);
+      } else {
+        toast.success("Cadastro realizado com sucesso!");
+      }
+
+      // Depois faz o login automático
+      try {
+        const loginResponse = await customFetch.post("/auth/login", {
+          email: data.email,
+          senha: data.senha
+        });
+
+        if (loginResponse.data && loginResponse.data.usuario) {
+          setUsuario(loginResponse.data.usuario);
+          toast.success("Login realizado com sucesso!");
+          window.location.href = "/user";
+        }
+      } catch (loginError) {
+        console.error('Erro no login automático:', loginError);
+        // Se falhar o login, apenas fecha o modal de cadastro
+        if (switchToLogin) {
+          switchToLogin();
+        }
+      }
     } catch (error) {
+      console.error('Erro no cadastro:', error);
       const apiError = error as ApiError;
       toast.error(
         apiError?.response?.data?.msg || apiError?.message || "Erro desconhecido"
@@ -36,7 +69,7 @@ const Register = ({ switchToLogin }: Props) => {
 
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit} className='form'>
+      <Form onSubmit={handleSubmit} className='form'>
         <h4>Cadastro</h4>
         <FormRow
           placeHolder="Nome"
@@ -51,13 +84,25 @@ const Register = ({ switchToLogin }: Props) => {
           defaultValue="rogerio@gmail.com"
         />
         <FormRow
+          placeHolder="CPF"
+          type="text"
+          name="cpf"
+          defaultValue="00000000000"
+        />
+        <FormRow
           placeHolder="Senha"
           type="password"
           name="senha"
           defaultValue="88888888"
         />
-        <button type="submit" className="btn btn-block">
-          Cadastrar
+        <FormRow
+          placeHolder="Confirmar Senha"
+          type="password"
+          name="confirmarSenha"
+          defaultValue="88888888"
+        />
+        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
+          {isSubmitting ? "Cadastrando..." : "Cadastrar"}
         </button>
         <div className="divider">
           <div className="line"></div>
@@ -91,7 +136,7 @@ const Register = ({ switchToLogin }: Props) => {
             Login
           </button>
         </div>
-      </form>
+      </Form>
     </Wrapper>
   );
 };
