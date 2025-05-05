@@ -4,7 +4,7 @@ import Wrapper from "../assets/wrappers/NovoMutirao";
 import { Form, useNavigation, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
-import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
+//import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
@@ -80,7 +80,7 @@ const NovoMutirao = () => {
     local: "",
     materiais: "",
     tarefas: [""],
-    mutiraoTipo: MUTIRAO_TIPOS.SOCIAL,
+    mutiraoTipo: "SOCIAL",
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -328,20 +328,18 @@ const NovoMutirao = () => {
                       onChange={handleChange}
                       required
                     >
-                      <option value={MUTIRAO_TIPOS.SOCIAL}>Social</option>
-                      <option value={MUTIRAO_TIPOS.CONSTRUCAO_REFORMA}>
+                      <option value="SOCIAL">Social</option>
+                      <option value="CONSTRUCAO_REFORMA">
                         Construção / Reforma
                       </option>
-                      <option value={MUTIRAO_TIPOS.AMBIENTAL_AGRICOLA}>
+                      <option value="AMBIENTAL_AGRICOLA">
                         Ambiental / Agrícola
                       </option>
-                      <option value={MUTIRAO_TIPOS.CULTURA_EDUCACAO}>
+                      <option value="CULTURA_EDUCACAO">
                         Cultura / Educação
                       </option>
-                      <option value={MUTIRAO_TIPOS.SAUDE}>Saúde</option>
-                      <option value={MUTIRAO_TIPOS.TECNOLOGIA}>
-                        Tecnologia{" "}
-                      </option>
+                      <option value="SAUDE">Saúde</option>
+                      <option value="TECNOLOGIA">Tecnologia </option>
                     </select>
                   </div>
 
