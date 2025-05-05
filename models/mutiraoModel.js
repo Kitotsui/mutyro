@@ -34,6 +34,17 @@ const MutiraoSchema = new mongoose.Schema(
       ref: "Usuario",
       //required: true,
     },
+
+    imagemCapa: String,
+
+    ativo: {
+      type: Boolean,
+      default: true,
+    },
+    deletadoEm: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

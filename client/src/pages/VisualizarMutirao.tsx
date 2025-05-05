@@ -17,6 +17,7 @@ interface Mutirao {
   mutiraoTipo: string;
   inscritos?: string[];
   criadoPor: CriadoPorInfo;
+  imagemCapa: string;
 }
 
 interface CriadoPorInfo {
@@ -192,14 +193,15 @@ const VisualizarMutirao = () => {
         <div className="container">
           <div className="content-container">
             <div className="image-section">
-              {/* <div className="image-container">
-                <img
-                  src={mutirao.image}
-                  alt={`Imagem do mutirão: ${mutirao.title}`}
-                  className="mutirao-image"
-                />
-                <p className="image-credit">Imagem por {mutirao.author}</p>
-              </div> */}
+              <img
+                src={
+                  mutirao.imagemCapa
+                    ? `http://localhost:5100${mutirao.imagemCapa}`
+                    : "http://localhost:5100/uploads/default.png"
+                }
+                alt={`Imagem do mutirão: ${mutirao.titulo}`}
+                className="mutirao-image"
+              />
               <div className="autor-info">
                 <span>Organizado por:</span>
                 <h3>{mutirao.criadoPor.nome}</h3>

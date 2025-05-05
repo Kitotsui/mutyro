@@ -4,12 +4,27 @@ import Wrapper from "../assets/wrappers/NovoMutirao";
 import { Form, useNavigation, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
+import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
 
-  // Transforma os dados do form em objeto
+  // Para debug - verifique os dados do formulário
+  console.log("Dados do FormData:");
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
+  // vamos trabalhar diretamente com o FormData
   const tarefas = formData.getAll("tarefas") as string[];
+
+  // Limpa as tarefas existentes no FormData
+  formData.delete("tarefas");
+
+  // Adiciona cada tarefa individualmente
+  tarefas.filter(Boolean).forEach((tarefa) => {
+    formData.append("tarefas", tarefa);
+  });
 
   const mutirao = {
     titulo: formData.get("titulo"),
@@ -19,16 +34,28 @@ export const action = async ({ request }: { request: Request }) => {
     local: formData.get("local"),
     materiais: formData.get("materiais") || "",
     tarefas: tarefas.filter(Boolean),
-    mutiraoTipo: formData.get("tipo"),
+    mutiraoTipo: formData.get("mutiraoTipo"),
   };
 
+
   try {
-    await customFetch.post("/mutiroes", mutirao);
+    const response = await customFetch.post("/mutiroes", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response.data.error) {
+      throw new Error(response.data.error);
+    }
+
     toast.success("Mutirão criado com sucesso!");
     return redirect("/user");
   } catch (err: any) {
-    toast.error(err?.response?.data?.msg || "Erro ao criar mutirão");
-    return err;
+    const errorMsg =
+      err.response?.data?.msg || err.message || "Erro ao criar mutirão";
+    toast.error(errorMsg);
+    return null;
   }
 };
 
@@ -40,7 +67,7 @@ interface FormData {
   local: string;
   materiais: string;
   tarefas: string[];
-  tipo: string;
+  mutiraoTipo: string;
 }
 
 const NovoMutirao = () => {
@@ -53,7 +80,7 @@ const NovoMutirao = () => {
     local: "",
     materiais: "",
     tarefas: [""],
-    tipo: "limpeza",
+    mutiraoTipo: MUTIRAO_TIPOS.SOCIAL,
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -117,7 +144,7 @@ const NovoMutirao = () => {
           <main>
             <h2>Seu mutirão está quase pronto!</h2>
             <div className="form-container">
-              <Form method="post" >
+              <Form method="post" encType="multipart/form-data">
                 <div className="image-section">
                   <h3>Capa do Mutirão</h3>
                   <div className="image-upload">
@@ -144,6 +171,7 @@ const NovoMutirao = () => {
                     <input
                       type="file"
                       id="foto-input"
+                      name="imagemCapa"
                       accept="image/*"
                       onChange={handleImageChange}
                       style={{ display: "none" }}
@@ -294,18 +322,26 @@ const NovoMutirao = () => {
                   <div className="form-group">
                     <label htmlFor="tipo">Tipo de Mutirão</label>
                     <select
-                      id="tipo"
-                      name="tipo"
-                      value={formData.tipo}
+                      id="mutiraoTipo"
+                      name="mutiraoTipo"
+                      value={formData.mutiraoTipo}
                       onChange={handleChange}
                       required
                     >
-                      <option value="SOCIAL">Social</option>
-                      <option value="CONSTRUCAO/REFORMA">Construcao / Reforma</option>
-                      <option value="AMBIENTAL/AGRICOLA">Ambiental / Agricola</option>
-                      <option value="CULTURA/EDUCACAO">Cultura / Educacao</option>
-                      <option value="SAUDE">Saúde</option>
-                      <option value="TECNOLOGIA">Tecnologia</option>
+                      <option value={MUTIRAO_TIPOS.SOCIAL}>Social</option>
+                      <option value={MUTIRAO_TIPOS.CONSTRUCAO_REFORMA}>
+                        Construção / Reforma
+                      </option>
+                      <option value={MUTIRAO_TIPOS.AMBIENTAL_AGRICOLA}>
+                        Ambiental / Agrícola
+                      </option>
+                      <option value={MUTIRAO_TIPOS.CULTURA_EDUCACAO}>
+                        Cultura / Educação
+                      </option>
+                      <option value={MUTIRAO_TIPOS.SAUDE}>Saúde</option>
+                      <option value={MUTIRAO_TIPOS.TECNOLOGIA}>
+                        Tecnologia{" "}
+                      </option>
                     </select>
                   </div>
 

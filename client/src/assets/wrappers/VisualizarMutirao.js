@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   min-height: 100vh;
   background-color: var(--grey-50);
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 
   .container {
     max-width: 1200px;
@@ -15,7 +15,8 @@ const Wrapper = styled.div`
     background: white;
     border-radius: 1rem;
     padding: 2rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
     margin-top: 2rem;
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -27,7 +28,7 @@ const Wrapper = styled.div`
       border-radius: 0.5rem;
       overflow: hidden;
       margin-bottom: 1rem;
-      
+
       img {
         width: 100%;
         height: 400px;
@@ -42,12 +43,19 @@ const Wrapper = styled.div`
       }
     }
 
+    .mutirao-image {
+      width: 100%;
+      height: 30%;
+      object-fit: cover; /* Mantém a proporção e cobre o container */
+      object-position: center; /* Centraliza a imagem */
+    }
+
     .autor-info {
       background: var(--grey-50);
       padding: 1rem;
       border-radius: 0.5rem;
       border: 1px solid var(--grey-100);
-      
+
       span {
         color: var(--grey-600);
         font-size: 0.875rem;
@@ -199,7 +207,7 @@ const Wrapper = styled.div`
 
       .termo-text {
         margin-left: 0.75rem;
-        
+
         p {
           font-size: 0.875rem;
           color: var(--grey-700);
@@ -256,7 +264,7 @@ const Wrapper = styled.div`
         &.disabled {
           opacity: 0.5;
           cursor: not-allowed;
-          
+
           &:hover {
             background: var(--orange-500);
             transform: none;
@@ -281,14 +289,16 @@ const Wrapper = styled.div`
         font-size: 1.25rem;
       }
 
-      .checkbox-list, .tasks-list {
+      .checkbox-list,
+      .tasks-list {
         gap: 0.5rem;
       }
 
       .button-group {
         flex-direction: column;
-        
-        .back-btn, .submit-btn {
+
+        .back-btn,
+        .submit-btn {
           width: 100%;
         }
       }

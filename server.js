@@ -6,6 +6,7 @@ const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from "cors";
 
 //Swagger
 import swaggerUi from "swagger-ui-express";
@@ -20,6 +21,21 @@ import userRouter from "./routes/userRouter.js";
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import {authenticateUser} from './middleware/authMiddleware.js';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use(cors({
+  origin: 'http://localhost:5173', // URL do seu frontend
+  credentials: true, // Permite enviar cookies
+}));
+
+// Arquivo estático para uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Configurações
@@ -30,6 +46,8 @@ if(process.env.NODE_ENV === 'development') {
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {    
     res.send("Olá mundo!");

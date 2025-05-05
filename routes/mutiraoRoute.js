@@ -3,6 +3,10 @@ import {
   validateMutiraoInput,
   validateIdParam,
 } from "../middleware/validationMiddleware.js";
+import express from "express";
+import upload from "../utils/multer.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
+
 const router = Router();
 
 import {
@@ -14,6 +18,7 @@ import {
   getTodosMutiroes,
   inscreverUsuario,
   cancelarInscricao,
+  getMutiroesInativos,
 } from "../controllers/mutiraoController.js";
 
 /**
@@ -55,7 +60,7 @@ import {
  *       201:
  *         description: Mutirão criado com sucesso
  */
-router.route("/").get(getMutiroes).post(validateMutiraoInput, createMutirao);
+router.route("/").get(getMutiroes).post(upload.single("imagemCapa"), validateMutiraoInput, createMutirao);
 
 router.route("/todos").get(getTodosMutiroes);
 
@@ -118,6 +123,8 @@ router.route("/todos").get(getTodosMutiroes);
  *       200:
  *         description: Mutirão deletado com sucesso
  */
+
+router.get("/inativos", authenticateUser, getMutiroesInativos);
 
 router
   .route("/:id")

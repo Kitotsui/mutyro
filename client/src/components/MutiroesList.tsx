@@ -6,6 +6,7 @@ interface Mutirao {
   titulo: string;
   data: string;
   descricao: string;
+  imagemCapa: string;
 }
 
 interface MutiroesListProps {
@@ -24,7 +25,13 @@ const MutiroesList = ({ mutiroes }: MutiroesListProps) => {
               key={mutirao._id}
               className="mutirao-card"
             >
-              {/*<img src={mutirao.image} alt={mutirao.title} />*/}
+              {mutirao.imagemCapa && (
+                <img
+                  src={`http://localhost:5100${mutirao.imagemCapa}`}
+                  alt={mutirao.titulo}
+                  className="mutirao-image"
+                />
+              )}
               <div className="mutirao-info">
                 <h3>{mutirao.titulo}</h3>
                 <p className="date">{mutirao.data}</p>

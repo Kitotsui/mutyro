@@ -1,23 +1,59 @@
 import { StatusCodes } from "http-status-codes";
 import Mutirao from "../models/mutiraoModel.js";
+import { MUTIRAO_TIPOS } from "../utils/constantes.js";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);
-  const mutiroes = await Mutirao.find({ criadoPor: req.user.userId }); // Busca todos os mutirões do usuário logado
+  const mutiroes = await Mutirao.find({
+    criadoPor: req.user.userId,
+    ativo: true,
+  }); // Busca todos os mutirões do usuário logado que estao ativos
   res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const getTodosMutiroes = async (req, res) => {
   //console.log(req.user);
-  const mutiroes = await Mutirao.find({}); // Busca todos os mutirões do usuário logado
+  const mutiroes = await Mutirao.find({ ativo: true }); // Busca todos os mutirões do usuário logado que estao ativos
   res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const createMutirao = async (req, res) => {
-  req.body.criadoPor = req.user.userId; // Adiciona o id do usuário logado ao mutirão
-  const mutirao = await Mutirao.create(req.body); // Criar um novo mutirão utilizando o modelo Mutirao do models
-  res.status(StatusCodes.CREATED).json({ mutirao });
-  console.log("Mutirão criado com sucesso!");
+  //LOGS PARA DEBUG
+    console.log("Tipo recebido:", req.body.mutiraoTipo);
+    console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
+    console.log("Corpo completo da requisição:", req.body);
+  try {
+    // verificação de tipo de mutirao
+    if (!Object.values(MUTIRAO_TIPOS).includes(req.body.mutiraoTipo)) {
+      return res.status(400).json({ msg: "Tipo de mutirão inválidop" });
+    }
+
+    // Define a imagem padrão ou a enviada
+    let imagePath = "/uploads/default.png"; 
+    if (req.file) {
+      imagePath = `/uploads/${req.file.filename}`;
+    }
+
+    const mutirao = await Mutirao.create({
+      ...req.body,
+      criadoPor: req.user.userId,
+      imagemCapa: imagePath,
+    });
+
+    res.status(201).json({ mutirao });
+  } catch (error) {
+    console.error("Erro ao criar mutirão:", error);
+
+    // Remove o arquivo se houve erro
+    if (req.file) {
+      fs.unlink(req.file.path, () => {});
+    }
+
+    res.status(500).json({
+      msg: "Erro ao criar mutirão",
+      error: process.env.NODE_ENV === "development" ? error.message : null,
+    });
+  }
 };
 
 export const getMutirao = async (req, res) => {
@@ -25,6 +61,15 @@ export const getMutirao = async (req, res) => {
   const mutirao = await Mutirao.findById(id).populate("criadoPor", "nome _id");
 
   res.status(StatusCodes.OK).json({ mutirao });
+};
+
+// Busca de mutirões inativos
+export const getMutiroesInativos = async (req, res) => {
+  const mutiroes = await Mutirao.find({ 
+    criadoPor: req.user.userId,
+    ativo: false 
+  });
+  res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const updateMutirao = async (req, res) => {
@@ -38,9 +83,21 @@ export const updateMutirao = async (req, res) => {
 
 export const deleteMutirao = async (req, res) => {
   const { id } = req.params;
-  const removedMutirao = await Mutirao.findByIdAndDelete(id);
+  const updatedMutirao = await Mutirao.findByIdAndUpdate(
+    id,
+    {
+      ativo: false,
+      deletadoEm: new Date(),
+    },
+    { new: true }
+  );
 
-  res.status(StatusCodes.OK).json({ message: "Mutirão deletado com sucesso!" });
+  res
+    .status(StatusCodes.OK)
+    .json({
+      message: "Mutirão marcado como inativo com sucesso!",
+      mutirao: updatedMutirao,
+    });
 };
 
 export const inscreverUsuario = async (req, res) => {

@@ -1,27 +1,49 @@
-import { UnauthenticatedError, UnauthorizedError} from "../errors/customErrors.js";
+import { UnauthenticatedError, UnauthorizedError } from "../errors/customErrors.js";
 import { verifyJWT } from "../utils/tokenUtils.js";
 
 export const authenticateUser = (req, res, next) => {
-  console.log(req.cookies);
-
-  const { token } = req.cookies;
-  if (!token) throw new UnauthenticatedError("Autenticação inválida00!"); //se o cookie nao estiver presente
+  // Verifica o token nos cookies no Authorization header
+  const token = req.cookies?.token || req.headers.authorization?.replace('Bearer ', '');
   
-    //verifica se o token é válido, envia os dados do usuário (id e tipo)
-    try {
-        const { userId, isAdmin } = verifyJWT(token); 
-        req.user = { userId, isAdmin };
-        next(); // chama o próximo middleware - mutiraocontroller
-    } catch (error) {
-      throw new UnauthenticatedError("Autenticação inválida01!"); //se o jwt nao for valido
-    } 
+  console.log('Token recebido:', token); // debug
+
+  if (!token) {
+    console.log('Nenhum token encontrado');
+    throw new UnauthenticatedError("Autenticação necessária");
+  }
+
+  try {
+    //Verifica e decodifica o token
+    const { userId, isAdmin } = verifyJWT(token);
+    
+    //Adiciona os dados do usuário na requisição
+    req.user = { 
+      userId, 
+      isAdmin,
+      token // adiciona o token na requisição
+    };
+    
+    console.log('Usuário autenticado:', { userId, isAdmin }); // debug
+    next();
+  } catch (error) {
+    console.error('Falha na verificação do token:', error.message);
+    throw new UnauthenticatedError("Token inválido ou expirado");
+  }
 };
 
 export const authorizePermissions = () => {
   return (req, res, next) => {
-    if (!req.user.isAdmin) { //se o usuario não for admin
-      throw new UnauthorizedError("Requerido admin para acessar esta rota!");
+    // Verifica se o middleware authenticateUser foi executado primeiro
+    if (!req.user) {
+      throw new UnauthenticatedError("Autenticação necessária");
     }
+    
+    if (!req.user.isAdmin) {
+      console.log('Acesso negado para usuário não-admin:', req.user.userId);
+      throw new UnauthorizedError("Acesso restrito a administradores");
+    }
+    
+    console.log('Acesso admin concedido para:', req.user.userId);
     next();
   };
 };

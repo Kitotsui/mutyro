@@ -71,8 +71,14 @@ export const validateMutiraoInput = withValidationErrors([
   body("descricao").notEmpty().withMessage("Descrição é obrigatório!"),
   body("local").notEmpty().withMessage("Local é obrigatório!"),
   body("mutiraoTipo")
+    .trim()
+    .toUpperCase()
     .isIn(Object.values(MUTIRAO_TIPOS))
-    .withMessage("Tipo do mutirao invalido!"),
+    .withMessage("Tipo do mutirao invalido!")
+    .customSanitizer((value) => {
+      // Remove barras se existirem
+      return value.replace(/\//g, "_");
+    }),
 ]);
 
 export const validateIdParam = withValidationErrors([
@@ -80,7 +86,10 @@ export const validateIdParam = withValidationErrors([
     const isValidId = mongoose.Types.ObjectId.isValid(value);
     if (!isValidId) throw new BadRequestError("invalido MongoDB id");
 
-    const mutirao = await Mutirao.findById(value);
+    const mutirao = await Mutirao.findOne({
+      _id: value,
+      ativo: true, // Só permite operações em mutirões ativos
+    });
     if (!mutirao) throw new NotFoundError(`Nenhum mutirão com Id ${value}`);
 
     // const isAdmin = req.user.role === 'admin'; //verifica se o usuário é admin
