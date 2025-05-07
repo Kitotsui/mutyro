@@ -4,6 +4,7 @@ import Wrapper from "../assets/wrappers/VisualizarMutirao";
 import { NavBar } from "../components";
 import customFetch from "@/utils/customFetch";
 import { useLoaderData } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Mutirao {
   _id: string;
@@ -45,7 +46,6 @@ export const loader = async ({
 }: LoaderFunctionArgs): Promise<VisualizarMutiraoLoaderData> => {
   const { id } = params;
 
-  // Checagem básica de parâmetro ainda útil
   if (!id) {
     throw new Response("Requisição inválida: ID do mutirão ausente na URL.", {
       status: 400,
@@ -102,7 +102,13 @@ const VisualizarMutirao = () => {
   const navigate = useNavigate();
   const { mutirao, isInscrito: initialIsInscrito } =
     useLoaderData() as VisualizarMutiraoLoaderData;
-  // const { id } = useParams();
+
+  // constante p/ gerenciar o usuário atual
+  const [currentUser, setCurrentUser] = useState<{
+    _id: string;
+    isAdmin: boolean;
+  } | null>(null);
+
   const [isInscrito, setIsInscrito] = useState(false);
   const [aceitouTermo, setAceitouTermo] = useState(false);
   const [habilidades, setHabilidades] = useState<Habilidade[]>([
@@ -114,6 +120,24 @@ const VisualizarMutirao = () => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Carrega o usuário atual
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await customFetch("/usuarios/atual-usuario");
+        setCurrentUser({
+          _id: response.data.usuario._id,
+          isAdmin: response.data.usuario.isAdmin,
+        });
+      } catch (error) {
+        console.log("Usuário não autenticado");
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Inicializa materiais selecionados
   useEffect(() => {
     if (mutirao?.materiais && Array.isArray(mutirao.materiais)) {
       const estadoInicial = mutirao.materiais.reduce((acc, nomeMaterial) => {
@@ -149,7 +173,9 @@ const VisualizarMutirao = () => {
 
   const handleInscricao = async () => {
     if (!aceitouTermo) {
-      alert("Por favor, aceite o termo de participação antes de se inscrever.");
+      toast.warn(
+        "Por favor, aceite o termo de participação antes de se inscrever."
+      );
       return;
     }
 
@@ -186,6 +212,32 @@ const VisualizarMutirao = () => {
     }
   };
 
+  const handleExcluirMutirao = async () => {
+    if (!window.confirm("Tem certeza que deseja excluir este mutirão?")) {
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await customFetch.delete(`/mutiroes/${mutirao._id}`);
+      toast.success("Mutirão excluído com sucesso!");
+      navigate("/user"); // Redireciona para a página do usuário após exclusão
+    } catch (error: any) {
+      const errorMsg =
+        error.response?.data?.msg ||
+        error.message ||
+        "Erro ao excluir mutirão";
+      toast.error(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Verifica se o usuário pode editar (criador ou admin)
+  const podeEditar =
+    currentUser &&
+    (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin);
+
   return (
     <Wrapper>
       <div className="min-h-screen">
@@ -206,8 +258,36 @@ const VisualizarMutirao = () => {
                 <span>Organizado por:</span>
                 <h3>{mutirao.criadoPor.nome}</h3>
               </div>
-            </div>
 
+              <div className="info-section">
+                <Wrapper>
+                  <div className="button-group">
+                    {podeEditar && (
+                      <div
+                        className="button-group"                
+                      >
+                        <button
+                          className="edit-btn"
+                          onClick={() =>
+                            navigate(`/mutirao/${mutirao._id}/editar`)
+                          }
+                          disabled={isSubmitting}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={handleExcluirMutirao}
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? "Processando..." : "Excluir"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </Wrapper>
+              </div>
+            </div>
             <div className="info-section">
               <h1>{mutirao.titulo}</h1>
               <p className="date-author">
@@ -336,7 +416,8 @@ const VisualizarMutirao = () => {
                 <button
                   type="button"
                   className="back-btn"
-                  onClick={() => navigate(-1)}
+                  /*onClick={() => navigate(-1)}*/
+                  onClick={() => navigate("/user")}
                 >
                   Voltar
                 </button>

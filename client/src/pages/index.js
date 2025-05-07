@@ -6,4 +6,5 @@ export {default as Error} from './Error';
 export {default as User} from './User';
 export {default as NovoMutirao} from './NovoMutirao';
 export {default as VisualizarMutirao} from './VisualizarMutirao';
+export { default as EditarMutirao } from "./EditarMutirao";
 
