@@ -6,7 +6,12 @@ const HomeLayout = () => {
   return (
     <div>
       <NavBar />
-      <div className="page-wrapper" style={{ paddingTop: "var(--nav-height)" }}>
+      <div
+        className="page-wrapper"
+        style={{
+          paddingTop: "calc(var(--nav-height) + calc(var(--nav-height) / 2))",
+        }}
+      >
         <Outlet />
       </div>
     </div>

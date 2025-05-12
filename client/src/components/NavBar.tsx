@@ -68,7 +68,6 @@ const NavBar = () => {
   const toggleUserDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Impede que o clique no profileLink feche imediatamente
     setShowUserDropdown(!showUserDropdown);
-    setIsOpen(false);
   };
 
   // Fecha o dropdown se clicar fora

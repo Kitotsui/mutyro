@@ -25,24 +25,27 @@ const Login = ({ switchToRegister }: Props) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    
+
     try {
-      console.log('Enviando dados para login:', data);
+      console.log("Enviando dados para login:", data);
       const response = await customFetch.post("/auth/login", data);
-      console.log('Resposta completa do login:', response);
-      
+      console.log("Resposta completa do login:", response);
+
       if (response.data && response.data.usuario) {
-        console.log('Dados do usuário recebidos:', response.data.usuario);
+        console.log("Dados do usuário recebidos:", response.data.usuario);
         setUsuario(response.data.usuario);
         toast.success("Login feito com sucesso!");
         window.location.href = "/user";
       } else {
-        console.log('Tentando buscar usuário atual...');
+        console.log("Tentando buscar usuário atual...");
         const userResponse = await customFetch.get("/usuarios/atual-usuario");
-        console.log('Resposta do usuário atual:', userResponse);
-        
+        console.log("Resposta do usuário atual:", userResponse);
+
         if (userResponse.data && userResponse.data.usuario) {
-          console.log('Dados do usuário atual recebidos:', userResponse.data.usuario);
+          console.log(
+            "Dados do usuário atual recebidos:",
+            userResponse.data.usuario
+          );
           setUsuario(userResponse.data.usuario);
           toast.success("Login feito com sucesso!");
           window.location.href = "/user";
@@ -51,17 +54,19 @@ const Login = ({ switchToRegister }: Props) => {
         }
       }
     } catch (error) {
-      console.error('Erro detalhado no login:', error);
+      console.error("Erro detalhado no login:", error);
       const apiError = error as ApiError;
       toast.error(
-        apiError?.response?.data?.msg || apiError?.message || "Erro desconhecido"
+        apiError?.response?.data?.msg ||
+          apiError?.message ||
+          "Erro desconhecido"
       );
     }
   };
 
   return (
     <Wrapper>
-      <Form onSubmit={handleSubmit} className='form'>
+      <Form onSubmit={handleSubmit} className="form">
         <h4>Login</h4>
         <FormRow
           placeHolder="Usuário ou Email"
@@ -86,11 +91,7 @@ const Login = ({ switchToRegister }: Props) => {
           <span>ou</span>
           <div className="line"></div>
         </div>
-        <button
-          type="button"
-          className="btn-link"
-          onClick={switchToRegister}
-        >
+        <button type="button" className="btn-link" onClick={switchToRegister}>
           Criar uma conta
         </button>
       </Form>

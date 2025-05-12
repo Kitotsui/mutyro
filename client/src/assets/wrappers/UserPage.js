@@ -14,8 +14,8 @@ const Wrapper = styled.div`
 
   .profile-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 2rem;
   }
 
@@ -47,11 +47,10 @@ const Wrapper = styled.div`
   .new-mutirao-btn {
     background-color: var(--primary-100);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2rem;
     border-radius: 0.375rem;
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    align-self: flex-end;
     transition: background-color 0.2s;
 
     &:hover {
@@ -307,6 +306,24 @@ const Wrapper = styled.div`
           font-size: 0.875rem;
         }
       }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
+  @media (max-width: 768px) {
+    .new-mutirao-btn {
+      align-self: center;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
     }
   }
 `;

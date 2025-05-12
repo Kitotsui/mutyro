@@ -89,20 +89,23 @@ const Wrapper = styled.div`
     gap: 0.5rem;
   }
 
-  .btn {
-    font-size: 14px;
+  .cta-btns .btn {
+    font-weight: 500;
+    font-size: 13px;
     color: white;
     width: 6rem;
     padding: 0.8rem;
     text-align: center;
     margin: 0 auto;
+    font-family: "Roboto";
   }
 
   .login-link {
-    color: var(--dark-color);
+    color: var(--dark-color) !important;
     background-color: var(--light-color);
   }
 
+<<<<<<< Updated upstream
   .modal-content {
     background: white;
     border-radius: 8px;
@@ -117,6 +120,8 @@ const Wrapper = styled.div`
     padding: 0;
   }
 
+=======
+>>>>>>> Stashed changes
   .user-profile-area {
     position: relative;
     display: flex;

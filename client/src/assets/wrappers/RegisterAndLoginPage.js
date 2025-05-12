@@ -109,7 +109,7 @@ const Wrapper = styled.section`
     color: var(--grey-800);
     border: 1px solid var(--grey-200);
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 12px 16px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -139,4 +139,3 @@ const Wrapper = styled.section`
 `;
 
 export default Wrapper;
-

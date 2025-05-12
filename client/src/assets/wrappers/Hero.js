@@ -16,6 +16,7 @@ const Wrapper = styled.div`
     padding: 0 5rem;
     max-width: var(--max-width);
     margin-bottom: 0;
+    margin-top: calc(var(--nav-height) * -1.5);
   }
 
   .hero-content {
@@ -159,6 +160,19 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+  }
+
+  @media (max-width: 992px) {
+    .hero-quotation {
+      position: relative;
+      right: auto;
+      left: auto;
+      width: 90%;
+      max-width: 35rem;
+      text-align: center;
+      margin: 1rem auto;
+      padding-right: 0;
+    }
   }
 
   @media (max-width: 768px) {
