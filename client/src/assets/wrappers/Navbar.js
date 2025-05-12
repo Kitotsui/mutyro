@@ -105,7 +105,6 @@ const Wrapper = styled.div`
     background-color: var(--light-color);
   }
 
-<<<<<<< Updated upstream
   .modal-content {
     background: white;
     border-radius: 8px;
@@ -120,8 +119,6 @@ const Wrapper = styled.div`
     padding: 0;
   }
 
-=======
->>>>>>> Stashed changes
   .user-profile-area {
     position: relative;
     display: flex;
@@ -190,7 +187,7 @@ const Wrapper = styled.div`
     cursor: pointer;
     padding: 0.5rem;
     display: flex;
-    align-items: center;
+    align-items: end;
     margin-left: 2px;
     color: var(--text-secondary-color, #555);
     border-radius: var(--border-radius, 4px);
