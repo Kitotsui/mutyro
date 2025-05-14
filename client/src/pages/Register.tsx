@@ -16,6 +16,7 @@ type ApiError = {
 
 type Props = {
   switchToLogin?: (e?: React.MouseEvent) => void;
+  closeModal?: () => void;
 };
 
 const Register = ({ switchToLogin }: Props) => {
