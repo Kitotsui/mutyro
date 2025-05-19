@@ -13,15 +13,19 @@ export const getMutiroes = async (req, res) => {
 
 export const getTodosMutiroes = async (req, res) => {
   //console.log(req.user);
-  const mutiroes = await Mutirao.find({ ativo: true }); // Busca todos os mutirões do usuário logado que estao ativos
+  const mutiroes = await Mutirao.find({ ativo: true }).populate(
+    "criadoPor",
+    "nome"
+  );
+
   res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const createMutirao = async (req, res) => {
   //LOGS PARA DEBUG
-    console.log("Tipo recebido:", req.body.mutiraoTipo);
-    console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
-    console.log("Corpo completo da requisição:", req.body);
+  console.log("Tipo recebido:", req.body.mutiraoTipo);
+  console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
+  console.log("Corpo completo da requisição:", req.body);
   try {
     // verificação de tipo de mutirao
     if (!Object.values(MUTIRAO_TIPOS).includes(req.body.mutiraoTipo)) {
@@ -29,7 +33,7 @@ export const createMutirao = async (req, res) => {
     }
 
     // Define a imagem padrão ou a enviada
-    let imagePath = "/uploads/default.png"; 
+    let imagePath = "/uploads/default.png";
     if (req.file) {
       imagePath = `/uploads/${req.file.filename}`;
     }
@@ -65,9 +69,9 @@ export const getMutirao = async (req, res) => {
 
 // Busca de mutirões inativos
 export const getMutiroesInativos = async (req, res) => {
-  const mutiroes = await Mutirao.find({ 
+  const mutiroes = await Mutirao.find({
     criadoPor: req.user.userId,
-    ativo: false 
+    ativo: false,
   });
   res.status(StatusCodes.OK).json({ mutiroes });
 };
@@ -92,12 +96,10 @@ export const deleteMutirao = async (req, res) => {
     { new: true }
   );
 
-  res
-    .status(StatusCodes.OK)
-    .json({
-      message: "Mutirão marcado como inativo com sucesso!",
-      mutirao: updatedMutirao,
-    });
+  res.status(StatusCodes.OK).json({
+    message: "Mutirão marcado como inativo com sucesso!",
+    mutirao: updatedMutirao,
+  });
 };
 
 export const inscreverUsuario = async (req, res) => {

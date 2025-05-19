@@ -1,16 +1,18 @@
 import logo from "../assets/images/mutyroinnerlogotextless.png";
 import Wrapper from "../assets/wrappers/Blog";
 
-import { FilterBar, Carousel, Card } from "../components";
-import mutiroesData from "../data/mutiroes";
+import { FilterBar, Carousel, Card } from ".";
 import { useState, useEffect, useRef } from "react";
 
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-const Blog = () => {
-  const [mutiroes, setMutiroes] = useState([]);
+interface BlogProps {
+  mutiroes: Mutirao[];
+  filtrosElement?: React.ReactNode;
+}
 
+const Blog = ({ mutiroes }: BlogProps) => {
   const wasDragging = useRef(false);
 
   const [date, setDate] = useState(new Date());
@@ -34,10 +36,6 @@ const Blog = () => {
     },
   ];
 
-  useEffect(() => {
-    setMutiroes(mutiroesData);
-  }, []);
-
   return (
     <Wrapper>
       <FilterBar />
@@ -52,15 +50,15 @@ const Blog = () => {
         </div>
         <Carousel>
           {mutiroes.map((mutirao) => {
-            const { id, image, title, date, user } = mutirao;
+            const { _id, imagemCapa, titulo, data, criadoPor } = mutirao;
             return (
               <Card
-                key={id}
-                id={id}
-                image={image}
-                title={title}
-                date={date}
-                user={user}
+                key={_id}
+                id={_id}
+                image={"http://localhost:5100" + imagemCapa}
+                title={titulo}
+                date={data}
+                user={criadoPor?.nome || "Usuário desconhecido"}
                 wasDraggingRef={wasDragging}
               />
             );
