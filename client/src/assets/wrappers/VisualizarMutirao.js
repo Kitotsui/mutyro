@@ -220,6 +220,8 @@ const Wrapper = styled.div`
       display: flex;
       gap: 1rem;
       margin-top: 2rem;
+      flex-direction: column;
+      width: 100%;
 
       .back-btn {
         padding: 0.75rem 1.5rem;
@@ -247,6 +249,69 @@ const Wrapper = styled.div`
         color: white;
         font-weight: 500;
         padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        transition: all 0.2s;
+        font-size: 1rem;
+
+        &:hover {
+          background: var(--primary-50);
+          transform: scale(1.02);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: var(--orange-500);
+            transform: none;
+          }
+        }
+      }
+
+      .edit-btn {
+        flex: 1;
+        background: var(--primary-100);
+        color: white;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        transition: all 0.2s;
+        font-size: 1rem;
+        text-align: center;
+
+        &:hover {
+          background: var(--primary-50);
+          transform: scale(1.02);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: var(--orange-500);
+            transform: none;
+          }
+        }
+      }
+
+      .delete-btn {
+        flex: 1;
+        background: var(--primary-100);
+        color: white;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
         border-radius: 0.5rem;
         border: none;
         transition: all 0.2s;

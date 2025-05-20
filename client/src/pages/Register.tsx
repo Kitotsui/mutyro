@@ -76,13 +76,13 @@ const Register = ({ switchToLogin }: Props) => {
           placeHolder="Nome"
           type="text"
           name="nome"
-          defaultValue="Rogerio"
+          defaultValue="Usuario"
         />
         <FormRow
           placeHolder="Email"
           type="email"
           name="email"
-          defaultValue="rogerio@gmail.com"
+          defaultValue="usuario@gmail.com"
         />
         <FormRow
           placeHolder="CPF"
