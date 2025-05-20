@@ -220,6 +220,8 @@ const Wrapper = styled.div`
       display: flex;
       gap: 1rem;
       margin-top: 2rem;
+      flex-direction: column;
+      width: 100%;
 
       .back-btn {
         padding: 0.75rem 1.5rem;
@@ -234,6 +236,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--grey-200);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -255,6 +258,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--primary-50);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -270,6 +274,79 @@ const Wrapper = styled.div`
             transform: none;
           }
         }
+      }
+
+      .edit-btn {
+        flex: 1;
+        background: var(--primary-100);
+        color: white;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        transition: all 0.2s;
+        font-size: 1rem;
+        text-align: center;
+
+        &:hover {
+          background: var(--primary-50);
+          transform: scale(1.02);
+          cursor: pointer;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: var(--orange-500);
+            transform: none;
+          }
+        }
+      }
+
+      .delete-btn {
+        flex: 1;
+        background: var(--primary-100);
+        color: white;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        transition: all 0.2s;
+        font-size: 1rem;
+
+        &:hover {
+          background: var(--primary-50);
+          transform: scale(1.02);
+          cursor: pointer;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: var(--orange-500);
+            transform: none;
+          }
+        }
+      }
+      .edicao-bloqueada {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ffeeba;
       }
     }
   }

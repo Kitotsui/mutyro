@@ -8,10 +8,12 @@ import {
   VisualizarMutirao,
 } from "./pages";
 import { AuthProvider } from "./context/AuthContext";
+import EditarMutirao from "./pages/EditarMutirao";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
 import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
+import { action as editarMutiraoAction } from "./pages/EditarMutirao";
 import { loader as landingLoader } from "./pages/Landing";
 
 const router = createBrowserRouter([
@@ -39,6 +41,12 @@ const router = createBrowserRouter([
         path: "mutirao/:id",
         element: <VisualizarMutirao />,
         loader: visualizarMutiraoLoader,
+      },
+      {
+        path: "mutirao/:id/editar",
+        element: <EditarMutirao />,
+        loader: visualizarMutiraoLoader,
+        action: editarMutiraoAction,
       },
     ],
   },

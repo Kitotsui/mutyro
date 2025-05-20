@@ -131,7 +131,7 @@ router.get("/inativos", authenticateUser, getMutiroesInativos);
 router
   .route("/:id")
   .get(validateIdParam, getMutirao)
-  .patch(validateMutiraoInput, validateIdParam, updateMutirao)
+  .patch(upload.single("imagemCapa"), validateMutiraoInput, validateIdParam, updateMutirao)
   .delete(validateIdParam, deleteMutirao);
 
 /**

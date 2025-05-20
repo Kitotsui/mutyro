@@ -12,6 +12,8 @@ const Wrapper = styled.aside`
       width: 250px;
       margin-left: -250px;
       transition: margin-left 0.3s ease-in-out;
+      visibility: hidden;
+      opacity: 0;
     }
     .content {
       position: sticky;
@@ -19,6 +21,8 @@ const Wrapper = styled.aside`
     }
     .show-sidebar {
       margin-left: 0;
+      visibility: visible;
+      opacity: 1;
     }
     header {
       height: 6rem;

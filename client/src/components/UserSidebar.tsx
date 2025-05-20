@@ -5,9 +5,10 @@ interface UserSidebarProps {
   date: Date;
   onDateChange: (date: Date) => void;
   interesses: string[];
+  proximosMutiroes?: { titulo: string; data: string }[];
 }
 
-const UserSidebar = ({ date, onDateChange, interesses }: UserSidebarProps) => {
+const UserSidebar = ({ date, onDateChange, interesses, proximosMutiroes = [] }: UserSidebarProps) => {
   return (
     <div className="sidebar">
       {/* Calendário */}
@@ -21,10 +22,21 @@ const UserSidebar = ({ date, onDateChange, interesses }: UserSidebarProps) => {
           <h2>Seus próximos mutirões</h2>
           <Link to="/mutiroes">Ver todos</Link>
         </div>
-        <div className="mutirao-card">
-          <h3>Reforma da Biblioteca</h3>
-          <p>Mar 28, 2024</p>
-        </div>
+        {proximosMutiroes.length === 0 ? (
+          <div style={{ color: '#64748b', fontSize: 14, padding: '1rem 0', textAlign: 'center' }}>
+            Você não tem nenhum mutirão<br/>
+            <span style={{ fontSize: 13 }}>
+              Os mutirões para os quais se inscreveu e/ou criou aparecerão aqui.
+            </span>
+          </div>
+        ) : (
+          proximosMutiroes.map((mutirao, idx) => (
+            <div className="mutirao-card" key={idx}>
+              <h3>{mutirao.titulo}</h3>
+              <p>{mutirao.data}</p>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Interesses */}

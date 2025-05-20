@@ -16,25 +16,36 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    width: 100%;
+    
+    @media (min-width: 768px) {
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
   }
 
   .profile-info {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 2.5rem;
+    @media (min-width: 768px) {
+      gap: 2.5rem;
+    }
   }
 
   .profile-image {
-    width: 6rem;
-    height: 6rem;
+    width: 7rem;
+    height: 7rem;
     border-radius: 9999px;
     object-fit: cover;
+    margin-right: 0.5rem;
   }
 
   .welcome-text {
     h1 {
-      font-size: 1.875rem;
+      font-size: 2.2rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
     }
@@ -58,13 +69,21 @@ const Wrapper = styled.div`
     }
   }
 
+  .page-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .content-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-
-    @media (min-width: 768px) {
-      grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1.1fr 2fr;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -72,6 +91,8 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    min-width: 320px;
+    max-width: 350px;
   }
 
   .card {

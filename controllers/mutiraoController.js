@@ -32,6 +32,18 @@ export const createMutirao = async (req, res) => {
       return res.status(400).json({ msg: "Tipo de mutirão inválidop" });
     }
 
+    // Verifica se faltam menos de 48 horas para o mutirão
+    const dataMutirao = new Date(`${req.body.data}T${req.body.horario}`);
+    const agora = new Date();
+    const diferencaMs = dataMutirao.getTime() - agora.getTime();
+    const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
+
+    if (horasQueFaltam < 48) {
+      return res.status(400).json({
+        msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
+      });
+    }
+
     // Define a imagem padrão ou a enviada
     let imagePath = "/uploads/default.png";
     if (req.file) {
@@ -78,9 +90,52 @@ export const getMutiroesInativos = async (req, res) => {
 
 export const updateMutirao = async (req, res) => {
   const { id } = req.params;
-  const updatedMutirao = await Mutirao.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
+
+  // Verifica se o usuário eh o criador ou admin
+  const mutiraoExistente = await Mutirao.findById(id);
+  if (!mutiraoExistente) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  if (
+    mutiraoExistente.criadoPor.toString() !== req.user.userId &&
+    !req.user.isAdmin
+  ) {
+    return res.status(403).json({ msg: "Não autorizado" });
+  }
+
+  // verifica se falta menos de 48 horas para o mutirão
+  const dataMutirao = new Date(mutiraoExistente.data);
+  const agora = new Date();
+  const diferencaMs = dataMutirao - agora;
+
+  if (diferencaMs < 48 * 60 * 60 * 1000) {
+    return res.status(400).json({
+      msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
+    });
+  }
+
+  // Atualiza a imagem se uma nova foi enviada
+  let imagePath = mutiraoExistente.imagemCapa;
+  if (req.file) {
+    imagePath = `/uploads/${req.file.filename}`;
+    // tem que implementar para apagar a imagem antiga
+  }
+
+  const updatedMutirao = await Mutirao.findByIdAndUpdate(
+    id,
+    {
+      ...req.body,
+      imagemCapa: imagePath,
+    },
+    {
+      new: true,
+    }
+  );
+
+  //res.status(StatusCodes.OK).json({ mutirao: updatedMutirao }); NOVO
+
+  /*const updatedMutirao = await Mutirao.findByIdAndUpdate(id, req.body, { new: true, }); ANTIGO*/
 
   res.status(StatusCodes.OK).json("Mutirão atualizado com sucesso!");
 };

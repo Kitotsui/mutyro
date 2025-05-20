@@ -3,15 +3,18 @@ import { Login, Register } from "../pages";
 import { Quote } from "../components";
 import Wrapper from "../assets/wrappers/Hero";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Hero = () => {
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
+  const { usuario } = useAuth();
 
   const closeModal = () => {
     setRegisterOpen(false);
     setLoginOpen(false);
   };
+
   return (
     <Wrapper>
       <div className="hero">
@@ -23,22 +26,24 @@ const Hero = () => {
             </div>
             <ul className="hero-cta">
               <li className="hero-cta-item">
-                <div className="ctn-btns">
-                  <Link
-                    to="#"
-                    className="btn login-link"
-                    onClick={() => setLoginOpen(true)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="#"
-                    className="btn register-link"
-                    onClick={() => setRegisterOpen(true)}
-                  >
-                    Cadastro
-                  </Link>
-                </div>
+                {!usuario && (
+                  <div className="ctn-btns">
+                    <Link
+                      to="#"
+                      className="btn login-link"
+                      onClick={() => setLoginOpen(true)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="#"
+                      className="btn register-link"
+                      onClick={() => setRegisterOpen(true)}
+                    >
+                      Cadastro
+                    </Link>
+                  </div>
+                )}
               </li>
               <li className="hero-cta-item"></li>
               <li className="hero-quotation">
@@ -50,7 +55,7 @@ const Hero = () => {
             className="wave"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1440 320"
-            preserveAspectRatio="none" // Esta linha que corrigiu o problema da altura do SVG - garante que as proporções não sejam mantidas
+            preserveAspectRatio="none"
           >
             <path
               fill="#f9fafb"

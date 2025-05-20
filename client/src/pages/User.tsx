@@ -1,11 +1,10 @@
 import Wrapper from "../assets/wrappers/UserPage";
-import { NavBar } from "../components";
 import UserProfile from "../components/UserProfile";
 import UserSidebar from "../components/UserSidebar";
 import MutiroesList from "../components/MutiroesList";
 import { useState } from "react";
 
-import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import customFetch from "../utils/customFetch";
 
 type Usuario = {
@@ -24,7 +23,7 @@ export const loader = async () => {
     const allMutiroes = mutiroesRes.data.mutiroes;
 
     return { usuario, allMutiroes };
-  } catch (error) {
+  } catch {
     return redirect("/"); //se a atenticacao falhar, redireciona para a pagina inicial
   }
 };
@@ -38,7 +37,9 @@ type Mutirao = {
   tarefas: string[];
   mutiraoStatus: string;
   mutiraoTipo: string;
-  criadoPor: string;
+  criadoPor: { _id: string; nome: string };
+  imagemCapa: string;
+  inscritos?: string[];
 };
 // Mock data - Simulação do banco de dados
 export const mockMutiroes = [
@@ -106,6 +107,17 @@ export const mockMutiroes = [
   },
 ];
 
+// Adicionar os tipos de mutirão conforme MUTIRAO_TIPOS (com 'Todos os Tipos' funcional)
+const tiposMutirao = [
+  { value: "", label: "Todos os Tipos" },
+  { value: "SOCIAL", label: "Social" },
+  { value: "CONSTRUCAO_REFORMA", label: "Construção / Reforma" },
+  { value: "AMBIENTAL_AGRICOLA", label: "Ambiental / Agrícola" },
+  { value: "CULTURA_EDUCACAO", label: "Cultura / Educação" },
+  { value: "SAUDE", label: "Saúde" },
+  { value: "TECNOLOGIA", label: "Tecnologia" },
+];
+
 const User = () => {
   const { usuario, allMutiroes } = useLoaderData() as {
     usuario: Usuario;
@@ -113,32 +125,105 @@ const User = () => {
   };
 
   const [date, setDate] = useState(new Date());
+  const [filtro, setFiltro] = useState<"meus" | "todos">("meus");
+  const [tipoSelecionado, setTipoSelecionado] = useState("");
 
-  /*const mockUser = {
-    name: "João",
-    username: "joao123"
-  };*/
-
-  const [showOnlyUserMutiroes, setShowOnlyUserMutiroes] = useState(true);
-
-  const handleToggleChange = () => {
-    setShowOnlyUserMutiroes((prevState) => !prevState);
-  };
-
-  const filteredList = allMutiroes
+  // Filtra os mutirões criados pelo usuário ou que ele está inscrito
+  const meusMutiroes = allMutiroes
     ? allMutiroes.filter((mutirao) => {
-        if (!usuario || !usuario._id) {
-          return false;
-        }
-        return mutirao.criadoPor === usuario._id;
+        if (!usuario || !usuario._id) return false;
+        const criadoPorMim = mutirao.criadoPor?._id === usuario._id;
+        const estouInscrito =
+          Array.isArray(mutirao.inscritos) &&
+          mutirao.inscritos.includes(usuario._id);
+        return criadoPorMim || estouInscrito;
       })
     : [];
 
-  const displayedMutiroes = allMutiroes
-    ? showOnlyUserMutiroes
-      ? filteredList
-      : allMutiroes
-    : [];
+  const displayedMutiroes = filtro === "meus" ? meusMutiroes : allMutiroes;
+
+  // Novo filtro por tipo
+  const mutiroesFiltradosPorTipo = displayedMutiroes.filter((mutirao) =>
+    tipoSelecionado === "" ? true : mutirao.mutiraoTipo === tipoSelecionado
+  );
+
+  // Próximos mutirões: data futura e usuário inscrito ou criador
+  const hoje = new Date();
+  const proximosMutiroes = allMutiroes
+    .filter((mutirao) => {
+      const dataMutirao = new Date(mutirao.data);
+      const isFuturo = dataMutirao >= hoje;
+      const criadoPorMim = mutirao.criadoPor._id === usuario._id;
+      const estouInscrito =
+        Array.isArray(mutirao.inscritos) &&
+        mutirao.inscritos.includes(usuario._id);
+      return isFuturo && (criadoPorMim || estouInscrito);
+    })
+    .map((mutirao) => ({ titulo: mutirao.titulo, data: mutirao.data }));
+
+  // Elemento de filtros para passar para MutiroesList
+  const filtrosElement = (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div
+        style={{
+          display: "flex",
+          background: "#e5e7eb",
+          borderRadius: 9999,
+          padding: 2,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+          transition: "background 0.3s cubic-bezier(.4,0,.2,1)",
+        }}
+      >
+        <button
+          onClick={() => setFiltro("meus")}
+          style={{
+            padding: "8px 20px",
+            borderRadius: 9999,
+            border: "none",
+            background: filtro === "meus" ? "#f97316" : "transparent",
+            color: filtro === "meus" ? "#fff" : "#1e293b",
+            fontWeight: filtro === "meus" ? 700 : 400,
+            cursor: "pointer",
+            transition:
+              "background 0.35s cubic-bezier(.4,0,.2,1), color 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1)",
+            boxShadow:
+              filtro === "meus" ? "0 2px 8px rgba(249,115,22,0.10)" : "none",
+          }}
+        >
+          Meus mutirões
+        </button>
+        <button
+          onClick={() => setFiltro("todos")}
+          style={{
+            padding: "8px 20px",
+            borderRadius: 9999,
+            border: "none",
+            background: filtro === "todos" ? "#f97316" : "transparent",
+            color: filtro === "todos" ? "#fff" : "#1e293b",
+            fontWeight: filtro === "todos" ? 700 : 400,
+            cursor: "pointer",
+            transition:
+              "background 0.35s cubic-bezier(.4,0,.2,1), color 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1)",
+            boxShadow:
+              filtro === "todos" ? "0 2px 8px rgba(249,115,22,0.10)" : "none",
+          }}
+        >
+          Todos
+        </button>
+      </div>
+      <select
+        value={tipoSelecionado}
+        onChange={(e) => setTipoSelecionado(e.target.value)}
+        style={{ marginLeft: 8, padding: 8, borderRadius: 6 }}
+      >
+        {tiposMutirao.map((tipo) => (
+          <option key={tipo.value} value={tipo.value}>
+            {tipo.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 
   return (
     <Wrapper>
@@ -146,25 +231,17 @@ const User = () => {
         {/*<NavBar />*/}
         <main>
           <UserProfile user={usuario} />
-          <div style={{ padding: "1rem", textAlign: "center" }}>
-            {" "}
-            <label>
-              <input
-                type="checkbox"
-                checked={showOnlyUserMutiroes}
-                onChange={handleToggleChange}
-              />
-              Mostrar apenas meus mutirões
-            </label>
-          </div>
-
           <div className="content-grid">
             <UserSidebar
               date={date}
               onDateChange={setDate}
               interesses={["Saúde", "TI"]}
+              proximosMutiroes={proximosMutiroes}
             />
-            <MutiroesList mutiroes={displayedMutiroes} />
+            <MutiroesList
+              mutiroes={mutiroesFiltradosPorTipo}
+              filtrosElement={filtrosElement}
+            />
           </div>
         </main>
       </div>

@@ -1,8 +1,19 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { NavBar } from "../components";
+import Sidebar from "../components/Sidebar";
+import { useAuth } from "../context/AuthContext";
 
 const HomeLayout = () => {
+  const { usuario } = useAuth();
+  const location = useLocation();
+  
+  // Lista de rotas onde a Sidebar deve aparecer
+  const sidebarRoutes = ['/user', '/chat', '/mutiroes', '/configuracoes'];
+  
+  // Verifica se a rota atual está na lista de rotas que devem mostrar a Sidebar
+  const shouldShowSidebar = usuario && sidebarRoutes.some(route => location.pathname.startsWith(route));
+
   return (
     <div>
       <NavBar />
@@ -10,9 +21,13 @@ const HomeLayout = () => {
         className="page-wrapper"
         style={{
           paddingTop: "calc(var(--nav-height) + calc(var(--nav-height) / 2))",
+          display: "flex",
         }}
       >
-        <Outlet />
+        {shouldShowSidebar && <Sidebar />}
+        <div style={{ flex: 1 }}>
+          <Outlet />
+        </div>
       </div>
     </div>
   );

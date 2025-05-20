@@ -16,6 +16,7 @@ type ApiError = {
 
 type Props = {
   switchToRegister?: () => void;
+  closeModal?: () => void;
 };
 
 const Login = ({ switchToRegister }: Props) => {
