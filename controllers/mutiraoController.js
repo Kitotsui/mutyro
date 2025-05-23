@@ -74,9 +74,41 @@ export const getMutiroesInativos = async (req, res) => {
 
 export const updateMutirao = async (req, res) => {
   const { id } = req.params;
-  const updatedMutirao = await Mutirao.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
+
+  // Verifica se o usuário eh o criador ou admin
+  const mutiraoExistente = await Mutirao.findById(id);
+  if (!mutiraoExistente) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  if (
+    mutiraoExistente.criadoPor.toString() !== req.user.userId &&
+    !req.user.isAdmin
+  ) {
+    return res.status(403).json({ msg: "Não autorizado" });
+  }
+
+  // Atualiza a imagem se uma nova foi enviada
+  let imagePath = mutiraoExistente.imagemCapa;
+  if (req.file) {
+    imagePath = `/uploads/${req.file.filename}`;
+    // tem que implementar para apagar a imagem antiga
+  }
+
+  const updatedMutirao = await Mutirao.findByIdAndUpdate(
+    id,
+    {
+      ...req.body,
+      imagemCapa: imagePath,
+    },
+    {
+      new: true,
+    }
+  );
+
+  //res.status(StatusCodes.OK).json({ mutirao: updatedMutirao }); NOVO
+
+  /*const updatedMutirao = await Mutirao.findByIdAndUpdate(id, req.body, { new: true, }); ANTIGO*/
 
   res.status(StatusCodes.OK).json("Mutirão atualizado com sucesso!");
 };

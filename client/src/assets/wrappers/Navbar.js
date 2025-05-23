@@ -119,7 +119,8 @@ const Wrapper = styled.div`
     padding: 0;
   }
 
-  .user-profile-area {
+  //brunao que fez
+    .user-profile-area {
     position: relative;
     display: flex;
     align-items: center;
@@ -187,7 +188,7 @@ const Wrapper = styled.div`
     cursor: pointer;
     padding: 0.5rem;
     display: flex;
-    align-items: end;
+    align-items: center;
     margin-left: 2px;
     color: var(--text-secondary-color, #555);
     border-radius: var(--border-radius, 4px);
@@ -243,8 +244,6 @@ const Wrapper = styled.div`
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--grey-300, #ddd);
-  }
 
   @media (max-width: 768px) {
     .cta-btns .user-profile-area {
