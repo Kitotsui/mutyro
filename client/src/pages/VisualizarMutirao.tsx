@@ -10,6 +10,7 @@ interface Mutirao {
   _id: string;
   titulo: string;
   data: string;
+  horario: string;
   descricao: string;
   local: string;
   materiais?: string[];
@@ -103,6 +104,16 @@ const VisualizarMutirao = () => {
   const { mutirao, isInscrito: initialIsInscrito } =
     useLoaderData() as VisualizarMutiraoLoaderData;
 
+  // Função para formatar a data como "DD de mes de YYYY"
+  const formatarDataExtensa = (dataISO: string): string => {
+    const data = new Date(dataISO);
+    const dia = data.getDate();
+    const mes = data.toLocaleString("pt-BR", { month: "long" });
+    const ano = data.getFullYear();
+    return `${dia} de ${mes} de ${ano}`;
+  };
+  const dataFormatada = formatarDataExtensa(mutirao.data);
+
   // constante p/ gerenciar o usuário atual
   const [currentUser, setCurrentUser] = useState<{
     _id: string;
@@ -149,14 +160,6 @@ const VisualizarMutirao = () => {
       setMateriaisSelecionados({});
     }
   }, [mutirao?.materiais]);
-  // const [materiais, setMateriais] = useState<Material[]>([
-  //   { nome: "Ferramentas de Pintura", checked: false },
-  //   { nome: "Martelos e pregos", checked: false },
-  //   { nome: "Parafusadeira", checked: false },
-  // ]);
-
-  // Encontra o mutirão com base no ID da URL
-  // const mutirao = mockMutiroes.find((m) => m.id === Number(id));
 
   const handleHabilidadeChange = (index: number) => {
     const novasHabilidades = [...habilidades];
@@ -224,19 +227,38 @@ const VisualizarMutirao = () => {
       navigate("/user"); // Redireciona para a página do usuário após exclusão
     } catch (error: any) {
       const errorMsg =
-        error.response?.data?.msg ||
-        error.message ||
-        "Erro ao excluir mutirão";
+        error.response?.data?.msg || error.message || "Erro ao excluir mutirão";
       toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Verifica se o usuário pode participar (não é o criador e não está inscrito)
+  const faltamMenosDe48Horas = (
+    dataString: string,
+    horarioString?: string
+  ): boolean => {
+    if (!horarioString) {
+      // Se não houver horário, considere apenas a data
+      const dataMutirao = new Date(dataString);
+      const agora = new Date();
+      return dataMutirao.getTime() - agora.getTime() < 48 * 60 * 60 * 1000;
+    }
+
+    // Dara e horario levados em consideracao
+    const dataHoraMutirao = new Date(`${dataString}T${horarioString}`);
+    const agora = new Date();
+    return dataHoraMutirao.getTime() - agora.getTime() < 48 * 60 * 60 * 1000;
+  };
+
   // Verifica se o usuário pode editar (criador ou admin)
   const podeEditar =
     currentUser &&
-    (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin);
+    (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) &&
+    !faltamMenosDe48Horas(mutirao.data, mutirao.horario);
+  const podeParticipar =
+    currentUser && currentUser._id !== mutirao.criadoPor._id;
 
   return (
     <Wrapper>
@@ -262,19 +284,32 @@ const VisualizarMutirao = () => {
               <div className="info-section">
                 <Wrapper>
                   <div className="button-group">
-                    {podeEditar && (
-                      <div
-                        className="button-group"                
+                    {podeEditar ? (
+                      <button
+                        className="edit-btn"
+                        onClick={() =>
+                          navigate(`/mutirao/${mutirao._id}/editar`)
+                        }
+                        disabled={isSubmitting}
                       >
-                        <button
-                          className="edit-btn"
-                          onClick={() =>
-                            navigate(`/mutirao/${mutirao._id}/editar`)
-                          }
-                          disabled={isSubmitting}
-                        >
-                          Editar
-                        </button>
+                        Editar
+                      </button>
+                    ) : (
+                      currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin) && (
+                        <div className="edicao-bloqueada">
+                          <p>
+                            Edição bloqueada: faltam menos de 48 horas para o
+                            início do mutirão.
+                          </p>
+                        </div>
+                      )
+                    )}
+
+                    {currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin) && (
                         <button
                           className="delete-btn"
                           onClick={handleExcluirMutirao}
@@ -282,8 +317,7 @@ const VisualizarMutirao = () => {
                         >
                           {isSubmitting ? "Processando..." : "Excluir"}
                         </button>
-                      </div>
-                    )}
+                      )}
                   </div>
                 </Wrapper>
               </div>
@@ -291,7 +325,7 @@ const VisualizarMutirao = () => {
             <div className="info-section">
               <h1>{mutirao.titulo}</h1>
               <p className="date-author">
-                Por {mutirao.criadoPor.nome} • {mutirao.data}
+                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada} {mutirao.horario && `às ${mutirao.horario}`} horas
               </p>
 
               <div className="section">
@@ -384,33 +418,35 @@ const VisualizarMutirao = () => {
                 </div>
               </div>
 
-              <div className="section">
-                <h2>Termo de Aceitação</h2>
-                <p className="section-description">
-                  Leia e confirme para participar deste mutirão
-                </p>
-                <label className="termo-container">
-                  <div className="checkbox-wrapper">
-                    <input
-                      type="checkbox"
-                      checked={aceitouTermo}
-                      onChange={(e) => setAceitouTermo(e.target.checked)}
-                    />
-                  </div>
-                  <div className="termo-text">
-                    <p>
-                      Eu concordo em participar deste mutirão de forma
-                      voluntária, contribuindo com minhas habilidades e seguindo
-                      as orientações dos organizadores. Entendo que o objetivo é
-                      desenvolver melhorias para a biblioteca da comunidade e,
-                      se necessário, trarei meus próprios equipamentos para
-                      colaborar. Comprometo-me a agir com respeito,
-                      responsabilidade e colaboração, garantindo um ambiente
-                      seguro e inclusivo para todos os participantes.
-                    </p>
-                  </div>
-                </label>
-              </div>
+              {podeParticipar && (
+                <div className="section">
+                  <h2>Termo de Aceitação</h2>
+                  <p className="section-description">
+                    Leia e confirme para participar deste mutirão
+                  </p>
+                  <label className="termo-container">
+                    <div className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        checked={aceitouTermo}
+                        onChange={(e) => setAceitouTermo(e.target.checked)}
+                      />
+                    </div>
+                    <div className="termo-text">
+                      <p>
+                        Eu concordo em participar deste mutirão de forma
+                        voluntária, contribuindo com minhas habilidades e
+                        seguindo as orientações dos organizadores. Entendo que o
+                        objetivo é desenvolver melhorias para a biblioteca da
+                        comunidade e, se necessário, trarei meus próprios
+                        equipamentos para colaborar. Comprometo-me a agir com
+                        respeito, responsabilidade e colaboração, garantindo um
+                        ambiente seguro e inclusivo para todos os participantes.
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              )}
 
               <div className="button-group">
                 <button
@@ -421,19 +457,21 @@ const VisualizarMutirao = () => {
                 >
                   Voltar
                 </button>
-                <button
-                  className={`submit-btn ${
-                    !aceitouTermo || isSubmitting ? "disabled" : ""
-                  }`}
-                  onClick={handleInscricao}
-                  disabled={!aceitouTermo || isSubmitting}
-                >
-                  {isSubmitting
-                    ? "Processando..."
-                    : isInscrito
-                    ? "Cancelar Participação"
-                    : "Quero Ser Voluntário"}{" "}
-                </button>
+                {podeParticipar && (
+                  <button
+                    className={`submit-btn ${
+                      !aceitouTermo || isSubmitting ? "disabled" : ""
+                    }`}
+                    onClick={handleInscricao}
+                    disabled={!aceitouTermo || isSubmitting}
+                  >
+                    {isSubmitting
+                      ? "Processando..."
+                      : isInscrito
+                      ? "Cancelar Participação"
+                      : "Quero Ser Voluntário"}{" "}
+                  </button>
+                )}
               </div>
             </div>
           </div>

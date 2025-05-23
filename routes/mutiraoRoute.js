@@ -60,9 +60,11 @@ import {
  *       201:
  *         description: Mutirão criado com sucesso
  */
-router.route("/").get(getMutiroes).post(upload.single("imagemCapa"), validateMutiraoInput, createMutirao);
-
-router.route("/todos").get(getTodosMutiroes);
+router.route("/").get(getTodosMutiroes);
+router
+  .route("/")
+  .get(getMutiroes)
+  .post(upload.single("imagemCapa"), validateMutiraoInput, createMutirao);
 
 /**
  * @swagger

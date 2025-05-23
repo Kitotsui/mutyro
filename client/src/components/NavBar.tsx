@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react"; // Adicionado useRef
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
@@ -19,16 +19,21 @@ const mockAvatarUrl = "https://i.pravatar.cc/150?img=11";
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // Menu hamburguer
-  const [showUserDropdown, setShowUserDropdown] = useState(false); // Dropdown de logout
+  const [isOpen, setIsOpen] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const { usuario, logout } = useAuth() as {
     usuario: Usuario | null;
     logout: () => Promise<void>;
   };
   const navigate = useNavigate();
-  const dropdownRef = useRef<HTMLDivElement>(null); // Ref para o container do dropdown
+  const location = useLocation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // ... (useEffect para log do usuário) ...
+  const handleHomeNavigation = () => {
+    setIsOpen(false);
+    setShowUserDropdown(false);
+    navigate('/');
+  };
 
   const handleLoginClick = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
@@ -68,7 +73,6 @@ const NavBar = () => {
   const toggleUserDropdown = (e: React.MouseEvent) => {
     e.stopPropagation(); // Impede que o clique no profileLink feche imediatamente
     setShowUserDropdown(!showUserDropdown);
-    setIsOpen(false);
   };
 
   // Fecha o dropdown se clicar fora
@@ -100,10 +104,7 @@ const NavBar = () => {
           <Link
             to="/"
             aria-label="Logo Home"
-            onClick={() => {
-              setIsOpen(false);
-              setShowUserDropdown(false);
-            }}
+            onClick={handleHomeNavigation}
           >
             <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
           </Link>
@@ -121,15 +122,11 @@ const NavBar = () => {
 
           <div className={`main-menu-items ${isOpen ? "open" : ""}`}>
             <ul className="main-menu-list">
-              {/* ... (Links de Início, Mutirões, Sobre) ... */}
               <li>
                 <Link
                   to="/"
                   className="nav-link"
-                  onClick={() => {
-                    setIsOpen(false);
-                    setShowUserDropdown(false);
-                  }}
+                  onClick={handleHomeNavigation}
                 >
                   Início
                 </Link>
@@ -176,16 +173,15 @@ const NavBar = () => {
                       </button>
                     </>
                   ) : (
-                    // NOVO LAYOUT PARA USUÁRIO LOGADO
                     <div className="user-profile-area" ref={dropdownRef}>
                       <div
                         className="user-info-clickable"
                         onClick={handleProfileNavigation}
-                        role="button" // Para acessibilidade
-                        tabIndex={0} // Para acessibilidade
+                        role="button"
+                        tabIndex={0}
                         onKeyDown={(e) =>
                           e.key === "Enter" && handleProfileNavigation()
-                        } // Para acessibilidade
+                        }
                       >
                         <div className="user-text-details">
                           <span className="user-display-name">
@@ -197,12 +193,10 @@ const NavBar = () => {
                         </div>
                         <div className="user-avatar-container">
                           <img
-                            // Se usuario.avatar existir (do backend), usa ele. Senão, usa o mock.
                             src={usuario.avatar || mockAvatarUrl}
                             alt={`Avatar de ${usuario.nome}`}
-                            className="avatar-img" // Você precisará de estilos para .avatar-img
+                            className="avatar-img"
                           />
-                          {/* <i className="fas fa-user-circle avatar-icon-fa"></i> */}
                         </div>
                       </div>
                       <button
@@ -235,7 +229,6 @@ const NavBar = () => {
         </div>
       </nav>
 
-      {/* ... (Modais de Login e Register) ... */}
       {showLogin && (
         <div className="modal-overlay" onClick={handleCloseModals}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

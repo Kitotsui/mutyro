@@ -14,6 +14,7 @@ import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
 import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
 import { action as editarMutiraoAction } from "./pages/EditarMutirao";
+import { loader as landingLoader } from "./pages/Landing";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
+        loader: landingLoader,
       },
       {
         path: "user",

@@ -236,6 +236,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--grey-200);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -257,6 +258,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--primary-50);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -289,6 +291,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--primary-50);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -320,6 +323,7 @@ const Wrapper = styled.div`
         &:hover {
           background: var(--primary-50);
           transform: scale(1.02);
+          cursor: pointer;
         }
 
         &:active {
@@ -335,6 +339,14 @@ const Wrapper = styled.div`
             transform: none;
           }
         }
+      }
+      .edicao-bloqueada {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ffeeba;
       }
     }
   }

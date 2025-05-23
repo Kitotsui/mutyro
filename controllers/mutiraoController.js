@@ -13,23 +13,39 @@ export const getMutiroes = async (req, res) => {
 
 export const getTodosMutiroes = async (req, res) => {
   //console.log(req.user);
-  const mutiroes = await Mutirao.find({ ativo: true }); // Busca todos os mutirões do usuário logado que estao ativos
+  const mutiroes = await Mutirao.find({ ativo: true }).populate(
+    "criadoPor",
+    "nome"
+  );
+
   res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const createMutirao = async (req, res) => {
   //LOGS PARA DEBUG
-    console.log("Tipo recebido:", req.body.mutiraoTipo);
-    console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
-    console.log("Corpo completo da requisição:", req.body);
+  console.log("Tipo recebido:", req.body.mutiraoTipo);
+  console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
+  console.log("Corpo completo da requisição:", req.body);
   try {
     // verificação de tipo de mutirao
     if (!Object.values(MUTIRAO_TIPOS).includes(req.body.mutiraoTipo)) {
       return res.status(400).json({ msg: "Tipo de mutirão inválidop" });
     }
 
+    // Verifica se faltam menos de 48 horas para o mutirão
+    const dataMutirao = new Date(`${req.body.data}T${req.body.horario}`);
+    const agora = new Date();
+    const diferencaMs = dataMutirao.getTime() - agora.getTime();
+    const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
+
+    if (horasQueFaltam < 48) {
+      return res.status(400).json({
+        msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
+      });
+    }
+
     // Define a imagem padrão ou a enviada
-    let imagePath = "/uploads/default.png"; 
+    let imagePath = "/uploads/default.png";
     if (req.file) {
       imagePath = `/uploads/${req.file.filename}`;
     }
@@ -65,9 +81,9 @@ export const getMutirao = async (req, res) => {
 
 // Busca de mutirões inativos
 export const getMutiroesInativos = async (req, res) => {
-  const mutiroes = await Mutirao.find({ 
+  const mutiroes = await Mutirao.find({
     criadoPor: req.user.userId,
-    ativo: false 
+    ativo: false,
   });
   res.status(StatusCodes.OK).json({ mutiroes });
 };
@@ -86,6 +102,17 @@ export const updateMutirao = async (req, res) => {
     !req.user.isAdmin
   ) {
     return res.status(403).json({ msg: "Não autorizado" });
+  }
+
+  // verifica se falta menos de 48 horas para o mutirão
+  const dataMutirao = new Date(mutiraoExistente.data);
+  const agora = new Date();
+  const diferencaMs = dataMutirao - agora;
+
+  if (diferencaMs < 48 * 60 * 60 * 1000) {
+    return res.status(400).json({
+      msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
+    });
   }
 
   // Atualiza a imagem se uma nova foi enviada
@@ -124,12 +151,10 @@ export const deleteMutirao = async (req, res) => {
     { new: true }
   );
 
-  res
-    .status(StatusCodes.OK)
-    .json({
-      message: "Mutirão marcado como inativo com sucesso!",
-      mutirao: updatedMutirao,
-    });
+  res.status(StatusCodes.OK).json({
+    message: "Mutirão marcado como inativo com sucesso!",
+    mutirao: updatedMutirao,
+  });
 };
 
 export const inscreverUsuario = async (req, res) => {

@@ -5,6 +5,7 @@ const MutiraoSchema = new mongoose.Schema(
   {
     titulo: String,
     data: String,
+    horario: String,
     descricao: String,
     local: String,
     materiais: [String],
