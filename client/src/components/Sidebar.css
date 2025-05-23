@@ -7,13 +7,21 @@
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.main-sidebar:hover {
+  width: 200px;
 }
 
 .main-sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
+
 .main-sidebar li {
   margin: 20px 0;
   padding: 10px;
@@ -21,14 +29,105 @@
   cursor: pointer;
   font-size: 22px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  transition: background 0.2s, border-left 0.2s;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  justify-content: center;
+  width: 100%;
+  min-height: 60px;
+  overflow: visible;
 }
-.main-sidebar li.active {
-  background: #fff;
-  border-left: 4px solid orange;
+
+.main-sidebar li span {
+  margin-left: 0;
+  font-size: 16px;
+  line-height: 22px;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 0.2s, max-width 0.2s, margin-left 0.2s;
+  display: inline-block;
+  vertical-align: middle;
 }
+
+.main-sidebar:hover li {
+  padding-left: 0;
+  overflow: visible;
+}
+
+.main-sidebar:hover li span {
+  opacity: 1;
+  max-width: 200px;
+  margin-left: 15px;
+}
+
 .main-sidebar li:hover {
   background: #f5f5f5;
+  border-left: 4px solid orange;
+}
+
+.main-sidebar li svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Media Queries para Responsividade */
+@media screen and (max-width: 768px) {
+  .main-sidebar {
+    width: 60px;
+  }
+
+  .main-sidebar:hover {
+    width: 160px;
+  }
+
+  .main-sidebar li {
+    font-size: 18px;
+    padding: 8px;
+    min-height: 40px;
+  }
+
+  .main-sidebar li svg {
+    min-width: 18px;
+    min-height: 18px;
+  }
+
+  .main-sidebar:hover li {
+    padding-left: 0;
+  }
+
+  .main-sidebar li span {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .main-sidebar {
+    width: 50px;
+  }
+
+  .main-sidebar:hover {
+    width: 140px;
+  }
+
+  .main-sidebar li {
+    font-size: 16px;
+    padding: 6px;
+    margin: 15px 0;
+    min-height: 36px;
+  }
+
+  .main-sidebar li svg {
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .main-sidebar:hover li {
+    padding-left: 0;
+  }
+
+  .main-sidebar li span {
+    font-size: 12px;
+  }
 } 

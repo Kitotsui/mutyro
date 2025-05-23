@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
 interface SidebarProps {
-  menuItems?: { icon: React.ReactNode; label: string; active?: boolean; onClick?: () => void }[];
+  menuItems?: { icon: React.ReactNode; label: string; onClick?: () => void }[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -13,7 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
 
   const defaultMenu = [
-    { icon: <FaUser />, label: "Perfil", active: true },
+    { icon: <FaUser />, label: "Perfil" },
     { icon: <FaUsers />, label: "Comunidade" },
     { icon: <FaEnvelope />, label: "Mensagens" },
     { icon: <FaComments />, label: "Chat", onClick: () => navigate('/chat') },
@@ -29,11 +29,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           {menuItemsToUse.map((item) => (
             <li
               key={item.label}
-              className={item.active ? "active" : ""}
               onClick={item.onClick}
               style={{ cursor: item.onClick ? "pointer" : "default" }}
             >
               {item.icon}
+              <span>{item.label}</span>
             </li>
           ))}
         </ul>
