@@ -1,10 +1,31 @@
 import { useState, useEffect } from "react";
-import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
+import { LoaderFunctionArgs, useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/VisualizarMutirao";
-import { NavBar } from "../components";
 import customFetch from "@/utils/customFetch";
 import { useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// --- FIX DEFAULT MARKER ICON ---
+// Correção para que os ícones padrões do Leaflet carreguem corretamente com Vite
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+// @ts-ignore: This is a common workaround for a Leaflet/bundler issue.
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
+
+interface LocationGeoJSON {
+  type: "Point";
+  coordinates: [number, number];
+}
 
 interface Mutirao {
   _id: string;
@@ -20,6 +41,8 @@ interface Mutirao {
   inscritos?: string[];
   criadoPor: CriadoPorInfo;
   imagemCapa: string;
+  location: LocationGeoJSON;
+  numeroEComplemento: string;
 }
 
 interface CriadoPorInfo {
@@ -57,8 +80,15 @@ export const loader = async ({
     console.log(`Loader: Buscando mutirão ID: ${id}`);
     const response = await customFetch(`/mutiroes/${id}`);
     const mutirao = response.data.mutirao;
-    if (!mutirao) {
-      throw new Response("Mutirão não encontrado.", { status: 404 });
+    if (!mutirao || !mutirao.location || !mutirao.location.coordinates) {
+      console.error(
+        "Loader: Dados de localização ausentes ou incompletos para o mutirão:",
+        mutirao
+      );
+      throw new Response(
+        "Dados de localização do mutirão ausentes ou incompletos.",
+        { status: 404 }
+      );
     }
 
     let currentUserId: string | null = null;
@@ -260,6 +290,17 @@ const VisualizarMutirao = () => {
   const podeParticipar =
     currentUser && currentUser._id !== mutirao.criadoPor._id;
 
+  // Dados para o mapa
+  const mapPosition: [number, number] = mutirao.location?.coordinates
+    ? [mutirao.location.coordinates[1], mutirao.location.coordinates[0]]
+    : [0, 0];
+
+  // Verifica os dados de geolocalização
+  const canDisplayMap =
+    mutirao.location &&
+    mutirao.location.coordinates &&
+    mutirao.location.coordinates.length === 2;
+
   return (
     <Wrapper>
       <div className="min-h-screen">
@@ -325,7 +366,8 @@ const VisualizarMutirao = () => {
             <div className="info-section">
               <h1>{mutirao.titulo}</h1>
               <p className="date-author">
-                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada} {mutirao.horario && `às ${mutirao.horario}`} horas
+                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada}{" "}
+                {mutirao.horario && `às ${mutirao.horario}`} horas
               </p>
 
               <div className="section">
@@ -336,26 +378,64 @@ const VisualizarMutirao = () => {
               <div className="section">
                 <h2>Local</h2>
                 <div className="location-box">
-                  <svg
-                    className="location-icon"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
+                  <i class="fas fa-map-marker-alt"></i>
                   <span>{mutirao.local}</span>
                 </div>
+
+                {canDisplayMap ? (
+                  <div className="map-container-visualizar">
+                    <MapContainer
+                      center={mapPosition}
+                      zoom={15} // Zoom level
+                      className="leaflet-map"
+                      // Opções de interatividade com o mapa - comente ou descomente se necessário
+                      dragging={false}
+                      touchZoom={false}
+                      doubleClickZoom={false}
+                      scrollWheelZoom={false}
+                      boxZoom={false}
+                      keyboard={false}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={mapPosition}>
+                        <Popup className="leaflet-popup">
+                          {mutirao.local} <br /> {/* Show address in popup */}
+                          {mutirao.numeroEComplemento && (
+                            <>
+                              {mutirao.numeroEComplemento}
+                              <br />
+                            </>
+                          )}
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i
+                              className="fas fa-map"
+                              style={{ marginRight: "6px" }}
+                            ></i>
+                            Abrir no Google Maps
+                          </a>
+                          {/* <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${mapPosition[0]},${mapPosition[1]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Abrir no Google Maps
+                          </a> */}
+                        </Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
+                ) : (
+                  <p style={{ marginTop: "10px", color: "grey" }}>
+                    Localização não disponível no mapa.
+                  </p>
+                )}
               </div>
 
               <div className="section">

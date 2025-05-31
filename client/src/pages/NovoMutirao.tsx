@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Wrapper from "../assets/wrappers/NovoMutirao";
-import { Form, useNavigation, redirect } from "react-router-dom";
+import { Form, useNavigate, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
+import AddressAutocomplete from "../components/AddressAutocomplete";
+
 //import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
 export const action = async ({ request }: { request: Request }) => {
@@ -37,6 +38,27 @@ export const action = async ({ request }: { request: Request }) => {
     mutiraoTipo: formData.get("mutiraoTipo"),
   };
 
+  const local = formData.get("local") as string;
+  const latitude = formData.get("latitude") as string;
+  const longitude = formData.get("longitude") as string;
+
+  if (!local || local.trim() === "") {
+    toast.error(
+      "Por favor, preencha o endereço base selecionando uma sugestão."
+    );
+    return { error: "Endereço base obrigatório." };
+  }
+  if (
+    !latitude ||
+    !longitude ||
+    latitude.trim() === "" ||
+    longitude.trim() === ""
+  ) {
+    toast.error(
+      "Localização inválida. Por favor, selecione um endereço da lista de sugestões."
+    );
+    return { error: "Coordenadas inválidas ou não selecionadas." }; // Or return null
+  }
 
   try {
     const response = await customFetch.post("/mutiroes", formData, {
@@ -55,7 +77,7 @@ export const action = async ({ request }: { request: Request }) => {
     const errorMsg =
       err.response?.data?.msg || err.message || "Erro ao criar mutirão";
     toast.error(errorMsg);
-    return null;
+    return { error: errorMsg };
   }
 };
 
@@ -82,7 +104,49 @@ const NovoMutirao = () => {
     tarefas: [""],
     mutiraoTipo: "SOCIAL",
   });
+
+  const [geoCoordinates, setGeoCoordinates] = useState<{
+    lat: string;
+    lon: string;
+  } | null>(null);
+
+  const [numeroEComplemento, setNumeroEComplemento] = useState("");
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  // State to hold the structured location data for submission
+  const [locationData, setLocationData] = useState<{
+    address: string;
+    latitude: string;
+    longitude: string;
+  } | null>(null);
+
+  const handleLocationSelected = (
+    location: {
+      display_name: string;
+      lat: string;
+      lon: string;
+    } | null
+  ) => {
+    if (location) {
+      setFormData((prev) => ({
+        ...prev,
+        local: location.display_name,
+      }));
+      setGeoCoordinates({ lat: location.lat, lon: location.lon });
+    } else {
+      // If location is null, it means user typed something new or cleared the input
+      setGeoCoordinates(null);
+      // formData.local will retain what the user typed if you don't clear it here.
+      // If AddressAutocomplete's input has name="local", that typed value will be submitted.
+    }
+  };
+
+  const handleNumeroEComplementoChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumeroEComplemento(e.target.value);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -232,17 +296,42 @@ const NovoMutirao = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="local">Local</label>
+                    <AddressAutocomplete
+                      onLocationSelect={handleLocationSelected}
+                      initialValue={formData.local}
+                    />
+                    <input type="hidden" name="local" value={formData.local} />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="numeroEComplemento">
+                      Número e Complemento
+                    </label>
                     <input
                       type="text"
-                      id="local"
-                      name="local"
-                      value={formData.local}
-                      onChange={handleChange}
-                      required
-                      placeholder="Digite o endereço do mutirão"
+                      id="numeroEComplemento"
+                      name="numeroEComplemento"
+                      value={numeroEComplemento}
+                      onChange={handleNumeroEComplementoChange}
+                      placeholder="Ex: 123, Bloco A, Próximo ao..."
                     />
                   </div>
+
+                  {/* Inputs ocultas para latitude e longitude */}
+                  {geoCoordinates && (
+                    <>
+                      <input
+                        type="hidden"
+                        name="latitude"
+                        value={geoCoordinates.lat}
+                      />
+                      <input
+                        type="hidden"
+                        name="longitude"
+                        value={geoCoordinates.lon}
+                      />
+                    </>
+                  )}
 
                   <div className="form-group">
                     <label>Tarefas</label>

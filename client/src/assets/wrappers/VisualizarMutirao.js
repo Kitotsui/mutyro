@@ -1,7 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  min-height: 100vh;
   background-color: var(--grey-50);
   font-family: "Open Sans", sans-serif;
 
@@ -349,6 +348,24 @@ const Wrapper = styled.div`
         border: 1px solid #ffeeba;
       }
     }
+
+    .map-container-visualizar {
+      height: 300px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      .leaflet-map {
+        width: 100%;
+        height: 100%;
+      }
+      .leaflet-popup {
+        a {
+          line-height: 2rem;
+        }
+      }
+    }
   }
 
   @media (max-width: 768px) {
@@ -383,4 +400,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default Wrapper; 
+export default Wrapper;

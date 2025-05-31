@@ -9,6 +9,7 @@ import {
 import Wrapper from "../assets/wrappers/NovoMutirao";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
+import AddressAutocomplete from "../components/AddressAutocomplete";
 
 interface Mutirao {
   _id: string;
@@ -17,6 +18,7 @@ interface Mutirao {
   horario: string;
   descricao: string;
   local: string;
+  numeroEComplemento?: string;
   materiais: string;
   tarefas: string[];
   mutiraoTipo: string;
@@ -24,6 +26,10 @@ interface Mutirao {
   criadoPor: {
     _id: string;
     nome: string;
+  };
+  location?: {
+    type: "Point";
+    coordinates: [number, number];
   };
 }
 
@@ -87,7 +93,7 @@ const EditarMutirao = () => {
     data: mutirao.data,
     horario: mutirao.horario || "",
     descricao: mutirao.descricao,
-    local: mutirao.local,
+    local: mutirao.local || "",
     materiais: mutirao.materiais || "",
     tarefas: mutirao.tarefas || [""],
     mutiraoTipo: mutirao.mutiraoTipo,
@@ -95,6 +101,22 @@ const EditarMutirao = () => {
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [currentImage, setCurrentImage] = useState(mutirao.imagemCapa);
+
+  // States para o endereço
+  const [numeroEComplemento, setNumeroEComplemento] = useState(
+    mutirao.numeroEComplemento || ""
+  );
+  const [geoCoordinates, setGeoCoordinates] = useState<{
+    lat: string;
+    lon: string;
+  } | null>(
+    mutirao.location?.coordinates
+      ? {
+          lat: String(mutirao.location.coordinates[1]),
+          lon: String(mutirao.location.coordinates[0]),
+        }
+      : null
+  );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -135,6 +157,28 @@ const EditarMutirao = () => {
       ...prev,
       tarefas: prev.tarefas.filter((_, i) => i !== index),
     }));
+  };
+
+  // Handle do endereço
+  const handleNumeroEComplementoChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumeroEComplemento(e.target.value);
+  };
+
+  const handleLocationSelected = (
+    locationInfo: { display_name: string; lat: string; lon: string } | null
+  ) => {
+    if (locationInfo) {
+      setFormData((prev) => ({
+        ...prev,
+        local: locationInfo.display_name,
+      }));
+      setGeoCoordinates({ lat: locationInfo.lat, lon: locationInfo.lon });
+    } else {
+      // Se usuário digitar maualmente, limpar coordenadas
+      setGeoCoordinates(null);
+    }
   };
 
   return (
@@ -238,17 +282,51 @@ const EditarMutirao = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="local">Local</label>
+                    <label htmlFor="address-search-input">
+                      Endereço Principal (Rua, Bairro, Cidade)
+                    </label>
+                    <AddressAutocomplete
+                      onLocationSelect={handleLocationSelected}
+                      initialValue={removeNumeroFromLocal(
+                        formData.local,
+                        numeroEComplemento
+                      )}
+                      placeholder="Busque o endereço..."
+                    />
+                    {/* Input oculta para o endereço para ser enviado para 'local' */}
+                    <input type="hidden" name="local" value={formData.local} />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="numeroEComplemento">
+                      Número e Complemento
+                    </label>
                     <input
                       type="text"
-                      id="local"
-                      name="local"
-                      value={formData.local}
-                      onChange={handleChange}
+                      id="numeroEComplemento"
+                      name="numeroEComplemento" // This name will be sent
+                      value={numeroEComplemento} // Use the separate state
+                      onChange={handleNumeroEComplementoChange}
                       required
-                      placeholder="Digite o endereço do mutirão"
+                      placeholder="Ex: 123, Apto B, Próximo ao..."
                     />
                   </div>
+
+                  {/* Inputs oculpas para latitude e longitude */}
+                  {geoCoordinates && (
+                    <>
+                      <input
+                        type="hidden"
+                        name="latitude"
+                        value={geoCoordinates.lat}
+                      />
+                      <input
+                        type="hidden"
+                        name="longitude"
+                        value={geoCoordinates.lon}
+                      />
+                    </>
+                  )}
 
                   <div className="form-group">
                     <label>Tarefas</label>
@@ -387,3 +465,14 @@ const EditarMutirao = () => {
 };
 
 export default EditarMutirao;
+
+function removeNumeroFromLocal(local, numeroEComplemento) {
+  if (!local || !numeroEComplemento) return local;
+
+  const pattern = new RegExp(`,\\s*${escapeRegExp(numeroEComplemento.trim())}`);
+  return local.replace(pattern, "").trim();
+}
+
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
