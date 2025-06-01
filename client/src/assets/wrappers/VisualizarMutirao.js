@@ -366,6 +366,59 @@ const Wrapper = styled.div`
         }
       }
     }
+
+    .guest-cta {
+      text-align: center;
+      margin: 6rem auto 4rem auto;
+      padding: 2rem 1rem;
+      background-color: var(--background-secondary-color);
+      color: var(--text-color, #333);
+      border-radius: var(--border-radius, 8px);
+      max-width: 800px;
+    }
+
+    .guest-cta .highlight {
+      color: var(--primary-color);
+    }
+
+    .guest-cta p {
+      font-size: 0.85rem;
+      color: var(--text-secondary-color, #555);
+      margin-bottom: 2rem;
+    }
+
+    .guest-cta .btn {
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: capitalize;
+      padding: 0.8rem 1.6rem;
+      border-radius: 12px !important;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: "Roboto", sans-serif;
+      box-shadow: var(--shadow-1);
+      text-decoration: none;
+    }
+
+    /* Primary button */
+    .guest-cta .btn .login-link {
+      color: var(--dark-color) !important;
+      background-color: var(--light-color) !important;
+    }
+
+    .guest-cta .btn .login-link:hover {
+      background-color: var(--primary-color-dark) !important;
+    }
+
+    /* Secondary button */
+    .guest-cta .btn.register-link {
+      color: var(--dark-color) !important;
+      background-color: var(--light-color) !important;
+    }
+
+    .guest-cta .btn.register-link:hover {
+      background-color: var(--grey-200) !important;
+    }
   }
 
   @media (max-width: 768px) {

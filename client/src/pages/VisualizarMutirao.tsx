@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
-import { LoaderFunctionArgs, useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/VisualizarMutirao";
 import customFetch from "@/utils/customFetch";
-import { useLoaderData } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  useNavigate,
+  useLoaderData,
+  useLocation,
+  useRevalidator,
+} from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { useAuth } from "@/context/AuthContext";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -144,13 +151,7 @@ const VisualizarMutirao = () => {
   };
   const dataFormatada = formatarDataExtensa(mutirao.data);
 
-  // constante p/ gerenciar o usuário atual
-  const [currentUser, setCurrentUser] = useState<{
-    _id: string;
-    isAdmin: boolean;
-  } | null>(null);
-
-  const [isInscrito, setIsInscrito] = useState(false);
+  const [isInscrito, setIsInscrito] = useState(initialIsInscrito);
   const [aceitouTermo, setAceitouTermo] = useState(false);
   const [habilidades, setHabilidades] = useState<Habilidade[]>([
     { nome: "NÃO IMPLEMENTADO", checked: false },
@@ -161,22 +162,18 @@ const VisualizarMutirao = () => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Carrega o usuário atual
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await customFetch("/usuarios/atual-usuario");
-        setCurrentUser({
-          _id: response.data.usuario._id,
-          isAdmin: response.data.usuario.isAdmin,
-        });
-      } catch (error) {
-        console.log("Usuário não autenticado");
-      }
-    };
+  const location = useLocation(); // Para retornar para a página de mutirão após logar / cadastrar
+  const { usuario: authContextUsuario } = useAuth();
+  let revalidator = useRevalidator();
 
-    fetchCurrentUser();
-  }, []);
+  // Atualiza isInscrito quando authContextUsuario ou mutirao.inscritos mudam
+  useEffect(() => {
+    if (authContextUsuario && mutirao?.inscritos) {
+      setIsInscrito(mutirao.inscritos.includes(authContextUsuario._id));
+    } else {
+      setIsInscrito(false);
+    }
+  }, [authContextUsuario, mutirao?.inscritos]);
 
   // Inicializa materiais selecionados
   useEffect(() => {
@@ -230,16 +227,22 @@ const VisualizarMutirao = () => {
     try {
       if (!isInscrito) {
         await customFetch.post(`/mutiroes/${mutirao._id}/inscrever`);
-        setIsInscrito(true);
-        alert("Inscrição realizada com sucesso!");
+        // setIsInscrito(true);
+        toast.success("Inscrição realizada com sucesso!");
       } else {
         await customFetch.delete(`/mutiroes/${mutirao._id}/cancelar`);
-        setIsInscrito(false);
-        alert("Inscrição cancelada.");
+        // setIsInscrito(false);
+        toast.success("Inscrição cancelada.");
       }
+      revalidator.revalidate(); // REVALIDATE LOADER para atualizar 'mutirao.inscritos' e 'initialIsInscrito'
     } catch (error) {
       console.error("Erro ao processar inscrição/cancelamento:", error);
-      alert(`Ocorreu um erro: ${error || "Tente novamente."}`);
+      const apiError = error as any;
+      toast.error(
+        apiError?.response?.data?.msg ||
+          apiError?.message ||
+          "Erro ao processar inscrição."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -284,11 +287,12 @@ const VisualizarMutirao = () => {
 
   // Verifica se o usuário pode editar (criador ou admin)
   const podeEditar =
-    currentUser &&
-    (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) &&
+    authContextUsuario &&
+    (authContextUsuario._id === mutirao.criadoPor._id ||
+      authContextUsuario.isAdmin) &&
     !faltamMenosDe48Horas(mutirao.data, mutirao.horario);
   const podeParticipar =
-    currentUser && currentUser._id !== mutirao.criadoPor._id;
+    authContextUsuario && authContextUsuario._id !== mutirao.criadoPor._id;
 
   // Dados para o mapa
   const mapPosition: [number, number] = mutirao.location?.coordinates
@@ -336,9 +340,9 @@ const VisualizarMutirao = () => {
                         Editar
                       </button>
                     ) : (
-                      currentUser &&
-                      (currentUser._id === mutirao.criadoPor._id ||
-                        currentUser.isAdmin) && (
+                      authContextUsuario &&
+                      (authContextUsuario._id === mutirao.criadoPor._id ||
+                        authContextUsuario.isAdmin) && (
                         <div className="edicao-bloqueada">
                           <p>
                             Edição bloqueada: faltam menos de 48 horas para o
@@ -348,9 +352,9 @@ const VisualizarMutirao = () => {
                       )
                     )}
 
-                    {currentUser &&
-                      (currentUser._id === mutirao.criadoPor._id ||
-                        currentUser.isAdmin) && (
+                    {authContextUsuario &&
+                      (authContextUsuario._id === mutirao.criadoPor._id ||
+                        authContextUsuario.isAdmin) && (
                         <button
                           className="delete-btn"
                           onClick={handleExcluirMutirao}
@@ -378,7 +382,10 @@ const VisualizarMutirao = () => {
               <div className="section">
                 <h2>Local</h2>
                 <div className="location-box">
-                  <i class="fas fa-map-marker-alt"></i>
+                  <i
+                    className="fas fa-map-marker-alt"
+                    style={{ color: "var(--primary-color)" }}
+                  ></i>
                   <span>{mutirao.local}</span>
                 </div>
 
@@ -497,6 +504,50 @@ const VisualizarMutirao = () => {
                   )}
                 </div>
               </div>
+
+              {/* --- CTA para GUEST USER --- */}
+              {!authContextUsuario && (
+                <div className="section guest-cta">
+                  <h2>Quer fazer a diferença?</h2>
+                  <p>
+                    Crie uma conta ou faça login para se voluntariar e ajudar
+                    neste mutirão!
+                  </p>
+                  <div
+                    className="button-group"
+                    style={{ justifyContent: "flex-start", marginTop: "1rem" }}
+                  >
+                    <button
+                      onClick={() =>
+                        navigate(location.pathname, {
+                          state: {
+                            showLoginModal: true,
+                            from: location.pathname,
+                          },
+                          replace: true,
+                        })
+                      }
+                      className="btn login-link"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(location.pathname, {
+                          state: {
+                            showRegisterModal: true,
+                            from: location.pathname,
+                          },
+                          replace: true,
+                        })
+                      }
+                      className="btn register-link"
+                    >
+                      Cadastre-se
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {podeParticipar && (
                 <div className="section">

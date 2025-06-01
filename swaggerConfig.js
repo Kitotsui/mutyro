@@ -1,4 +1,3 @@
-// swaggerConfig.ts
 import swaggerJSDoc from "swagger-jsdoc";
 
 const options = {
@@ -14,6 +13,15 @@ const options = {
         url: "http://localhost:5100/api/v1",
       },
     ],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "token",
+        },
+      },
+    },
   },
   apis: ["./routes/*.js"],
 };

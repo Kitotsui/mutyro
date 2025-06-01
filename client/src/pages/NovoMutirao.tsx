@@ -7,6 +7,16 @@ import AddressAutocomplete from "../components/AddressAutocomplete";
 
 //import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
+export const loader = async () => {
+  try {
+    await customFetch.get("/usuarios/atual-usuario");
+    return null; // User is authenticated, allow access
+  } catch (error) {
+    toast.error("Você precisa estar logado para criar um mutirão.");
+    return redirect("/");
+  }
+};
+
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
 

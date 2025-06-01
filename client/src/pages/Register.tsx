@@ -1,6 +1,11 @@
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-import { Form, useNavigation } from "react-router-dom";
+import {
+  Form,
+  useNavigation,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
@@ -19,21 +24,24 @@ type Props = {
   closeModal?: () => void;
 };
 
-const Register = ({ switchToLogin }: Props) => {
+const Register = ({ switchToLogin, closeModal }: Props) => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const { setUsuario } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    
+
     try {
       // Primeiro faz o cadastro
       const response = await customFetch.post("/auth/cadastro", data);
-      console.log('Resposta do cadastro:', response);
-      
+      console.log("Resposta do cadastro:", response);
+
       if (response.data && response.data.msg) {
         toast.success(response.data.msg);
       } else {
@@ -44,33 +52,46 @@ const Register = ({ switchToLogin }: Props) => {
       try {
         const loginResponse = await customFetch.post("/auth/login", {
           email: data.email,
-          senha: data.senha
+          senha: data.senha,
         });
+
+        const from = location.state?.from || "/user"; // Redireciona para user ou para .from
 
         if (loginResponse.data && loginResponse.data.usuario) {
           setUsuario(loginResponse.data.usuario);
           toast.success("Login realizado com sucesso!");
-          window.location.href = "/user";
+          if (closeModal) closeModal();
+          navigate(from, { replace: true });
+        } else {
+          toast.warn(
+            "Cadastro realizado, mas houve um problema ao logar automaticamente. Por favor, faça o login."
+          );
+          if (closeModal) closeModal();
+          if (switchToLogin) switchToLogin(); // Switch to login modal
         }
       } catch (loginError) {
-        console.error('Erro no login automático:', loginError);
+        console.error("Erro no login automático:", loginError);
+        toast.error(
+          "Cadastro realizado, mas o login automático falhou. Por favor, tente fazer login manualmente."
+        );
         // Se falhar o login, apenas fecha o modal de cadastro
-        if (switchToLogin) {
-          switchToLogin();
-        }
+        if (closeModal) closeModal();
+        if (switchToLogin) switchToLogin();
       }
     } catch (error) {
-      console.error('Erro no cadastro:', error);
+      console.error("Erro no cadastro:", error);
       const apiError = error as ApiError;
       toast.error(
-        apiError?.response?.data?.msg || apiError?.message || "Erro desconhecido"
+        apiError?.response?.data?.msg ||
+          apiError?.message ||
+          "Erro desconhecido"
       );
     }
   };
 
   return (
     <Wrapper>
-      <Form onSubmit={handleSubmit} className='form'>
+      <Form onSubmit={handleSubmit} className="form">
         <h4>Cadastro</h4>
         <FormRow
           placeHolder="Nome"
@@ -111,7 +132,12 @@ const Register = ({ switchToLogin }: Props) => {
           <div className="line"></div>
         </div>
         <button type="button" className="btn-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -131,7 +157,7 @@ const Register = ({ switchToLogin }: Props) => {
           </svg>
           Continuar com Google
         </button>
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+        <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <span>Já é membro? </span>
           <button type="button" onClick={switchToLogin} className="switch-btn">
             Login
@@ -143,4 +169,3 @@ const Register = ({ switchToLogin }: Props) => {
 };
 
 export default Register;
-

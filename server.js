@@ -60,9 +60,14 @@ app.get("/api/v1/test", (req, res) => {
   res.json({ msg: "test route" });
 });
 
-//Rotas
-app.use("/api/v1/mutiroes/todos", mutiraoRoute);
-app.use("/api/v1/mutiroes", authenticateUser, mutiraoRoute);
+//Rotas - Pré-lógica de GUEST USER
+// app.use("/api/v1/mutiroes/todos", mutiraoRoute);
+// app.use("/api/v1/mutiroes", authenticateUser, mutiraoRoute);
+// app.use("/api/v1/usuarios", authenticateUser, userRouter);
+// app.use("/api/v1/auth", authRoute);
+
+// Rotas - Pós-lógica de GUEST USER
+app.use("/api/v1/mutiroes", mutiraoRoute);
 app.use("/api/v1/usuarios", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRoute);
 
@@ -80,6 +85,9 @@ try {
   await mongoose.connect(process.env.MONGO_URL);
   app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}....`);
+    console.log(
+      `Swagger docs disponíveis em: http://localhost:${port}/api-docs`
+    );
   });
 } catch (error) {
   console.log(error);
