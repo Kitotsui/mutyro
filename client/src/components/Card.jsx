@@ -1,7 +1,7 @@
 import Wrapper from "../assets/wrappers/Card";
 import { Link } from "react-router-dom";
 
-const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
+const Card = ({ id, image, title, date, user, wasDraggingRef, finalizado }) => {
   const handleClickCapture = (e) => {
     if (wasDraggingRef?.current) {
       e.preventDefault();
@@ -10,7 +10,7 @@ const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
   };
 
   return (
-    <Wrapper className="card">
+    <Wrapper className={`card ${finalizado ? "finalizado" : ""}`}>
       <Link to={`/mutirao/${id}`} onClickCapture={handleClickCapture}>
         <img src={image} alt="Foto do Mutirão" />
         <div className="card-content">

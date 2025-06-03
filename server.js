@@ -21,12 +21,43 @@ import userRouter from "./routes/userRouter.js";
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
 import { authenticateUser } from "./middleware/authMiddleware.js";
 
+//controllers
+import { finalizarMutirao } from "./controllers/mutiraoController.js";
+
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// verifica se o mutirao está finalizado e atualiza o status a cada 24 horas
+async function iniciarVerificacaoPeriodica() {
+  try {
+    console.log("Executando verificação inicial de mutirões finalizados...");
+    const resultados = await finalizarMutirao();
+    console.log(
+      `Mutirões finalizados: ${resultados.marcados} marcados, ${resultados.total} verificados`
+    );
+
+    // Configura o intervalo para verificar a cada 24 horas
+    setInterval(async () => {
+      try {
+        console.log(
+          "Executando verificação periódica de mutirões finalizados..."
+        );
+        const resultadosPeriodicos = await finalizarMutirao();
+        console.log(
+          `Mutirões finalizados: ${resultadosPeriodicos.marcados} marcados, ${resultadosPeriodicos.total} verificados`
+        );
+      } catch (error) {
+        console.error("Erro na verificação periódica:", error);
+      }
+    }, 24 * 60 * 60 * 1000); // 24 horas em milissegundos
+  } catch (error) {
+    console.error("Erro na verificação inicial:", error);
+  }
+}
 
 app.use(
   cors({
@@ -78,8 +109,9 @@ app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5100;
 try {
   await mongoose.connect(process.env.MONGO_URL);
-  app.listen(port, () => {
+  app.listen(port, async () => {
     console.log(`Servidor rodando na porta ${port}....`);
+    await iniciarVerificacaoPeriodica();
   });
 } catch (error) {
   console.log(error);

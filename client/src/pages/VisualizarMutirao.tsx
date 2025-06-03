@@ -6,6 +6,17 @@ import customFetch from "@/utils/customFetch";
 import { useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
 
+interface Avaliacao {
+  _id: string;
+  usuario: {
+    _id: string;
+    nome: string;
+  };
+  nota: number;
+  comentario: string;
+  criadoEm: string;
+}
+
 interface Mutirao {
   _id: string;
   titulo: string;
@@ -20,6 +31,7 @@ interface Mutirao {
   inscritos?: string[];
   criadoPor: CriadoPorInfo;
   imagemCapa: string;
+  finalizado?: boolean;
 }
 
 interface CriadoPorInfo {
@@ -40,6 +52,7 @@ interface Material {
 interface VisualizarMutiraoLoaderData {
   mutirao: Mutirao;
   isInscrito: boolean;
+  avaliacoes: Avaliacao[];
 }
 
 export const loader = async ({
@@ -61,8 +74,12 @@ export const loader = async ({
       throw new Response("Mutirão não encontrado.", { status: 404 });
     }
 
+    // Busca as avaliações
+    const avaliacoesResponse = await customFetch(`/mutiroes/${id}/avaliacoes`);
+    const avaliacoes = avaliacoesResponse.data.avaliacoes || [];
+
     let currentUserId: string | null = null;
-    let isInscrito = false; // Default
+    let isInscrito = false;
     try {
       const userResponse = await customFetch("/usuarios/atual-usuario");
       currentUserId = userResponse.data.usuario._id;
@@ -80,7 +97,7 @@ export const loader = async ({
     console.log("Loader: Mutirão carregado:", mutirao);
     console.log("Loader: Status inicial de inscrição:", isInscrito);
 
-    return { mutirao, isInscrito };
+    return { mutirao, isInscrito, avaliacoes };
   } catch (error: any) {
     console.error(`Erro no loader ao buscar ID ${id}:`, error);
     const status = error?.response?.status;
@@ -101,8 +118,23 @@ export const loader = async ({
 
 const VisualizarMutirao = () => {
   const navigate = useNavigate();
-  const { mutirao, isInscrito: initialIsInscrito } =
-    useLoaderData() as VisualizarMutiraoLoaderData;
+  const {
+    mutirao,
+    isInscrito: initialIsInscrito,
+    avaliacoes: initialAvaliacoes,
+  } = useLoaderData() as VisualizarMutiraoLoaderData;
+
+  // Estados para avaliações
+  const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>(
+    initialAvaliacoes || []
+  );
+  const [minhaAvaliacao, setMinhaAvaliacao] = useState<{
+    nota: number;
+    comentario: string;
+  }>({ nota: 3, comentario: "" });
+  const [editandoAvaliacao, setEditandoAvaliacao] = useState<string | null>(
+    null
+  );
 
   // Função para formatar a data como "DD de mes de YYYY"
   const formatarDataExtensa = (dataISO: string): string => {
@@ -114,22 +146,74 @@ const VisualizarMutirao = () => {
   };
   const dataFormatada = formatarDataExtensa(mutirao.data);
 
-  // constante p/ gerenciar o usuário atual
+  // Estados para usuário e inscrição
   const [currentUser, setCurrentUser] = useState<{
     _id: string;
     isAdmin: boolean;
   } | null>(null);
-
-  const [isInscrito, setIsInscrito] = useState(false);
+  const [isInscrito, setIsInscrito] = useState(initialIsInscrito);
   const [aceitouTermo, setAceitouTermo] = useState(false);
   const [habilidades, setHabilidades] = useState<Habilidade[]>([
     { nome: "NÃO IMPLEMENTADO", checked: false },
   ]);
-
   const [materiaisSelecionados, setMateriaisSelecionados] = useState<{
     [key: string]: boolean;
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Funções para manipulação de avaliações
+  const handleCriarAvaliacao = async () => {
+    try {
+      const response = await customFetch.post(
+        `/mutiroes/${mutirao._id}/avaliacoes`,
+        {
+          nota: minhaAvaliacao.nota,
+          comentario: minhaAvaliacao.comentario,
+        }
+      );
+
+      setAvaliacoes([...avaliacoes, response.data.avaliacao]);
+      setMinhaAvaliacao({ nota: 5, comentario: "" });
+      toast.success("Avaliação enviada com sucesso!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.msg || "Erro ao enviar avaliação");
+    }
+  };
+
+  const handleAtualizarAvaliacao = async (avaliacaoId: string) => {
+    try {
+      const response = await customFetch.patch(
+        `/mutiroes/${mutirao._id}/avaliacoes/${avaliacaoId}`,
+        {
+          nota: minhaAvaliacao.nota,
+          comentario: minhaAvaliacao.comentario,
+        }
+      );
+
+      setAvaliacoes(
+        avaliacoes.map((av) =>
+          av._id === avaliacaoId ? response.data.avaliacao : av
+        )
+      );
+      setEditandoAvaliacao(null);
+      setMinhaAvaliacao({ nota: 3, comentario: "" });
+      toast.success("Avaliação atualizada com sucesso!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.msg || "Erro ao atualizar avaliação");
+    }
+  };
+
+  const handleDeletarAvaliacao = async (avaliacaoId: string) => {
+    try {
+      await customFetch.delete(
+        `/mutiroes/${mutirao._id}/avaliacoes/${avaliacaoId}`
+      );
+      setAvaliacoes(avaliacoes.filter((av) => av._id !== avaliacaoId));
+      toast.success("Avaliação removida com sucesso!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.msg || "Erro ao remover avaliação");
+    }
+  };
 
   // Carrega o usuário atual
   useEffect(() => {
@@ -152,7 +236,7 @@ const VisualizarMutirao = () => {
   useEffect(() => {
     if (mutirao?.materiais && Array.isArray(mutirao.materiais)) {
       const estadoInicial = mutirao.materiais.reduce((acc, nomeMaterial) => {
-        acc[nomeMaterial] = false; // Começa desmarcado
+        acc[nomeMaterial] = false;
         return acc;
       }, {} as { [key: string]: boolean });
       setMateriaisSelecionados(estadoInicial);
@@ -182,20 +266,9 @@ const VisualizarMutirao = () => {
       return;
     }
 
-    if (isSubmitting) return; // Evitar cliques duplos
+    if (isSubmitting) return;
 
-    setIsSubmitting(true); // Inicia o feedback de carregamento
-
-    // Pega os materiais selecionados (mesmo que não vá enviar agora)
-    const materiaisSelecionadosNomes = Object.entries(materiaisSelecionados)
-      .filter(([nome, selecionado]) => selecionado)
-      .map(([nome, selecionado]) => nome);
-    console.log(
-      "Materiais selecionados (NÃO enviados nesta versão):",
-      materiaisSelecionadosNomes
-    );
-    // const habilidadesSelecionadasNomes = habilidades.filter(h => h.checked).map(h => h.nome);
-    // console.log("Habilidades selecionadas (NÃO enviadas):", habilidadesSelecionadasNomes);
+    setIsSubmitting(true);
 
     try {
       if (!isInscrito) {
@@ -224,7 +297,7 @@ const VisualizarMutirao = () => {
       setIsSubmitting(true);
       await customFetch.delete(`/mutiroes/${mutirao._id}`);
       toast.success("Mutirão excluído com sucesso!");
-      navigate("/user"); // Redireciona para a página do usuário após exclusão
+      navigate("/user");
     } catch (error: any) {
       const errorMsg =
         error.response?.data?.msg || error.message || "Erro ao excluir mutirão";
@@ -234,25 +307,21 @@ const VisualizarMutirao = () => {
     }
   };
 
-  // Verifica se o usuário pode participar (não é o criador e não está inscrito)
   const faltamMenosDe48Horas = (
     dataString: string,
     horarioString?: string
   ): boolean => {
     if (!horarioString) {
-      // Se não houver horário, considere apenas a data
       const dataMutirao = new Date(dataString);
       const agora = new Date();
       return dataMutirao.getTime() - agora.getTime() < 48 * 60 * 60 * 1000;
     }
 
-    // Dara e horario levados em consideracao
     const dataHoraMutirao = new Date(`${dataString}T${horarioString}`);
     const agora = new Date();
     return dataHoraMutirao.getTime() - agora.getTime() < 48 * 60 * 60 * 1000;
   };
 
-  // Verifica se o usuário pode editar (criador ou admin)
   const podeEditar =
     currentUser &&
     (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) &&
@@ -325,7 +394,8 @@ const VisualizarMutirao = () => {
             <div className="info-section">
               <h1>{mutirao.titulo}</h1>
               <p className="date-author">
-                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada} {mutirao.horario && `às ${mutirao.horario}`} horas
+                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada}{" "}
+                {mutirao.horario && `às ${mutirao.horario}`} horas
               </p>
 
               <div className="section">
@@ -384,7 +454,7 @@ const VisualizarMutirao = () => {
                       <input
                         type="checkbox"
                         checked={habilidade.checked}
-                        disabled={true} // Remover quando implementar
+                        disabled={true}
                         onChange={() => handleHabilidadeChange(index)}
                       />
                     </label>
@@ -398,7 +468,6 @@ const VisualizarMutirao = () => {
                   Selecione caso possa trazer os seguintes itens
                 </p>
                 <div className="checkbox-list">
-                  {/* Verifica se é array e não está vazio */}
                   {mutirao.materiais &&
                   Array.isArray(mutirao.materiais) &&
                   mutirao.materiais.length > 0 ? (
@@ -447,12 +516,167 @@ const VisualizarMutirao = () => {
                   </label>
                 </div>
               )}
+              <div className="section">
+                <div className="form-section">
+                  <h2>Avaliações</h2>
 
+                  {mutirao.finalizado ? (
+                    <>
+                      {currentUser && isInscrito && (
+                        <div className="avaliar-container">
+                          <h2>Sua avaliação</h2>
+
+                          <div className="form-group">
+                            <label htmlFor="nota-avaliacao">Nota (1-5)</label>
+                            <select
+                              id="nota-avaliacao"
+                              name="nota-avaliacao"
+                              value={minhaAvaliacao.nota}
+                              onChange={(e) =>
+                                setMinhaAvaliacao({
+                                  ...minhaAvaliacao,
+                                  nota: parseInt(e.target.value),
+                                })
+                              }
+                              required
+                            >
+                              <option value="">Selecione uma nota</option>
+                              {[1, 2, 3, 4, 5].map((num) => (
+                                <option key={num} value={num}>
+                                  {num}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="form-group">
+                            <label htmlFor="comentario">
+                              Comentário (opcional)
+                            </label>
+                            <textarea
+                              id="comentario"
+                              name="comentario"
+                              value={minhaAvaliacao.comentario}
+                              onChange={(e) =>
+                                setMinhaAvaliacao({
+                                  ...minhaAvaliacao,
+                                  comentario: e.target.value,
+                                })
+                              }
+                              placeholder="Deixe seu feedback sobre o mutirão"
+                              maxLength={500}
+                            />
+                          </div>
+
+                          <div className="button-group">
+                            {editandoAvaliacao ? (
+                              <>
+                                <button
+                                  type="button"
+                                  className="cancel-btn"
+                                  onClick={() => setEditandoAvaliacao(null)}
+                                >
+                                  Cancelar
+                                </button>
+                                <button
+                                  type="button"
+                                  className="submit-btn"
+                                  onClick={() =>
+                                    handleAtualizarAvaliacao(editandoAvaliacao)
+                                  }
+                                >
+                                  Atualizar Avaliação
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                type="button"
+                                className="submit-btn"
+                                onClick={handleCriarAvaliacao}
+                              >
+                                Enviar Avaliação
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="avaliacoes-list">
+                        {avaliacoes.length > 0 ? (
+                          avaliacoes.map((avaliacao) => (
+                            <div key={avaliacao._id} className="avaliacao-item">
+                              <div className="avaliacao-header">
+                                <h4>{avaliacao.usuario.nome}</h4>
+                                <div className="rating">
+                                  {/* Nota: {avaliacao.nota}/5 */}
+                                  {Array(avaliacao.nota).fill("★").join("")}
+                                </div>
+
+                                {currentUser?.isAdmin ||
+                                currentUser?._id === avaliacao.usuario._id ? (
+                                  <div className="avaliacao-actions">
+                                    <button
+                                      type="button"
+                                      className="edit-btn"
+                                      onClick={() => {
+                                        setEditandoAvaliacao(avaliacao._id);
+                                        setMinhaAvaliacao({
+                                          nota: avaliacao.nota,
+                                          comentario: avaliacao.comentario,
+                                        });
+                                      }}
+                                    >
+                                      Editar
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="delete-btn"
+                                      onClick={() =>
+                                        handleDeletarAvaliacao(avaliacao._id)
+                                      }
+                                    >
+                                      Excluir
+                                    </button>
+                                  </div>
+                                ) : null}
+                              </div>
+
+                              {avaliacao.comentario && (
+                                <p className="comentario">
+                                  {avaliacao.comentario}
+                                </p>
+                              )}
+
+                              <small className="avaliacao-date">
+                                {new Date(
+                                  avaliacao.criadoEm
+                                ).toLocaleDateString("pt-BR", {
+                                  day: "2-digit",
+                                  month: "long",
+                                  year: "numeric",
+                                })}
+                              </small>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="no-avaliacoes">
+                            Nenhuma avaliação ainda. Seja o primeiro a avaliar!
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="avaliacoes-disabled">
+                      As avaliações estarão disponíveis após a conclusão do
+                      mutirão.
+                    </p>
+                  )}
+                </div>
+              </div>
               <div className="button-group">
                 <button
                   type="button"
                   className="back-btn"
-                  /*onClick={() => navigate(-1)}*/
                   onClick={() => navigate("/user")}
                 >
                   Voltar

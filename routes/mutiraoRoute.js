@@ -19,6 +19,11 @@ import {
   inscreverUsuario,
   cancelarInscricao,
   getMutiroesInativos,
+  getAvaliacoes,
+  criarAvaliacao,
+  atualizarAvaliacao,
+  deletarAvaliacao,
+  finalizarMutirao,
 } from "../controllers/mutiraoController.js";
 
 /**
@@ -191,5 +196,17 @@ router.route("/:id/inscrever").post(validateIdParam, inscreverUsuario);
  *         description: Inscrição cancelada com sucesso
  */
 router.route("/:id/cancelar").delete(validateIdParam, cancelarInscricao);
+
+router.route("/:id/avaliacoes")
+  .get(getAvaliacoes)
+  .post(authenticateUser, criarAvaliacao);
+
+router
+  .route("/:id/avaliacoes/:avaliacaoId")
+  .patch(authenticateUser, atualizarAvaliacao)
+  .delete(authenticateUser, deletarAvaliacao);
+
+router.route("/:id/finalizar")
+  .post(authenticateUser, finalizarMutirao);
 
 export default router;

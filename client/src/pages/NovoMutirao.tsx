@@ -4,7 +4,6 @@ import Wrapper from "../assets/wrappers/NovoMutirao";
 import { Form, useNavigation, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
-//import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();

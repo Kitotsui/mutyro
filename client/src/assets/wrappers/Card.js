@@ -12,6 +12,8 @@ const Wrapper = styled.article`
   font-weight: 600;
   width: 400px;
   height: fit-content;
+  position: relative;
+  transition: all 0.3s ease;
 
   &:hover {
     transform: scale(1.05);
@@ -47,6 +49,42 @@ const Wrapper = styled.article`
     height: 270px;
     object-fit: cover;
     border-radius: 20px;
+  }
+
+  /* Estilo para mutirões finalizados */
+  &.finalizado {
+    background-color: #f1f3f5;
+    border: 1px solid #e9ecef;
+
+    &::after {
+      content: "FINALIZADO";
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #495057;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      filter: grayscale(30%) brightness(0.95);
+    }
+
+    h4,
+    p,
+    time {
+      color: #868e96;
+    }
+
+    .card-content {
+      opacity: 0.9;
+    }
   }
 `;
 
