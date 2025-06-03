@@ -15,9 +15,9 @@ html {
 :root {
   /* colors */
   --primary-50: #ff9100;
-  --primary-100: #ff6f00;
-  --primary-200: #ffcc00;
-  --primary-300: #ff5200;
+  --primary-100: #ed9141;
+  --primary-200: #c25937;
+  --primary-300: #ef561d;
   --primary-400: #ff2a00;
   --primary-500: #ff007f;
   --primary-600: #ff00cc;
@@ -77,7 +77,7 @@ html {
   --text-secondary-color: var(--grey-500);
 
   /* Additional Colours */
-  --primary-color: #fc5d66;
+  --primary-color: #ef561d;
   --secondary-color: #ffc05a;
   --light-color: #f9fafb;
   --dark-color: #272d35;
