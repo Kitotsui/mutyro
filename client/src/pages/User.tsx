@@ -3,6 +3,8 @@ import UserProfile from "../components/UserProfile";
 import UserSidebar from "../components/UserSidebar";
 import MutiroesList from "../components/MutiroesList";
 import { useState } from "react";
+import SmoothToggle from "../components/SmoothToggle";
+import CustomDropdown from "../components/CustomDropdown";
 
 import { redirect, useLoaderData } from "react-router-dom";
 import customFetch from "../utils/customFetch";
@@ -163,65 +165,20 @@ const User = () => {
 
   // Elemento de filtros para passar para MutiroesList
   const filtrosElement = (
-    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <div
-        style={{
-          display: "flex",
-          background: "#e5e7eb",
-          borderRadius: 9999,
-          padding: 2,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-          transition: "background 0.3s cubic-bezier(.4,0,.2,1)",
-        }}
-      >
-        <button
-          onClick={() => setFiltro("meus")}
-          style={{
-            padding: "8px 20px",
-            borderRadius: 9999,
-            border: "none",
-            background: filtro === "meus" ? "#f97316" : "transparent",
-            color: filtro === "meus" ? "#fff" : "#1e293b",
-            fontWeight: filtro === "meus" ? 700 : 400,
-            cursor: "pointer",
-            transition:
-              "background 0.35s cubic-bezier(.4,0,.2,1), color 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1)",
-            boxShadow:
-              filtro === "meus" ? "0 2px 8px rgba(249,115,22,0.10)" : "none",
-          }}
-        >
-          Meus mutirões
-        </button>
-        <button
-          onClick={() => setFiltro("todos")}
-          style={{
-            padding: "8px 20px",
-            borderRadius: 9999,
-            border: "none",
-            background: filtro === "todos" ? "#f97316" : "transparent",
-            color: filtro === "todos" ? "#fff" : "#1e293b",
-            fontWeight: filtro === "todos" ? 700 : 400,
-            cursor: "pointer",
-            transition:
-              "background 0.35s cubic-bezier(.4,0,.2,1), color 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1)",
-            boxShadow:
-              filtro === "todos" ? "0 2px 8px rgba(249,115,22,0.10)" : "none",
-          }}
-        >
-          Todos
-        </button>
-      </div>
-      <select
+    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <SmoothToggle
+        options={[
+          { label: "Meus mutirões", value: "meus" },
+          { label: "Todos", value: "todos" },
+        ]}
+        value={filtro}
+        onChange={(v) => setFiltro(v as "meus" | "todos")}
+      />
+      <CustomDropdown
+        options={tiposMutirao}
         value={tipoSelecionado}
-        onChange={(e) => setTipoSelecionado(e.target.value)}
-        style={{ marginLeft: 8, padding: 8, borderRadius: 6 }}
-      >
-        {tiposMutirao.map((tipo) => (
-          <option key={tipo.value} value={tipo.value}>
-            {tipo.label}
-          </option>
-        ))}
-      </select>
+        onChange={setTipoSelecionado}
+      />
     </div>
   );
 
