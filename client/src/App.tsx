@@ -1,20 +1,14 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  HomeLayout,
-  Landing,
-  Error,
-  User,
-  NovoMutirao,
-  VisualizarMutirao,
-} from "./pages";
-import { AuthProvider } from "./context/AuthContext";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {HomeLayout, Landing, Error, User, NovoMutirao, VisualizarMutirao} from "./pages";
+import {AuthProvider} from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
 
-import { action as novoMutiraoAction } from "./pages/NovoMutirao";
-import { loader as userLoader } from "./pages/User";
-import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
-import { action as editarMutiraoAction } from "./pages/EditarMutirao";
-import { loader as landingLoader } from "./pages/Landing";
+import {action as novoMutiraoAction} from "./pages/NovoMutirao";
+import {loader as userLoader} from "./pages/User";
+import {loader as visualizarMutiraoLoader} from "./pages/VisualizarMutirao";
+import {action as editarMutiraoAction} from "./pages/EditarMutirao";
+import {loader as landingLoader} from "./pages/Landing";
+import EditarUsuario from "./pages/EditarUsuario";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "mutirao/:id",
     element: <VisualizarMutirao />,
+  },
+  {
+    path: "EditarUsuario",
+    element: <EditarUsuario />, // <- Certifique-se de usar o componente correto,
   },
 ]);
 

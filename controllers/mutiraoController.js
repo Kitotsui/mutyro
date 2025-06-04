@@ -1,6 +1,8 @@
-import { StatusCodes } from "http-status-codes";
+import {StatusCodes} from "http-status-codes";
 import Mutirao from "../models/mutiraoModel.js";
-import { MUTIRAO_TIPOS } from "../utils/constantes.js";
+import Usuario from "../models/usuarioModel.js";
+import {MUTIRAO_TIPOS} from "../utils/constantes.js";
+import nodemailer from "nodemailer";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);
@@ -8,17 +10,14 @@ export const getMutiroes = async (req, res) => {
     criadoPor: req.user.userId,
     ativo: true,
   }); // Busca todos os mutirões do usuário logado que estao ativos
-  res.status(StatusCodes.OK).json({ mutiroes });
+  res.status(StatusCodes.OK).json({mutiroes});
 };
 
 export const getTodosMutiroes = async (req, res) => {
   //console.log(req.user);
-  const mutiroes = await Mutirao.find({ ativo: true }).populate(
-    "criadoPor",
-    "nome"
-  );
+  const mutiroes = await Mutirao.find({ativo: true}).populate("criadoPor", "nome");
 
-  res.status(StatusCodes.OK).json({ mutiroes });
+  res.status(StatusCodes.OK).json({mutiroes});
 };
 
 export const createMutirao = async (req, res) => {
@@ -29,7 +28,7 @@ export const createMutirao = async (req, res) => {
   try {
     // verificação de tipo de mutirao
     if (!Object.values(MUTIRAO_TIPOS).includes(req.body.mutiraoTipo)) {
-      return res.status(400).json({ msg: "Tipo de mutirão inválidop" });
+      return res.status(400).json({msg: "Tipo de mutirão inválidop"});
     }
 
     // Verifica se faltam menos de 48 horas para o mutirão
@@ -56,7 +55,7 @@ export const createMutirao = async (req, res) => {
       imagemCapa: imagePath,
     });
 
-    res.status(201).json({ mutirao });
+    res.status(201).json({mutirao});
   } catch (error) {
     console.error("Erro ao criar mutirão:", error);
 
@@ -73,10 +72,10 @@ export const createMutirao = async (req, res) => {
 };
 
 export const getMutirao = async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
   const mutirao = await Mutirao.findById(id).populate("criadoPor", "nome _id");
 
-  res.status(StatusCodes.OK).json({ mutirao });
+  res.status(StatusCodes.OK).json({mutirao});
 };
 
 // Busca de mutirões inativos
@@ -85,23 +84,20 @@ export const getMutiroesInativos = async (req, res) => {
     criadoPor: req.user.userId,
     ativo: false,
   });
-  res.status(StatusCodes.OK).json({ mutiroes });
+  res.status(StatusCodes.OK).json({mutiroes});
 };
 
 export const updateMutirao = async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
 
   // Verifica se o usuário eh o criador ou admin
   const mutiraoExistente = await Mutirao.findById(id);
   if (!mutiraoExistente) {
-    return res.status(404).json({ msg: "Mutirão não encontrado" });
+    return res.status(404).json({msg: "Mutirão não encontrado"});
   }
 
-  if (
-    mutiraoExistente.criadoPor.toString() !== req.user.userId &&
-    !req.user.isAdmin
-  ) {
-    return res.status(403).json({ msg: "Não autorizado" });
+  if (mutiraoExistente.criadoPor.toString() !== req.user.userId && !req.user.isAdmin) {
+    return res.status(403).json({msg: "Não autorizado"});
   }
 
   // verifica se falta menos de 48 horas para o mutirão
@@ -141,14 +137,14 @@ export const updateMutirao = async (req, res) => {
 };
 
 export const deleteMutirao = async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
   const updatedMutirao = await Mutirao.findByIdAndUpdate(
     id,
     {
       ativo: false,
       deletadoEm: new Date(),
     },
-    { new: true }
+    {new: true}
   );
 
   res.status(StatusCodes.OK).json({
@@ -158,25 +154,47 @@ export const deleteMutirao = async (req, res) => {
 };
 
 export const inscreverUsuario = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.user;
-  const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
-    $addToSet: { inscritos: userId },
+  const {id} = req.params;
+  const {userId} = req.user;
+
+  const usuario = await Usuario.findById(userId);
+  if (!usuario) {
+    return res.status(StatusCodes.NOT_FOUND).json({msg: "Usuário não encontrado"});
+  }
+
+  const multirao = await Mutirao.findByIdAndUpdate(id, {
+    $addToSet: {inscritos: userId},
   });
-  res
-    .status(StatusCodes.OK)
-    .json(`Usuário ${userId} inscrito com sucesso no mutirão ${id} !`);
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: usuario.email,
+    subject: "Inscrição confirmada no mutirão",
+    text: `Olá ${usuario.nome},\n\nSua inscrição no mutirão ${multirao.titulo} foi realizada com sucesso!\n\nObrigado por participar!`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Erro ao enviar e-mail:", error);
+  }
+
+  res.status(StatusCodes.OK).json(`Usuário ${userId} inscrito com sucesso no mutirão ${id} !`);
 };
 
 export const cancelarInscricao = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.user;
+  const {id} = req.params;
+  const {userId} = req.user;
   const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
-    $pull: { inscritos: userId },
+    $pull: {inscritos: userId},
   });
-  res
-    .status(StatusCodes.OK)
-    .json(
-      `Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`
-    );
+  res.status(StatusCodes.OK).json(`Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`);
 };

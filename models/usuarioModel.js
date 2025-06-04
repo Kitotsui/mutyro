@@ -7,7 +7,8 @@ const UsuarioSchema = new mongoose.Schema(
     senha: String,
     cpf: String,
     telefone: String,
-    //endereco: String,
+    endereco: String,
+    dataNascimento: String,
     cidade: String,
     //estado: String,
     //cep: String,
@@ -19,7 +20,7 @@ const UsuarioSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  {timestamps: true}
 );
 
 UsuarioSchema.methods.toJSON = function () {

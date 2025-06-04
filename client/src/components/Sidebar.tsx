@@ -13,7 +13,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
 
   const defaultMenu = [
-    { icon: <FaUser />, label: "Perfil" },
+   {
+      icon: <FaUser />,
+      label: "Perfil",
+      active: true,
+      onClick: () => navigate("/editarusuario"), // Aqui é o redirecionamento para a página EditarUsuario
+    },
     { icon: <FaUsers />, label: "Comunidade" },
     { icon: <FaEnvelope />, label: "Mensagens" },
     { icon: <FaComments />, label: "Chat", onClick: () => navigate('/chat') },

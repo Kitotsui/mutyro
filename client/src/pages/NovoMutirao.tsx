@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/NovoMutirao";
-import { Form, useNavigation, redirect } from "react-router-dom";
+import { Form, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 //import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
@@ -26,18 +26,6 @@ export const action = async ({ request }: { request: Request }) => {
     formData.append("tarefas", tarefa);
   });
 
-  const mutirao = {
-    titulo: formData.get("titulo"),
-    data: formData.get("data"),
-    horario: formData.get("horario"),
-    descricao: formData.get("descricao"),
-    local: formData.get("local"),
-    materiais: formData.get("materiais") || "",
-    tarefas: tarefas.filter(Boolean),
-    mutiraoTipo: formData.get("mutiraoTipo"),
-  };
-
-
   try {
     const response = await customFetch.post("/mutiroes", formData, {
       headers: {
@@ -51,9 +39,10 @@ export const action = async ({ request }: { request: Request }) => {
 
     toast.success("Mutirão criado com sucesso!");
     return redirect("/user");
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const error = err as { response?: { data?: { msg?: string } }; message?: string };
     const errorMsg =
-      err.response?.data?.msg || err.message || "Erro ao criar mutirão";
+      error.response?.data?.msg || error.message || "Erro ao criar mutirão";
     toast.error(errorMsg);
     return null;
   }
