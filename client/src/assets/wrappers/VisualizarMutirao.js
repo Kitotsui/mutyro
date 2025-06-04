@@ -1,7 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  min-height: 100vh;
   background-color: var(--grey-50);
   font-family: "Open Sans", sans-serif;
 
@@ -349,6 +348,77 @@ const Wrapper = styled.div`
         border: 1px solid #ffeeba;
       }
     }
+
+    .map-container-visualizar {
+      height: 300px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      .leaflet-map {
+        width: 100%;
+        height: 100%;
+      }
+      .leaflet-popup {
+        a {
+          line-height: 2rem;
+        }
+      }
+    }
+
+    .guest-cta {
+      text-align: center;
+      margin: 6rem auto 4rem auto;
+      padding: 2rem 1rem;
+      background-color: var(--background-secondary-color);
+      color: var(--text-color, #333);
+      border-radius: var(--border-radius, 8px);
+      max-width: 800px;
+    }
+
+    .guest-cta .highlight {
+      color: var(--primary-color);
+    }
+
+    .guest-cta p {
+      font-size: 0.85rem;
+      color: var(--text-secondary-color, #555);
+      margin-bottom: 2rem;
+    }
+
+    .guest-cta .btn {
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: capitalize;
+      padding: 0.8rem 1.6rem;
+      border-radius: 12px !important;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: "Roboto", sans-serif;
+      box-shadow: var(--shadow-1);
+      text-decoration: none;
+    }
+
+    /* Primary button */
+    .guest-cta .btn .login-link {
+      color: var(--dark-color) !important;
+      background-color: var(--light-color) !important;
+    }
+
+    .guest-cta .btn .login-link:hover {
+      background-color: var(--primary-color-dark) !important;
+    }
+
+    /* Secondary button */
+    .guest-cta .btn.register-link {
+      color: var(--dark-color) !important;
+      background-color: var(--light-color) !important;
+    }
+
+    .guest-cta .btn.register-link:hover {
+      background-color: var(--grey-200) !important;
+    }
   }
 
   @media (max-width: 768px) {
@@ -383,4 +453,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default Wrapper; 
+export default Wrapper;

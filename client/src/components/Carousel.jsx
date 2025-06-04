@@ -7,6 +7,12 @@ const Carousel = ({ children }) => {
   const scrollAnimationRef = useRef(null);
   const scrollSpeedRef = useRef(0);
 
+  // Dragging
+  const isDragging = useRef(false);
+  const wasDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
   // Auto Scroll
   const startAutoScroll = (direction) => {
     const container = carouselRef.current;
@@ -35,6 +41,10 @@ const Carousel = ({ children }) => {
   };
 
   const handleMouseMove = (e) => {
+    if (isDragging.current) {
+      stopScrolling(); // Parar auto-scroll se estiver usando dragging
+      return;
+    }
     const container = carouselRef.current;
     if (!container) return;
 
@@ -75,7 +85,7 @@ const Carousel = ({ children }) => {
 
   // Gradient visibility state
   const [gradientState, setGradientState] = useState({
-    left: false,
+    left: true,
     right: true,
   });
 
@@ -103,11 +113,17 @@ const Carousel = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.style.cursor = "grab";
+    }
+  }, []);
+
   const handleMouseDown = (e) => {
     if (e.button !== 0) return; // Only respond to left click
     const container = carouselRef.current;
-    wasDragging.current = false;
     isDragging.current = true;
+    wasDragging.current = false;
     startX.current = e.clientX - container.getBoundingClientRect().left;
     scrollLeft.current = container.scrollLeft;
     container.style.cursor = "grabbing";
@@ -126,13 +142,14 @@ const Carousel = ({ children }) => {
 
   const handleMouseLeave = () => {
     isDragging.current = false;
+    stopScrolling();
     carouselRef.current.style.cursor = "grab";
   };
 
   const handleMouseMoveDrag = (e) => {
     if (!isDragging.current) return;
     e.preventDefault();
-    wasDragging.current = true;
+    // wasDragging.current = true;
 
     const container = carouselRef.current;
     const x = e.pageX - container.offsetLeft;
@@ -153,10 +170,7 @@ const Carousel = ({ children }) => {
           handleMouseMove(e);
           handleMouseMoveDrag(e);
         }}
-        onMouseLeave={(e) => {
-          stopScrolling();
-          handleMouseLeave(e);
-        }}
+        onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
       >

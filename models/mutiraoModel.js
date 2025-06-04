@@ -46,6 +46,20 @@ const MutiraoSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+
+    numeroEComplemento: String,
   },
   { timestamps: true }
 );

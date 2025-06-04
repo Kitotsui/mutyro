@@ -31,7 +31,7 @@
   left: 0;
   width: 50%;
   height: 36px;
-  background: #2563eb;
+  background: var(--primary-100);
   border-radius: 9999px;
   transition: left 0.3s cubic-bezier(.4,0,.2,1), background 0.3s;
   z-index: 1;

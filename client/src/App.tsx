@@ -3,12 +3,12 @@ import {HomeLayout, Landing, Error, User, NovoMutirao, VisualizarMutirao} from "
 import {AuthProvider} from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
 
-import {action as novoMutiraoAction} from "./pages/NovoMutirao";
-import {loader as userLoader} from "./pages/User";
-import {loader as visualizarMutiraoLoader} from "./pages/VisualizarMutirao";
-import {action as editarMutiraoAction} from "./pages/EditarMutirao";
-import {loader as landingLoader} from "./pages/Landing";
-import EditarUsuario from "./pages/EditarUsuario";
+import { action as novoMutiraoAction } from "./pages/NovoMutirao";
+import { loader as userLoader } from "./pages/User";
+import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
+import { action as editarMutiraoAction } from "./pages/EditarMutirao";
+import { loader as landingLoader } from "./pages/Landing";
+import { loader as novoMutiraoLoader } from "./pages/NovoMutirao";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +30,7 @@ const router = createBrowserRouter([
         path: "novo-mutirao",
         element: <NovoMutirao />,
         action: novoMutiraoAction,
+        loader: novoMutiraoLoader,
       },
       {
         path: "mutirao/:id",
@@ -45,28 +46,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/landing",
-    element: <Landing />,
-  },
-  {
     path: "/error",
     element: <Error />,
-  },
-  {
-    path: "user",
-    element: <User />,
-  },
-  {
-    path: "novo-mutirao",
-    element: <NovoMutirao />,
-  },
-  {
-    path: "mutirao/:id",
-    element: <VisualizarMutirao />,
-  },
-  {
-    path: "EditarUsuario",
-    element: <EditarUsuario />, // <- Certifique-se de usar o componente correto,
   },
 ]);
 

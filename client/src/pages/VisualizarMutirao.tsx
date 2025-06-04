@@ -1,10 +1,37 @@
 import { useState, useEffect } from "react";
-import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
 import Wrapper from "../assets/wrappers/VisualizarMutirao";
-import { NavBar } from "../components";
 import customFetch from "@/utils/customFetch";
-import { useLoaderData } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  useNavigate,
+  useLoaderData,
+  useLocation,
+  useRevalidator,
+} from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { useAuth } from "@/context/AuthContext";
+
+import { MapContainer, TileLayer, Marker, Popup, MapContainerProps } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// Correção para que os ícones padrões do Leaflet carreguem corretamente com Vite
+import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
+
+interface LocationGeoJSON {
+  type: "Point";
+  coordinates: [number, number];
+}
 
 interface Mutirao {
   _id: string;
@@ -20,6 +47,8 @@ interface Mutirao {
   inscritos?: string[];
   criadoPor: CriadoPorInfo;
   imagemCapa: string;
+  location: LocationGeoJSON;
+  numeroEComplemento: string;
 }
 
 interface CriadoPorInfo {
@@ -28,11 +57,6 @@ interface CriadoPorInfo {
 }
 
 interface Habilidade {
-  nome: string;
-  checked: boolean;
-}
-
-interface Material {
   nome: string;
   checked: boolean;
 }
@@ -57,8 +81,15 @@ export const loader = async ({
     console.log(`Loader: Buscando mutirão ID: ${id}`);
     const response = await customFetch(`/mutiroes/${id}`);
     const mutirao = response.data.mutirao;
-    if (!mutirao) {
-      throw new Response("Mutirão não encontrado.", { status: 404 });
+    if (!mutirao || !mutirao.location || !mutirao.location.coordinates) {
+      console.error(
+        "Loader: Dados de localização ausentes ou incompletos para o mutirão:",
+        mutirao
+      );
+      throw new Response(
+        "Dados de localização do mutirão ausentes ou incompletos.",
+        { status: 404 }
+      );
     }
 
     let currentUserId: string | null = null;
@@ -66,10 +97,11 @@ export const loader = async ({
     try {
       const userResponse = await customFetch("/usuarios/atual-usuario");
       currentUserId = userResponse.data.usuario._id;
-    } catch (userError: any) {
+    } catch (userError: unknown) {
+      const error = userError as { response?: { status?: number } };
       console.warn(
         "Loader: Usuário não autenticado ou erro ao buscar usuário atual.",
-        userError?.response?.status
+        error?.response?.status
       );
     }
 
@@ -81,9 +113,10 @@ export const loader = async ({
     console.log("Loader: Status inicial de inscrição:", isInscrito);
 
     return { mutirao, isInscrito };
-  } catch (error: any) {
-    console.error(`Erro no loader ao buscar ID ${id}:`, error);
-    const status = error?.response?.status;
+  } catch (error: unknown) {
+    const err = error as { response?: { status?: number } };
+    console.error(`Erro no loader ao buscar ID ${id}:`, err);
+    const status = err?.response?.status;
 
     if (status === 404) {
       throw new Response("Mutirão não encontrado.", { status: 404 });
@@ -114,13 +147,7 @@ const VisualizarMutirao = () => {
   };
   const dataFormatada = formatarDataExtensa(mutirao.data);
 
-  // constante p/ gerenciar o usuário atual
-  const [currentUser, setCurrentUser] = useState<{
-    _id: string;
-    isAdmin: boolean;
-  } | null>(null);
-
-  const [isInscrito, setIsInscrito] = useState(false);
+  const [isInscrito, setIsInscrito] = useState(initialIsInscrito);
   const [aceitouTermo, setAceitouTermo] = useState(false);
   const [habilidades, setHabilidades] = useState<Habilidade[]>([
     { nome: "NÃO IMPLEMENTADO", checked: false },
@@ -131,22 +158,18 @@ const VisualizarMutirao = () => {
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Carrega o usuário atual
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await customFetch("/usuarios/atual-usuario");
-        setCurrentUser({
-          _id: response.data.usuario._id,
-          isAdmin: response.data.usuario.isAdmin,
-        });
-      } catch (error) {
-        console.log("Usuário não autenticado");
-      }
-    };
+  const location = useLocation(); // Para retornar para a página de mutirão após logar / cadastrar
+  const { usuario: authContextUsuario } = useAuth();
+  const revalidator = useRevalidator();
 
-    fetchCurrentUser();
-  }, []);
+  // Atualiza isInscrito quando authContextUsuario ou mutirao.inscritos mudam
+  useEffect(() => {
+    if (authContextUsuario && mutirao?.inscritos) {
+      setIsInscrito(mutirao.inscritos.includes(authContextUsuario._id));
+    } else {
+      setIsInscrito(false);
+    }
+  }, [authContextUsuario, mutirao?.inscritos]);
 
   // Inicializa materiais selecionados
   useEffect(() => {
@@ -188,8 +211,8 @@ const VisualizarMutirao = () => {
 
     // Pega os materiais selecionados (mesmo que não vá enviar agora)
     const materiaisSelecionadosNomes = Object.entries(materiaisSelecionados)
-      .filter(([nome, selecionado]) => selecionado)
-      .map(([nome, selecionado]) => nome);
+      .filter(([, selecionado]) => selecionado)
+      .map(([nome]) => nome);
     console.log(
       "Materiais selecionados (NÃO enviados nesta versão):",
       materiaisSelecionadosNomes
@@ -200,16 +223,22 @@ const VisualizarMutirao = () => {
     try {
       if (!isInscrito) {
         await customFetch.post(`/mutiroes/${mutirao._id}/inscrever`);
-        setIsInscrito(true);
-        alert("Inscrição realizada com sucesso!");
+        // setIsInscrito(true);
+        toast.success("Inscrição realizada com sucesso!");
       } else {
         await customFetch.delete(`/mutiroes/${mutirao._id}/cancelar`);
-        setIsInscrito(false);
-        alert("Inscrição cancelada.");
+        // setIsInscrito(false);
+        toast.success("Inscrição cancelada.");
       }
-    } catch (error) {
+      revalidator.revalidate(); // REVALIDATE LOADER para atualizar 'mutirao.inscritos' e 'initialIsInscrito'
+    } catch (error: unknown) {
       console.error("Erro ao processar inscrição/cancelamento:", error);
-      alert(`Ocorreu um erro: ${error || "Tente novamente."}`);
+      const apiError = error as { response?: { data?: { msg?: string } }; message?: string };
+      toast.error(
+        apiError?.response?.data?.msg ||
+          apiError?.message ||
+          "Erro ao processar inscrição."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -225,9 +254,10 @@ const VisualizarMutirao = () => {
       await customFetch.delete(`/mutiroes/${mutirao._id}`);
       toast.success("Mutirão excluído com sucesso!");
       navigate("/user"); // Redireciona para a página do usuário após exclusão
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { msg?: string } }; message?: string };
       const errorMsg =
-        error.response?.data?.msg || error.message || "Erro ao excluir mutirão";
+        err.response?.data?.msg || err.message || "Erro ao excluir mutirão";
       toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
@@ -254,11 +284,23 @@ const VisualizarMutirao = () => {
 
   // Verifica se o usuário pode editar (criador ou admin)
   const podeEditar =
-    currentUser &&
-    (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) &&
+    authContextUsuario &&
+    (authContextUsuario._id === mutirao.criadoPor._id ||
+      authContextUsuario.isAdmin) &&
     !faltamMenosDe48Horas(mutirao.data, mutirao.horario);
   const podeParticipar =
-    currentUser && currentUser._id !== mutirao.criadoPor._id;
+    authContextUsuario && authContextUsuario._id !== mutirao.criadoPor._id;
+
+  // Dados para o mapa
+  const mapPosition: [number, number] = mutirao.location?.coordinates
+    ? [mutirao.location.coordinates[1], mutirao.location.coordinates[0]]
+    : [0, 0];
+
+  // Verifica os dados de geolocalização
+  const canDisplayMap =
+    mutirao.location &&
+    mutirao.location.coordinates &&
+    mutirao.location.coordinates.length === 2;
 
   return (
     <Wrapper>
@@ -295,9 +337,9 @@ const VisualizarMutirao = () => {
                         Editar
                       </button>
                     ) : (
-                      currentUser &&
-                      (currentUser._id === mutirao.criadoPor._id ||
-                        currentUser.isAdmin) && (
+                      authContextUsuario &&
+                      (authContextUsuario._id === mutirao.criadoPor._id ||
+                        authContextUsuario.isAdmin) && (
                         <div className="edicao-bloqueada">
                           <p>
                             Edição bloqueada: faltam menos de 48 horas para o
@@ -307,9 +349,9 @@ const VisualizarMutirao = () => {
                       )
                     )}
 
-                    {currentUser &&
-                      (currentUser._id === mutirao.criadoPor._id ||
-                        currentUser.isAdmin) && (
+                    {authContextUsuario &&
+                      (authContextUsuario._id === mutirao.criadoPor._id ||
+                        authContextUsuario.isAdmin) && (
                         <button
                           className="delete-btn"
                           onClick={handleExcluirMutirao}
@@ -325,7 +367,8 @@ const VisualizarMutirao = () => {
             <div className="info-section">
               <h1>{mutirao.titulo}</h1>
               <p className="date-author">
-                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada} {mutirao.horario && `às ${mutirao.horario}`} horas
+                Por {mutirao.criadoPor.nome} • Acontece em {dataFormatada}{" "}
+                {mutirao.horario && `às ${mutirao.horario}`} horas
               </p>
 
               <div className="section">
@@ -336,26 +379,51 @@ const VisualizarMutirao = () => {
               <div className="section">
                 <h2>Local</h2>
                 <div className="location-box">
-                  <svg
-                    className="location-icon"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
+                  <i
+                    className="fas fa-map-marker-alt"
+                    style={{ color: "var(--primary-color)" }}
+                  ></i>
                   <span>{mutirao.local}</span>
                 </div>
+
+                {canDisplayMap ? (
+                  <div className="map-container-visualizar">
+                    <MapContainer
+                      {...({ center: mapPosition, zoom: 15 } as MapContainerProps)}
+                      style={{ height: "400px", width: "100%" }}
+                    >
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={mapPosition}>
+                        <Popup>
+                          {mutirao.local} <br />
+                          {mutirao.numeroEComplemento && (
+                            <>
+                              {mutirao.numeroEComplemento}
+                              <br />
+                            </>
+                          )}
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i
+                              className="fas fa-map"
+                              style={{ marginRight: "6px" }}
+                            ></i>
+                            Abrir no Google Maps
+                          </a>
+                        </Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
+                ) : (
+                  <p style={{ marginTop: "10px", color: "grey" }}>
+                    Localização não disponível no mapa.
+                  </p>
+                )}
               </div>
 
               <div className="section">
@@ -417,6 +485,50 @@ const VisualizarMutirao = () => {
                   )}
                 </div>
               </div>
+
+              {/* --- CTA para GUEST USER --- */}
+              {!authContextUsuario && (
+                <div className="section guest-cta">
+                  <h2>Quer fazer a diferença?</h2>
+                  <p>
+                    Crie uma conta ou faça login para se voluntariar e ajudar
+                    neste mutirão!
+                  </p>
+                  <div
+                    className="button-group"
+                    style={{ justifyContent: "flex-start", marginTop: "1rem" }}
+                  >
+                    <button
+                      onClick={() =>
+                        navigate(location.pathname, {
+                          state: {
+                            showLoginModal: true,
+                            from: location.pathname,
+                          },
+                          replace: true,
+                        })
+                      }
+                      className="btn login-link"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(location.pathname, {
+                          state: {
+                            showRegisterModal: true,
+                            from: location.pathname,
+                          },
+                          replace: true,
+                        })
+                      }
+                      className="btn register-link"
+                    >
+                      Cadastre-se
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {podeParticipar && (
                 <div className="section">

@@ -59,8 +59,9 @@ const EditarUsuario = () => {
 
       toast.success("Usuário atualizado com sucesso!");
       navigate("/user");
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.msg || err.message || "Erro ao editar usuário";
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { msg?: string } }; message?: string };
+      const errorMsg = error.response?.data?.msg || error.message || "Erro ao editar usuário";
       toast.error(errorMsg);
     }
   };

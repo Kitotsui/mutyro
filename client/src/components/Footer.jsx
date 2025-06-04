@@ -5,8 +5,8 @@ const Footer = () => {
   return (
     <Wrapper>
       <footer className="footer">
-        <div class="container footer-flex">
-          <ul class="footer-links">
+        <div className="container footer-flex">
+          <ul className="footer-links">
             <li>
               <img src={logo} alt="" />
             </li>

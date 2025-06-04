@@ -1,8 +1,7 @@
 import {StatusCodes} from "http-status-codes";
 import Mutirao from "../models/mutiraoModel.js";
-import Usuario from "../models/usuarioModel.js";
-import {MUTIRAO_TIPOS} from "../utils/constantes.js";
-import nodemailer from "nodemailer";
+import { MUTIRAO_TIPOS } from "../utils/constantes.js";
+import fs from "fs/promises";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);
@@ -25,22 +24,68 @@ export const createMutirao = async (req, res) => {
   console.log("Tipo recebido:", req.body.mutiraoTipo);
   console.log("Valores permitidos:", Object.values(MUTIRAO_TIPOS));
   console.log("Corpo completo da requisição:", req.body);
+
+  const {
+    titulo,
+    data,
+    horario,
+    descricao,
+    local,
+    numeroEComplemento,
+    latitude,
+    longitude,
+    materiais,
+    tarefas,
+    mutiraoTipo,
+  } = req.body;
+
   try {
     // verificação de tipo de mutirao
-    if (!Object.values(MUTIRAO_TIPOS).includes(req.body.mutiraoTipo)) {
-      return res.status(400).json({msg: "Tipo de mutirão inválidop"});
+    if (!Object.values(MUTIRAO_TIPOS).includes(mutiraoTipo)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Tipo de mutirão inválidop" });
     }
 
     // Verifica se faltam menos de 48 horas para o mutirão
-    const dataMutirao = new Date(`${req.body.data}T${req.body.horario}`);
+    const dataMutirao = new Date(`${data}T${horario}`);
+
+    if (isNaN(dataMutirao.getTime())) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Formato de data ou horário inválido." });
+    }
+
     const agora = new Date();
     const diferencaMs = dataMutirao.getTime() - agora.getTime();
     const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
 
     if (horasQueFaltam < 48) {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
       });
+    }
+
+    // Validação dos dados de localização
+
+    if (!local || local.trim() === "") {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "O campo 'local' (endereço base) é obrigatório." });
+    }
+    if (!latitude || !longitude) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "Latitude e longitude válidas são obrigatórias (selecione da lista).",
+      });
+    }
+
+    const latNum = parseFloat(latitude); // Use latitudeString
+    const lonNum = parseFloat(longitude); // Use longitudeString
+
+    if (isNaN(latNum) || isNaN(lonNum)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Valores de latitude ou longitude inválidos." });
     }
 
     // Define a imagem padrão ou a enviada
@@ -49,13 +94,35 @@ export const createMutirao = async (req, res) => {
       imagePath = `/uploads/${req.file.filename}`;
     }
 
+    // Salvando objeto location com GeoJSON
+    let locationGeoJSON = {
+      type: "Point",
+      coordinates: [lonNum, latNum],
+    };
+
+    // Endereço final
+    const enderecoFinal = mergeEndereco(local, numeroEComplemento);
+
     const mutirao = await Mutirao.create({
-      ...req.body,
+      titulo,
+      data,
+      horario,
+      descricao,
+      local: enderecoFinal,
+      numeroEComplemento,
+      materiais: Array.isArray(materiais)
+        ? materiais
+        : materiais
+        ? [materiais]
+        : [], // Verifica se é array. Se string, transforma em array, se vazio ou null, usa o fallback []
+      tarefas: Array.isArray(tarefas) ? tarefas : tarefas ? [tarefas] : [],
+      mutiraoTipo,
       criadoPor: req.user.userId,
       imagemCapa: imagePath,
+      location: locationGeoJSON,
     });
 
-    res.status(201).json({mutirao});
+    res.status(StatusCodes.CREATED).json({ mutirao });
   } catch (error) {
     console.error("Erro ao criar mutirão:", error);
 
@@ -64,7 +131,7 @@ export const createMutirao = async (req, res) => {
       fs.unlink(req.file.path, () => {});
     }
 
-    res.status(500).json({
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       msg: "Erro ao criar mutirão",
       error: process.env.NODE_ENV === "development" ? error.message : null,
     });
@@ -88,7 +155,21 @@ export const getMutiroesInativos = async (req, res) => {
 };
 
 export const updateMutirao = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
+
+  const {
+    titulo,
+    data,
+    horario,
+    descricao,
+    local,
+    numeroEComplemento,
+    latitude,
+    longitude,
+    materiais,
+    tarefas,
+    mutiraoTipo,
+  } = req.body;
 
   // Verifica se o usuário eh o criador ou admin
   const mutiraoExistente = await Mutirao.findById(id);
@@ -118,22 +199,67 @@ export const updateMutirao = async (req, res) => {
     // tem que implementar para apagar a imagem antiga
   }
 
+  let enderecoBase;
+
+  if (local && local.trim() !== "") {
+    // remove any old numeroEComplemento from the user input 'local' just in case
+    enderecoBase = removeNumeroFromLocal(
+      local.trim(),
+      mutiraoExistente.numeroEComplemento
+    );
+  } else {
+    enderecoBase = removeNumeroFromLocal(
+      mutiraoExistente.local,
+      mutiraoExistente.numeroEComplemento
+    );
+  }
+
+  const finalNumero =
+    numeroEComplemento?.trim() || mutiraoExistente.numeroEComplemento;
+
+  const enderecoFinal = mergeEndereco(enderecoBase, finalNumero);
+
+  let locationGeoJSON = mutiraoExistente.location;
+  if (latitude && longitude) {
+    const latNum = parseFloat(latitude);
+    const lonNum = parseFloat(longitude);
+    if (!isNaN(latNum) && !isNaN(lonNum)) {
+      locationGeoJSON = {
+        type: "Point",
+        coordinates: [lonNum, latNum],
+      };
+    }
+  }
+
   const updatedMutirao = await Mutirao.findByIdAndUpdate(
     id,
     {
-      ...req.body,
+      titulo,
+      data,
+      horario,
+      descricao,
+      local: enderecoFinal,
+      numeroEComplemento,
+      materiais: Array.isArray(materiais)
+        ? materiais
+        : materiais
+        ? [materiais]
+        : [],
+      tarefas: Array.isArray(tarefas) ? tarefas : tarefas ? [tarefas] : [],
+      mutiraoTipo,
       imagemCapa: imagePath,
+      location: locationGeoJSON,
     },
-    {
-      new: true,
-    }
+    { new: true }
   );
 
   //res.status(StatusCodes.OK).json({ mutirao: updatedMutirao }); NOVO
 
   /*const updatedMutirao = await Mutirao.findByIdAndUpdate(id, req.body, { new: true, }); ANTIGO*/
 
-  res.status(StatusCodes.OK).json("Mutirão atualizado com sucesso!");
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Mutirão atualizado com sucesso!", mutirao: updatedMutirao });
 };
 
 export const deleteMutirao = async (req, res) => {
@@ -196,5 +322,38 @@ export const cancelarInscricao = async (req, res) => {
   const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
     $pull: {inscritos: userId},
   });
-  res.status(StatusCodes.OK).json(`Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`);
+  res
+    .status(StatusCodes.OK)
+    .json(
+      `Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`
+    );
 };
+
+// Helper Functions
+
+function mergeEndereco(local, numeroEComplemento) {
+  if (!local) return "";
+  let enderecoFinal = local.trim();
+
+  if (numeroEComplemento?.trim()) {
+    const [mainPart, ...rest] = enderecoFinal.split(" - ");
+    const mainWithNumber = `${mainPart.trim()}, ${numeroEComplemento.trim()}`;
+    enderecoFinal =
+      rest.length > 0
+        ? `${mainWithNumber} - ${rest.join(" - ").trim()}`
+        : mainWithNumber;
+  }
+
+  return enderecoFinal;
+}
+
+function removeNumeroFromLocal(local, numeroEComplemento) {
+  if (!local || !numeroEComplemento) return local;
+
+  const pattern = new RegExp(`,\\s*${escapeRegExp(numeroEComplemento.trim())}`);
+  return local.replace(pattern, "").trim();
+}
+
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
