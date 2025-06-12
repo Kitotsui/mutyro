@@ -60,13 +60,7 @@ app.get("/api/v1/test", (req, res) => {
   res.json({ msg: "test route" });
 });
 
-//Rotas - Pré-lógica de GUEST USER
-// app.use("/api/v1/mutiroes/todos", mutiraoRoute);
-// app.use("/api/v1/mutiroes", authenticateUser, mutiraoRoute);
-// app.use("/api/v1/usuarios", authenticateUser, userRouter);
-// app.use("/api/v1/auth", authRoute);
-
-// Rotas - Pós-lógica de GUEST USER
+//Rotas
 app.use("/api/v1/mutiroes", mutiraoRoute);
 app.use("/api/v1/usuarios", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRoute);

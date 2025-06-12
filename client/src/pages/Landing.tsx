@@ -6,11 +6,11 @@ import publicFetch from "../utils/publicFetch";
 
 export const loader = async () => {
   try {
-    const res = await publicFetch("/mutiroes/todos");
+    const res = await publicFetch("/api/v1/mutiroes/todos");
     return { mutiroes: res.data.mutiroes };
   } catch (err) {
     console.error("Erro ao carregar mutirões:", err);
-    return [];
+    return { mutiroes: [] };
   }
 };
 
