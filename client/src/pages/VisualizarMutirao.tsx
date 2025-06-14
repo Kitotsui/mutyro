@@ -223,7 +223,6 @@ const VisualizarMutirao = () => {
     try {
       if (!isInscrito) {
         await customFetch.post(`/mutiroes/${mutirao._id}/inscrever`);
-        // setIsInscrito(true);
         toast.success("Inscrição realizada com sucesso!");
       } else {
         await customFetch.delete(`/mutiroes/${mutirao._id}/cancelar`);

@@ -1,5 +1,5 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {HomeLayout, Landing, Error, User, NovoMutirao, VisualizarMutirao} from "./pages";
+import {HomeLayout, Landing, Error, User, NovoMutirao, VisualizarMutirao, Notificacoes} from "./pages";
 import {AuthProvider} from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
 
@@ -42,6 +42,10 @@ const router = createBrowserRouter([
         element: <EditarMutirao />,
         loader: visualizarMutiraoLoader,
         action: editarMutiraoAction,
+      },
+      {
+        path: "notificacoes",
+        element: <Notificacoes />,
       },
     ],
   },

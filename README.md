@@ -33,6 +33,9 @@ docker-compose ps
 # Ver logs em tempo real
 docker-compose logs -f
 
+# Iniciar os containers
+docker-compose up
+
 # Parar os containers
 docker-compose down
 ```

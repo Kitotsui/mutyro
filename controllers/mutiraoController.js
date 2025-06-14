@@ -1,7 +1,10 @@
-import {StatusCodes} from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import Mutirao from "../models/mutiraoModel.js";
+import Usuario from "../models/usuarioModel.js";
 import { MUTIRAO_TIPOS } from "../utils/constantes.js";
 import fs from "fs/promises";
+import Notificacao from "../models/Notificacao.js";
+import nodemailer from "nodemailer";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);
@@ -290,7 +293,18 @@ export const inscreverUsuario = async (req, res) => {
 
   const multirao = await Mutirao.findByIdAndUpdate(id, {
     $addToSet: {inscritos: userId},
+  }, { new: true });
+
+  // LOG PARA DEPURAÇÃO
+  console.log('Tentando criar notificação para usuário:', userId, 'no mutirão:', multirao.titulo);
+  await Notificacao.create({
+    usuarioId: userId,
+    tipo: 'sucesso',
+    titulo: 'Inscrição Confirmada',
+    mensagem: `Parabéns, você acaba de se cadastrar no mutirão "${multirao.titulo}" que acontecerá no dia ${multirao.data} às ${multirao.horario} no endereço ${multirao.local}. Sua inscrição foi confirmada!`,
+    mutiraoId: multirao._id
   });
+  console.log('Notificação criada com sucesso!');
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -321,6 +335,14 @@ export const cancelarInscricao = async (req, res) => {
   const {userId} = req.user;
   const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
     $pull: {inscritos: userId},
+  });
+  // Cria notificação de cancelamento
+  await Notificacao.create({
+    usuarioId: userId,
+    tipo: 'alerta',
+    titulo: 'Inscrição Cancelada',
+    mensagem: `Sua inscrição no mutirão "${mutiraoInscricao.titulo}" foi cancelada. Esperamos ver você em outros mutirões!`,
+    mutiraoId: mutiraoInscricao._id
   });
   res
     .status(StatusCodes.OK)
