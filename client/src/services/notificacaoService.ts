@@ -30,4 +30,9 @@ export const criarNotificacao = async (dados: {
 export const marcarTodasComoLidas = async () => {
   const response = await customFetch.patch(`/notificacoes/todas/marcar-lidas`);
   return response.data;
+};
+
+export const excluirNotificacao = async (id: string) => {
+  const response = await customFetch.delete(`/notificacoes/${id}`);
+  return response.data;
 }; 

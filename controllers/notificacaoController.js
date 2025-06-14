@@ -90,4 +90,20 @@ export const marcarTodasComoLidas = async (req, res) => {
     { lida: true }
   );
   res.status(StatusCodes.OK).json({ msg: 'Todas as notificações marcadas como lidas' });
+};
+
+// Excluir notificação
+export const excluirNotificacao = async (req, res) => {
+  const { id } = req.params;
+  
+  const notificacao = await Notificacao.findOneAndDelete({
+    _id: id,
+    usuarioId: req.user.userId
+  });
+
+  if (!notificacao) {
+    throw new NotFoundError('Notificação não encontrada');
+  }
+
+  res.status(StatusCodes.OK).json({ msg: 'Notificação excluída com sucesso' });
 }; 

@@ -217,6 +217,28 @@ const Wrapper = styled.div`
     padding: 2rem 0;
     font-size: 1.1rem;
   }
+
+  .notificacoes-btn-delete {
+    background: none;
+    border: none;
+    color: #ff4d4f;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notificacoes-btn-delete:hover {
+    background: rgba(255, 77, 79, 0.1);
+  }
+
+  .notificacoes-btn-delete svg {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 export default Wrapper; 

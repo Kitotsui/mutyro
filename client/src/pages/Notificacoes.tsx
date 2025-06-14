@@ -7,10 +7,12 @@ import {
   FaShieldAlt,
   FaInbox,
   FaEnvelopeOpenText,
+  FaTrash,
 } from "react-icons/fa";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { getNotificacoes, marcarTodasComoLidas } from "../services/notificacaoService";
+import { getNotificacoes, marcarTodasComoLidas, excluirNotificacao } from "../services/notificacaoService";
+import { toast } from 'react-toastify';
 
 type Notificacao = {
   _id: string;
@@ -74,6 +76,16 @@ const Notificacoes = () => {
       setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
     } catch {
       setErro("Erro ao marcar todas como lidas");
+    }
+  };
+
+  const handleExcluirNotificacao = async (id: string) => {
+    try {
+      await excluirNotificacao(id);
+      setNotificacoes((prev) => prev.filter((n) => n._id !== id));
+      toast.success('Notificação excluída com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao excluir notificação');
     }
   };
 
@@ -153,8 +165,23 @@ const Notificacoes = () => {
                     {notif.tipo === "sucesso" && (
                       <button className="notificacoes-btn-orange">Baixar Certificado</button>
                     )}
-                    <button className="notificacoes-btn-fav">
+                    <button 
+                      className="notificacoes-btn-fav"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Lógica para favoritar
+                      }}
+                    >
                       <FaStar />
+                    </button>
+                    <button 
+                      className="notificacoes-btn-delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExcluirNotificacao(notif._id);
+                      }}
+                    >
+                      <FaTrash />
                     </button>
                   </div>
                 </div>
