@@ -457,34 +457,49 @@ const VisualizarMutirao = () => {
                   </div>
                 </div>
               </div>
-              <div className="side-card">
-                <h3>Termo de Aceitação</h3>
-                <div className="side-termo">
-                  Eu concordo em participar deste mutirão de forma voluntária, contribuindo com minhas habilidades e seguindo as orientações dos organizadores. Entendo que o objetivo é desenvolver melhorias para a comunidade e, se necessário, trarei meus próprios equipamentos para colaborar. Comprometo-me a agir com respeito, responsabilidade e colaboração, garantindo um ambiente seguro e inclusivo para todos os participantes.
-                </div>
-                <label className="side-checkbox">
-                  <input type="checkbox" checked={aceitouTermo} onChange={(e) => setAceitouTermo(e.target.checked)} />
-                  <span>Aceito os termos e condições</span>
-                </label>
-                <div className="side-btns">
-                  {podeParticipar && (
-                    <button className={`submit-btn${!aceitouTermo || isSubmitting ? " disabled" : ""}`} onClick={handleInscricao} disabled={!aceitouTermo || isSubmitting}>
-                      {isSubmitting ? "Processando..." : isInscrito ? "Cancelar Participação" : "Quero Ser Voluntário"}
-                    </button>
-                  )}
-                  {podeEditar && (
-                    <button className="submit-btn" style={{ background: "var(--primary-300)" }} onClick={() => navigate(`/mutirao/${mutirao._id}/editar`)} disabled={isSubmitting}>
-                      Editar
-                    </button>
-                  )}
-                  {(authContextUsuario && (authContextUsuario._id === mutirao.criadoPor._id || authContextUsuario.isAdmin)) && (
-                    <button className="back-btn" onClick={handleExcluirMutirao} disabled={isSubmitting}>
-                      {isSubmitting ? "Processando..." : "Excluir"}
-                    </button>
-                  )}
+              {/* Se não estiver logado, exibe só os botões de cadastro e voltar */}
+              {!authContextUsuario ? (
+                <div className="side-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <button
+                    className="submit-btn"
+                    onClick={() => navigate(location.pathname, { state: { showRegisterModal: true, from: location.pathname }, replace: true })}
+                  >
+                    Cadastre-se para poder participar
+                  </button>
                   <button className="back-btn" onClick={() => navigate("/user")}>Voltar</button>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div className="side-card">
+                    <h3>Termo de Aceitação</h3>
+                    <div className="side-termo">
+                      Eu concordo em participar deste mutirão de forma voluntária, contribuindo com minhas habilidades e seguindo as orientações dos organizadores. Entendo que o objetivo é desenvolver melhorias para a comunidade e, se necessário, trarei meus próprios equipamentos para colaborar. Comprometo-me a agir com respeito, responsabilidade e colaboração, garantindo um ambiente seguro e inclusivo para todos os participantes.
+                    </div>
+                    <label className="side-checkbox">
+                      <input type="checkbox" checked={aceitouTermo} onChange={(e) => setAceitouTermo(e.target.checked)} />
+                      <span>Aceito os termos e condições</span>
+                    </label>
+                    <div className="side-btns">
+                      {podeParticipar && (
+                        <button className={`submit-btn${!aceitouTermo || isSubmitting ? " disabled" : ""}`} onClick={handleInscricao} disabled={!aceitouTermo || isSubmitting}>
+                          {isSubmitting ? "Processando..." : isInscrito ? "Cancelar Participação" : "Quero Ser Voluntário"}
+                        </button>
+                      )}
+                      {podeEditar && (
+                        <button className="submit-btn" style={{ background: "var(--primary-300)" }} onClick={() => navigate(`/mutirao/${mutirao._id}/editar`)} disabled={isSubmitting}>
+                          Editar
+                        </button>
+                      )}
+                      {(authContextUsuario && (authContextUsuario._id === mutirao.criadoPor._id || authContextUsuario.isAdmin)) && (
+                        <button className="back-btn" onClick={handleExcluirMutirao} disabled={isSubmitting}>
+                          {isSubmitting ? "Processando..." : "Excluir"}
+                        </button>
+                      )}
+                      <button className="back-btn" onClick={() => navigate("/user")}>Voltar</button>
+                    </div>
+                  </div>
+                </>
+              )}
               <div className="side-card share-card">
               <div className="share-row">
                 <ShareMutirao

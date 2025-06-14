@@ -329,6 +329,43 @@ const Wrapper = styled.div`
         }
       }
     }
+    .submit-btn {
+      width: 100%;
+      background: var(--primary-100);
+      color: var(--white);
+      border: none;
+      border-radius: 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      padding: 0.9rem 0;
+      margin-bottom: 0.7rem;
+      box-shadow: var(--shadow-1);
+      transition: background 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    .submit-btn:hover {
+      background: var(--primary-300);
+      box-shadow: var(--shadow-3);
+    }
+    .back-btn {
+      width: 100%;
+      background: var(--grey-200);
+      color: var(--primary-900);
+      border: none;
+      border-radius: 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 500;
+      padding: 0.9rem 0;
+      box-shadow: var(--shadow-1);
+      transition: background 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    .back-btn:hover {
+      background: var(--grey-300);
+      box-shadow: var(--shadow-2);
+    }
   }
 
   @media (max-width: 900px) {
