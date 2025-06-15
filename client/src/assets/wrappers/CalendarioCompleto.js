@@ -175,6 +175,12 @@ const Wrapper = styled.div`
     }
   }
 
+  .rbc-toolbar-label {
+    /* padding: 1rem; */
+    margin: 15px;
+    color: var(--grey-400);
+  }
+
   .rbc-event {
     background-color: var(--primary-color, lightblue);
     border: none;

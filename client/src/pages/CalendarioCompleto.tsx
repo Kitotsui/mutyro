@@ -187,7 +187,7 @@ const CalendarioCompleto = () => {
           onClick={() => setViewMode("month")}
           className={viewMode === "month" ? "active" : ""}
         >
-          Mês
+          Calendário
         </button>
         <button
           onClick={() => setViewMode("grid")}

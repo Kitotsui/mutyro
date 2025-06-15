@@ -12,3 +12,5 @@ export { default as UserCard } from "./UserCard";
 export { default as MutiraoItem } from "./MutiraoItem";
 export { default as SearchBar } from "./SearchBar";
 export { default as Calendar } from "./Calendar";
+export { default as MapComponent } from "./MapComponent";
+export { default as ShareMutirao } from "./ShareMutirao";
