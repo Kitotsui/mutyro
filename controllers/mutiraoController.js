@@ -6,6 +6,7 @@ import fs from "fs/promises";
 import Notificacao from "../models/Notificacao.js";
 
 import nodemailer from "nodemailer";
+import usuarioModel from "../models/usuarioModel.js";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);

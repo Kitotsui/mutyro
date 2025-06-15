@@ -12,11 +12,10 @@ import { SearchBar, Card } from "../components";
 import Wrapper from "../assets/wrappers/CalendarioCompleto";
 
 import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
-import { format } from "date-fns/format";
-import { parse } from "date-fns/parse";
-import { startOfWeek } from "date-fns/startOfWeek";
-import { getDay } from "date-fns/getDay";
-import { ptBR } from "date-fns/locale/pt-BR";
+import { format } from "date-fns";
+import { parse, startOfWeek, getDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Views } from "react-big-calendar";
 
@@ -46,7 +45,7 @@ export const loader = async ({ request }: { request: Request }) => {
   const searchTerm = url.searchParams.get("search") || "";
 
   try {
-    const { data } = await publicFetch.get("/mutiroes/todos", {
+    const { data } = await customFetch.get("/mutiroes/todos", {
       params: { search: searchTerm },
     });
     return { mutiroes: data.mutiroes, searchTerm };

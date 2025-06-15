@@ -9,16 +9,6 @@ import {
   Notificacoes,
 } from "./pages";
 import { AuthProvider } from "./context/AuthContext";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  HomeLayout,
-  Landing,
-  Error,
-  User,
-  NovoMutirao,
-  VisualizarMutirao,
-} from "./pages";
-import { AuthProvider } from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
 import CalendarioCompleto from "./pages/CalendarioCompleto";
 

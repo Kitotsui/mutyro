@@ -150,6 +150,53 @@ export const loader = async ({
 
 import ShareMutirao from "@/components/ShareMutirao";
 
+type MapWrapperProps = {
+  mutirao: any;
+  mapPosition: [number, number];
+};
+
+function MapWrapper({ mutirao, mapPosition }: MapWrapperProps) {
+  return (
+    <div
+      key={`map-${mutirao._id}`} // Isso forçará o React a recriar o container se mudar
+      style={{
+        height: 250,
+        borderRadius: 12,
+        overflow: "hidden",
+        marginTop: 10,
+        border: "1px solid #eee",
+      }}
+    >
+      <MapContainer
+        center={mapPosition}
+        zoom={15}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <Marker position={mapPosition}>
+          <Popup>
+            {mutirao.local}
+            {mutirao.numeroEComplemento && (
+              <>
+                <br />
+                {mutirao.numeroEComplemento}
+              </>
+            )}
+            <br />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Abrir no Google Maps
+            </a>
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
+  );
+}
+
 const VisualizarMutirao = () => {
   const navigate = useNavigate();
   const { mutirao, isInscrito: initialIsInscrito } =
@@ -385,44 +432,8 @@ const VisualizarMutirao = () => {
                   <FaMapMarkerAlt /> Local
                 </h3>
                 <p className="section-description">{mutirao.local}</p>
-                {canDisplayMap ? (
-                  <div
-                    style={{
-                      height: 250,
-                      borderRadius: 12,
-                      overflow: "hidden",
-                      marginTop: 10,
-                      border: "1px solid #eee",
-                    }}
-                  >
-                    <MapContainer
-                      {...({
-                        center: mapPosition,
-                        zoom: 15,
-                      } as MapContainerProps)}
-                      style={{ height: "100%", width: "100%" }}
-                    >
-                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                      <Marker position={mapPosition}>
-                        <Popup>
-                          {mutirao.local} <br />
-                          {mutirao.numeroEComplemento && (
-                            <>
-                              {mutirao.numeroEComplemento}
-                              <br />
-                            </>
-                          )}
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Abrir no Google Maps
-                          </a>
-                        </Popup>
-                      </Marker>
-                    </MapContainer>
-                  </div>
+                {canDisplayMap && mapPosition ? (
+                  <MapWrapper mutirao={mutirao} mapPosition={mapPosition} />
                 ) : (
                   <p style={{ color: "#aaa", marginTop: 8 }}>
                     Localização não disponível no mapa.
