@@ -32,7 +32,6 @@ const Landing = () => {
         {/* <NavBar /> */}
         <Hero />
         <Blog mutiroes={mutiroes} />
-        <Footer />
       </div>
     </Wrapper>
   );

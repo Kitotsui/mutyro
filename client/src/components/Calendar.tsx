@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import Wrapper from "../assets/wrappers/Calendar";
 
 interface CalendarProps {
   onChange?: (date: Date) => void;
@@ -18,19 +19,21 @@ const CustomCalendar = ({ onChange, value }: CalendarProps) => {
   };
 
   return (
-    <div className="calendar-wrapper">
-      <Calendar
-        onChange={handleDateChange}
-        value={selectedDate}
-        showNeighboringMonth={true}
-        next2Label={null}
-        prev2Label={null}
-        formatShortWeekday={(locale, date) =>
-          date.toLocaleDateString(locale, { weekday: "narrow" })
-        }
-      />
-    </div>
+    <Wrapper>
+      <div className="calendar-wrapper">
+        <Calendar
+          onChange={handleDateChange}
+          value={selectedDate}
+          showNeighboringMonth={true}
+          next2Label={null}
+          prev2Label={null}
+          formatShortWeekday={(locale, date) =>
+            date.toLocaleDateString(locale, { weekday: "narrow" })
+          }
+        />
+      </div>
+    </Wrapper>
   );
 };
 
-export default CustomCalendar; 
+export default CustomCalendar;

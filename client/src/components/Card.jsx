@@ -11,7 +11,11 @@ const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
 
   return (
     <Wrapper className="card">
-      <Link to={`/mutirao/${id}`} onClickCapture={handleClickCapture}>
+      <Link
+        className="link-card"
+        to={`/mutirao/${id}`}
+        onClickCapture={handleClickCapture}
+      >
         <img src={image} alt="Foto do Mutirão" />
         <div className="card-content">
           <h4>{title}</h4>
