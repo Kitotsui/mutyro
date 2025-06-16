@@ -146,10 +146,30 @@ export const createMutirao = async (req, res) => {
         .json({ msg: "Valores de latitude ou longitude inválidos." });
     }
 
+    const defaultImages = {
+      SOCIAL:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/social_w337yo.jpg",
+      SAUDE:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/saude_jxyour.jpg",
+      CONSTRUCAO_REFORMA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/construcao_llhyii.avif",
+      AMBIENTAL_AGRICOLA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/ambiental_upuyed.avif",
+      CULTURA_EDUCACAO:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/educacao_zs4ywz.avif",
+      TECNOLOGIA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/tecnologia_o5ui0u.avif",
+      FALLBACK:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png",
+    };
+
     // Define a imagem padrão ou a enviada
-    let imagePath = "/uploads/default.png";
+    let imagePath;
     if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
+      imagePath = req.file.path;
+    } else {
+      const tipo = req.body.mutiraoTipo;
+      imagePath = defaultImages[tipo] || defaultImages.FALLBACK;
     }
 
     // Salvando objeto location com GeoJSON
@@ -254,10 +274,10 @@ export const updateMutirao = async (req, res) => {
   }
 
   // Atualiza a imagem se uma nova foi enviada
-  let imagePath = mutiraoExistente.imagemCapa;
+  let imagePath = mutiraoExistente.imagemCapa; // Mantém o mesmo caminho antigo por padrão
   if (req.file) {
-    imagePath = `/uploads/${req.file.filename}`;
-    // tem que implementar para apagar a imagem antiga
+    imagePath = req.file.path; // Se uma nova imagem for enviada, usa o Cloudinary
+    // TODO: Implementar remoção da imagem antiga no Cloudinary com o public_id
   }
 
   let enderecoBase;

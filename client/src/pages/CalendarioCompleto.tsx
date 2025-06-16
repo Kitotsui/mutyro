@@ -19,6 +19,8 @@ import { ptBR } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Views } from "react-big-calendar";
 
+import getImageUrl from "../utils/imageUrlHelper";
+
 interface Mutirao {
   _id: string;
   imagemCapa: string;
@@ -213,7 +215,7 @@ const CalendarioCompleto = () => {
                   <Card
                     key={mutirao._id}
                     id={mutirao._id}
-                    image={"http://localhost:5100" + mutirao.imagemCapa}
+                    image={getImageUrl(mutirao.imagemCapa)}
                     title={mutirao.titulo}
                     date={mutirao.data}
                     user={mutirao.criadoPor?.nome || "Usuário desconhecido"}

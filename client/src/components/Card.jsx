@@ -1,6 +1,8 @@
 import Wrapper from "../assets/wrappers/Card";
 import { Link } from "react-router-dom";
 
+import getImageUrl from "@/utils/imageUrlHelper";
+
 const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
   const handleClickCapture = (e) => {
     if (wasDraggingRef?.current) {
@@ -16,7 +18,7 @@ const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
         to={`/mutirao/${id}`}
         onClickCapture={handleClickCapture}
       >
-        <img src={image} alt="Foto do Mutirão" />
+        <img src={getImageUrl(image)} alt={title} />
         <div className="card-content">
           <h4>{title}</h4>
           <time dateTime={date}>

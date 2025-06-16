@@ -36,6 +36,8 @@ import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
+import getImageUrl from "@/utils/imageUrlHelper";
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -381,11 +383,12 @@ const VisualizarMutirao = () => {
           <div className="mutirao-header">
             <div className="header-content">
               <img
-                src={
-                  mutirao.imagemCapa
-                    ? `http://localhost:5100${mutirao.imagemCapa}`
-                    : "http://localhost:5100/uploads/default.png"
-                }
+                src={getImageUrl(mutirao.imagemCapa)}
+                // src={
+                //   mutirao.imagemCapa
+                //     ? `http://localhost:5100${mutirao.imagemCapa}`
+                //     : "http://localhost:5100/uploads/default.png"
+                // }
                 alt={`Imagem do mutirão: ${mutirao.titulo}`}
                 className="mutirao-img"
               />
