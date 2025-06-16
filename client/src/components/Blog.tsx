@@ -190,7 +190,14 @@ const Blog = ({ mutiroes }: BlogProps) => {
             ))}
           </ul>
           {/* Implementar página de calendário completo */}
-          <button>Calendário Completo</button>
+          <Link
+            className="btn-calendario"
+            to="/mutiroes"
+            state={{ initialView: "month" }}
+          >
+            <i class="fas fa-calendar" style={{ paddingRight: "10px" }}></i>
+            Calendário Completo
+          </Link>
         </div>
 
         <div className="calendar-column">

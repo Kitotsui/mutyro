@@ -1,18 +1,20 @@
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { NavBar } from "../components";
+import { NavBar, Footer } from "../components";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
 
 const HomeLayout = () => {
   const { usuario } = useAuth();
   const location = useLocation();
-  
+
   // Lista de rotas onde a Sidebar deve aparecer
-  const sidebarRoutes = ['/user', '/chat', '/mutiroes', '/configuracoes'];
-  
+  const sidebarRoutes = ["/user", "/chat", "/mutiroes", "/configuracoes"];
+
   // Verifica se a rota atual está na lista de rotas que devem mostrar a Sidebar
-  const shouldShowSidebar = usuario && sidebarRoutes.some(route => location.pathname.startsWith(route));
+  const shouldShowSidebar =
+    usuario &&
+    sidebarRoutes.some((route) => location.pathname.startsWith(route));
 
   return (
     <div>
@@ -29,6 +31,7 @@ const HomeLayout = () => {
           <Outlet />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

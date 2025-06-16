@@ -1,12 +1,21 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import customFetch from '../utils/customFetch';
-import { toast } from 'react-toastify';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import customFetch from "../utils/customFetch";
+import { toast } from "react-toastify";
 
 type Usuario = {
   _id: string;
   nome: string;
   email: string;
   isAdmin: boolean;
+  cpf: string;
+  endereco: string;
+  dataNascimento: string;
 };
 
 type AuthContextType = {
@@ -24,13 +33,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const verificarUsuario = async () => {
       try {
-        const response = await customFetch.get('/usuarios/atual-usuario');
-        console.log('Usuário atual verificado:', response.data);
+        const response = await customFetch.get("/usuarios/atual-usuario");
+        console.log("Usuário atual verificado:", response.data);
         if (response.data && response.data.usuario) {
           setUsuario(response.data.usuario);
         }
       } catch (error) {
-        console.log('Nenhum usuário logado:', error);
+        console.log("Nenhum usuário logado:", error);
         setUsuario(null);
       }
     };
@@ -40,18 +49,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await customFetch.get('/auth/logout');
+      await customFetch.get("/auth/logout");
       setUsuario(null);
-      toast.success('Logout realizado com sucesso!');
+      toast.success("Logout realizado com sucesso!");
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-      toast.error('Erro ao fazer logout');
+      console.error("Erro ao fazer logout:", error);
+      toast.error("Erro ao fazer logout");
     }
   };
 
   // Log quando o estado do usuário mudar
   useEffect(() => {
-    console.log('Estado do usuário atualizado:', usuario);
+    console.log("Estado do usuário atualizado:", usuario);
   }, [usuario]);
 
   return (
@@ -64,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
   return context;
-}; 
+};

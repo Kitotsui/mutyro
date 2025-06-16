@@ -338,3 +338,14 @@ button:disabled {
   background: #ffeeee;
   color: #d66a6a;
 }
+
+/* Garante que o modal fique acima do mapa/Leaflet */
+.modal-overlay, .modal-content {
+  z-index: 3000 !important;
+  position: fixed !important;
+}
+
+/* Baixa o z-index dos controles do Leaflet para evitar sobreposição */
+.leaflet-control {
+  z-index: 100 !important;
+}

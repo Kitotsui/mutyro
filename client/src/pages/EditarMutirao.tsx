@@ -1,9 +1,18 @@
-import {useState} from "react";
-import {useLoaderData, useNavigate, Form, useNavigation, redirect, ActionFunctionArgs} from "react-router-dom";
+import { useState } from "react";
+import {
+  useLoaderData,
+  useNavigate,
+  Form,
+  useNavigation,
+  redirect,
+  ActionFunctionArgs,
+} from "react-router-dom";
 import Wrapper from "../assets/wrappers/NovoMutirao";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import AddressAutocomplete from "../components/AddressAutocomplete";
+
+import getImageUrl from "../utils/imageUrlHelper";
 
 interface Mutirao {
   _id: string;
@@ -38,7 +47,7 @@ interface FormData {
   mutiraoTipo: string;
 }
 
-export const action = async ({request, params}: ActionFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const id = params.id;
   if (!id) {
     throw new Error("ID do mutirão não fornecido");
@@ -66,15 +75,19 @@ export const action = async ({request, params}: ActionFunctionArgs) => {
     toast.success("Mutirão atualizado com sucesso!");
     return redirect(`/mutirao/${id}`);
   } catch (err: unknown) {
-    const error = err as { response?: { data?: { msg?: string } }; message?: string };
-    const errorMsg = error.response?.data?.msg || error.message || "Erro ao atualizar mutirão";
+    const error = err as {
+      response?: { data?: { msg?: string } };
+      message?: string;
+    };
+    const errorMsg =
+      error.response?.data?.msg || error.message || "Erro ao atualizar mutirão";
     toast.error(errorMsg);
     return null;
   }
 };
 
 const EditarMutirao = () => {
-  const {mutirao} = useLoaderData() as {mutirao: Mutirao};
+  const { mutirao } = useLoaderData() as { mutirao: Mutirao };
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -115,8 +128,12 @@ const EditarMutirao = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const {name, value} = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -180,42 +197,92 @@ const EditarMutirao = () => {
                   <h3>Capa do Mutirão</h3>
                   <div className="image-upload">
                     {selectedImage ? (
-                      <img src={URL.createObjectURL(selectedImage)} alt="Preview" className="preview-image" />
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Preview"
+                        className="preview-image"
+                      />
                     ) : currentImage ? (
-                      <img src={`http://localhost:5100${currentImage}`} alt="Current" className="preview-image" />
+                      <img
+                        src={getImageUrl(currentImage)}
+                        alt="Current"
+                        className="preview-image"
+                      />
                     ) : (
                       <div className="upload-placeholder">
                         <span>Foto</span>
                       </div>
                     )}
-                    <button type="button" className="upload-btn" onClick={() => document.getElementById("foto-input")?.click()}>
+                    <button
+                      type="button"
+                      className="upload-btn"
+                      onClick={() =>
+                        document.getElementById("foto-input")?.click()
+                      }
+                    >
                       Alterar foto
                     </button>
-                    <input type="file" id="foto-input" name="imagemCapa" accept="image/*" onChange={handleImageChange} style={{display: "none"}} />
+                    <input
+                      type="file"
+                      id="foto-input"
+                      name="imagemCapa"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      style={{ display: "none" }}
+                    />
                   </div>
                 </div>
 
                 <div className="form-section">
                   <div className="form-group">
                     <label htmlFor="titulo">Título</label>
-                    <input type="text" id="titulo" name="titulo" value={formData.titulo} onChange={handleChange} required placeholder="Digite o título do mutirão" />
+                    <input
+                      type="text"
+                      id="titulo"
+                      name="titulo"
+                      value={formData.titulo}
+                      onChange={handleChange}
+                      required
+                      placeholder="Digite o título do mutirão"
+                    />
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="data">Data</label>
-                      <input type="date" id="data" name="data" value={formData.data} onChange={handleChange} required />
+                      <input
+                        type="date"
+                        id="data"
+                        name="data"
+                        value={formData.data}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="horario">Horário</label>
-                      <input type="time" id="horario" name="horario" value={formData.horario} onChange={handleChange} required />
+                      <input
+                        type="time"
+                        id="horario"
+                        name="horario"
+                        value={formData.horario}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="descricao">Descrição</label>
-                    <textarea id="descricao" name="descricao" value={formData.descricao} onChange={handleChange} required placeholder="Descreva o objetivo do mutirão" />
+                    <textarea
+                      id="descricao"
+                      name="descricao"
+                      value={formData.descricao}
+                      onChange={handleChange}
+                      required
+                      placeholder="Descreva o objetivo do mutirão"
+                    />
                   </div>
 
                   <div className="form-group">
@@ -269,41 +336,96 @@ const EditarMutirao = () => {
                     <label>Tarefas</label>
                     {formData.tarefas.map((tarefa, index) => (
                       <div key={index} className="tarefa-input">
-                        <input type="text" name="tarefas" value={tarefa} onChange={(e) => handleTarefaChange(index, e.target.value)} placeholder="Descreva a tarefa" required />
+                        <input
+                          type="text"
+                          name="tarefas"
+                          value={tarefa}
+                          onChange={(e) =>
+                            handleTarefaChange(index, e.target.value)
+                          }
+                          placeholder="Descreva a tarefa"
+                          required
+                        />
                         {formData.tarefas.length > 1 && (
-                          <button type="button" className="remove-btn" onClick={() => removerTarefa(index)}>
+                          <button
+                            type="button"
+                            className="remove-btn"
+                            onClick={() => removerTarefa(index)}
+                          >
                             Remover
                           </button>
                         )}
                       </div>
                     ))}
-                    <button type="button" className="add-btn" onClick={adicionarTarefa}>
+                    <button
+                      type="button"
+                      className="add-btn"
+                      onClick={adicionarTarefa}
+                    >
                       Adicionar Tarefa
                     </button>
                   </div>
 
                   <div className="form-group">
-                    <label>Necessita de Ferramentas, Materiais e (ou) Habilidades Específicas?</label>
+                    <label>
+                      Necessita de Ferramentas, Materiais e (ou) Habilidades
+                      Específicas?
+                    </label>
                     <div className="radio-group">
                       <label>
-                        <input type="radio" name="necessitaMateriais" value="sim" checked={!!formData.materiais} onChange={() => setFormData((prev) => ({...prev, materiais: " "}))} />
+                        <input
+                          type="radio"
+                          name="necessitaMateriais"
+                          value="sim"
+                          checked={!!formData.materiais}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, materiais: " " }))
+                          }
+                        />
                         Sim
                       </label>
                       <label>
-                        <input type="radio" name="necessitaMateriais" value="nao" checked={!formData.materiais} onChange={() => setFormData((prev) => ({...prev, materiais: ""}))} />
+                        <input
+                          type="radio"
+                          name="necessitaMateriais"
+                          value="nao"
+                          checked={!formData.materiais}
+                          onChange={() =>
+                            setFormData((prev) => ({ ...prev, materiais: "" }))
+                          }
+                        />
                         Não
                       </label>
                     </div>
-                    {formData.materiais && <textarea name="materiais" value={formData.materiais} onChange={handleChange} placeholder="Liste os materiais necessários" />}
+                    {formData.materiais && (
+                      <textarea
+                        name="materiais"
+                        value={formData.materiais}
+                        onChange={handleChange}
+                        placeholder="Liste os materiais necessários"
+                      />
+                    )}
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="tipo">Tipo de Mutirão</label>
-                    <select id="mutiraoTipo" name="mutiraoTipo" value={formData.mutiraoTipo} onChange={handleChange} required>
+                    <select
+                      id="mutiraoTipo"
+                      name="mutiraoTipo"
+                      value={formData.mutiraoTipo}
+                      onChange={handleChange}
+                      required
+                    >
                       <option value="SOCIAL">Social</option>
-                      <option value="CONSTRUCAO_REFORMA">Construção / Reforma</option>
-                      <option value="AMBIENTAL_AGRICOLA">Ambiental / Agrícola</option>
-                      <option value="CULTURA_EDUCACAO">Cultura / Educação</option>
+                      <option value="CONSTRUCAO_REFORMA">
+                        Construção / Reforma
+                      </option>
+                      <option value="AMBIENTAL_AGRICOLA">
+                        Ambiental / Agrícola
+                      </option>
+                      <option value="CULTURA_EDUCACAO">
+                        Cultura / Educação
+                      </option>
                       <option value="SAUDE">Saúde</option>
                       <option value="TECNOLOGIA">Tecnologia </option>
                     </select>
@@ -312,16 +434,28 @@ const EditarMutirao = () => {
                   <div className="terms">
                     <label>
                       <input type="checkbox" required />
-                      Eu concordo em organizar este mutirão de forma responsável, respeitando as diretrizes da comunidade e garantindo um ambiente seguro e inclusivo para todos os participantes.
+                      Eu concordo em organizar este mutirão de forma
+                      responsável, respeitando as diretrizes da comunidade e
+                      garantindo um ambiente seguro e inclusivo para todos os
+                      participantes.
                     </label>
                   </div>
                 </div>
 
                 <div className="button-group">
-                  <button type="button" className="cancel-btn" onClick={() => navigate(-1)} disabled={isSubmitting}>
+                  <button
+                    type="button"
+                    className="cancel-btn"
+                    onClick={() => navigate(-1)}
+                    disabled={isSubmitting}
+                  >
                     Cancelar
                   </button>
-                  <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? "Atualizando..." : "Atualizar Mutirão"}
                   </button>
                 </div>

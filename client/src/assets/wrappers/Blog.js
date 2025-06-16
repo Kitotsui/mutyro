@@ -73,6 +73,11 @@ const Wrapper = styled.div`
     }
 
     .right-column {
+      white-space: nowrap;
+      max-width: 100%;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
       align-items: flex-start;
       align-self: center;
       time {
@@ -94,6 +99,11 @@ const Wrapper = styled.div`
       align-self: center;
 
       .upcoming-event-link {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        max-height: 4rem;
         display: flex;
         flex-direction: row;
         text-decoration: none;
@@ -106,9 +116,9 @@ const Wrapper = styled.div`
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%; /* Circle */
+          min-width: 40px;
+          min-height: 40px;
+          border-radius: 50%;
           background-color: var(--primary-color);
           color: var(--light-color);
           font-weight: bold;
@@ -132,7 +142,19 @@ const Wrapper = styled.div`
         }
       }
 
-      button {
+      .btn-calendario {
+        padding: 0.8rem;
+        border-radius: 16px;
+        border: 1px solid var(--grey-400);
+        width: 20rem;
+        text-align: center;
+      }
+
+      .btn-calendario::before {
+      }
+
+      .btn-calendario:hover {
+        background-color: var(--grey-100);
       }
     }
 

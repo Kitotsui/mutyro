@@ -13,6 +13,33 @@ server.js            # Entry point da API
 swaggerConfig.js     # Configuração da documentação Swagger
 README.md            # Esse arquivo!
 
+## Rodando com Docker
+1. Certifique-se de ter o Docker e Docker Compose instalados
+2. Clone o repositório
+3. Na raiz do projeto, execute:
+   ```bash
+   docker-compose up -d --build
+   ```
+4. Acesse:
+   - Frontend: http://localhost:5174
+   - Backend: http://localhost:5100
+   - Documentação Swagger: http://localhost:5100/api-docs
+
+Comandos úteis:
+```bash
+# Verificar status dos containers
+docker-compose ps
+
+# Ver logs em tempo real
+docker-compose logs -f
+
+# Iniciar os containers
+docker-compose up
+
+# Parar os containers
+docker-compose down
+```
+
 ## Instalação das dependências
 npm run setup-project
 

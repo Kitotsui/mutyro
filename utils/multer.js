@@ -3,6 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
+import { storage as cloudinaryStorage } from "./cloudinary.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -23,13 +25,17 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-  fileFilter: (req, file, cb) => {
-    // Aceita o arquivo (imagem, se existir) ou continua sem erro se não houver
-    cb(null, true);
-  },
-});
+// ARMAZENAMENTO CLOUDINARY
+const upload = multer({ storage: cloudinaryStorage });
+
+// ARMAZENAMENTO LOCAL
+// const upload = multer({
+//   storage: storage,
+//   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+//   fileFilter: (req, file, cb) => {
+//     // Aceita o arquivo (imagem, se existir) ou continua sem erro se não houver
+//     cb(null, true);
+//   },
+// });
 
 export default upload;
