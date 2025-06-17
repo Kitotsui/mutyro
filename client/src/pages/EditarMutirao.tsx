@@ -190,7 +190,9 @@ const EditarMutirao = () => {
       <div className="min-h-screen">
         <div className="container">
           <main>
-            <h2>Editando seu mutirão</h2>
+            <div className="form-header">
+              <h2>Editando seu mutirão</h2>
+            </div>
             <div className="form-container">
               <Form method="post" encType="multipart/form-data">
                 <div className="image-section">
@@ -286,9 +288,9 @@ const EditarMutirao = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="address-search-input">
+                    {/* <label htmlFor="address-search-input">
                       Endereço Principal (Rua, Bairro, Cidade)
-                    </label>
+                    </label> */}
                     <AddressAutocomplete
                       onLocationSelect={handleLocationSelected}
                       initialValue={removeNumeroFromLocal(

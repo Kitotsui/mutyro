@@ -374,21 +374,43 @@ const VisualizarMutirao = () => {
     mutirao.location.coordinates &&
     mutirao.location.coordinates.length === 2;
 
+  const defaultImages = {
+    SOCIAL:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/social_w337yo.jpg",
+    SAUDE:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/saude_jxyour.jpg",
+    CONSTRUCAO_REFORMA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/construcao_llhyii.avif",
+    AMBIENTAL_AGRICOLA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/ambiental_upuyed.avif",
+    CULTURA_EDUCACAO:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/educacao_zs4ywz.avif",
+    TECNOLOGIA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/tecnologia_o5ui0u.avif",
+    FALLBACK:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png",
+  };
+
   // --- NOVO LAYOUT ---
   return (
     <Wrapper>
       <div className="main-container">
         <div className="mutirao-card">
           {/* TOPO DESTACADO */}
-          <div className="mutirao-header">
+          <div
+            className="mutirao-header"
+            data-bg={
+              defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
+            }
+            style={{
+              "--bg-url": `url(${
+                defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
+              })`,
+            }}
+          >
             <div className="header-content">
               <img
                 src={getImageUrl(mutirao.imagemCapa)}
-                // src={
-                //   mutirao.imagemCapa
-                //     ? `http://localhost:5100${mutirao.imagemCapa}`
-                //     : "http://localhost:5100/uploads/default.png"
-                // }
                 alt={`Imagem do mutirão: ${mutirao.titulo}`}
                 className="mutirao-img"
               />

@@ -100,7 +100,9 @@ const EditarUsuario = () => {
   return (
     <Wrapper>
       <div className="container">
-        <h1>Editar Usuário</h1>
+        <div className="form-header">
+          <h2>Editar Usuário</h2>
+        </div>
         <div className="form-container">
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="image-section">

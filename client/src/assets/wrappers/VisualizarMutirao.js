@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   background: var(--background-color);
   min-height: 100vh;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 
   .main-container {
     max-width: 1200px;
@@ -27,6 +27,17 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 2rem 2.5rem;
     color: var(--grey-50);
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--bg-url);
+      background-size: auto;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 1;
+      pointer-events: none;
+    }
     .header-content {
       position: relative;
       z-index: 2;
@@ -48,7 +59,7 @@ const Wrapper = styled.div`
       flex-direction: column;
       gap: 0.5rem;
       .org-label {
-        background: rgba(255,255,255,0.18);
+        background: rgba(255, 255, 255, 0.18);
         padding: 0.25rem 1rem;
         border-radius: 999px;
         font-size: 0.95rem;
@@ -138,7 +149,8 @@ const Wrapper = styled.div`
       gap: 0.5rem;
       color: var(--grey-600);
       font-size: 1rem;
-      svg, i {
+      svg,
+      i {
         color: var(--primary-400);
         font-size: 1.2rem;
       }
@@ -164,7 +176,9 @@ const Wrapper = styled.div`
       align-items: center;
       gap: 0.5rem;
     }
-    p, ul, .section-description {
+    p,
+    ul,
+    .section-description {
       color: var(--grey-700);
       font-size: 1rem;
       margin-bottom: 0.5rem;
@@ -178,12 +192,14 @@ const Wrapper = styled.div`
       padding-left: 1.2rem;
       margin-bottom: 0.5rem;
     }
-    .task-list, .checkbox-list {
+    .task-list,
+    .checkbox-list {
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
     }
-    .task-item, .checkbox-item {
+    .task-item,
+    .checkbox-item {
       background: var(--white);
       border: 1px solid var(--grey-200);
       border-radius: 0.7rem;

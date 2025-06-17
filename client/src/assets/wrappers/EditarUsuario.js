@@ -1,10 +1,23 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+  }
+
+  .form-header {
+    background-color: var(--primary-100);
+    width: 100%;
+    padding: 4rem 2rem;
+    border-radius: 16px 16px 0 0;
+    h2 {
+      font-size: 2rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: var(--light-color);
+    }
   }
 
   h1 {
@@ -16,9 +29,28 @@ const Wrapper = styled.div`
 
   .form-container {
     background: var(--white);
-    border-radius: 1rem;
+    border-radius: 0 0 1rem 1rem;
     padding: 2rem;
     box-shadow: var(--shadow-2);
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
+  .image-section {
+    text-align: center;
+    img {
+      width: 12rem;
+      height: 12rem;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: var(--shadow-2);
+      border: 4px solid var(--white);
+      background: var(--grey-100);
+    }
   }
 
   form {
@@ -45,7 +77,7 @@ const Wrapper = styled.div`
       font-size: 0.9rem;
     }
 
-    input[type='date'] {
+    input[type="date"] {
       color: var(--text-color);
     }
 
