@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   .container {
@@ -11,7 +11,6 @@ const Wrapper = styled.div`
     font-size: 1.5rem;
     color: var(--text-color);
     margin-bottom: 2rem;
-    text-align: center;
   }
 
   .form-container {
@@ -23,35 +22,8 @@ const Wrapper = styled.div`
 
   form {
     display: grid;
-    gap: 1.5rem;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    label {
-      font-size: 0.9rem;
-      color: var(--text-color);
-    }
-
-    input,
-    textarea {
-      padding: 0.75rem;
-      border: 1px solid var(--grey-200);
-      border-radius: 0.5rem;
-      background: var(--white);
-      font-size: 0.9rem;
-    }
-
-    input[type='date'] {
-      color: var(--text-color);
-    }
-
-    textarea {
-      min-height: 100px;
-    }
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
   }
 
   .image-section {
@@ -66,7 +38,8 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem; /* menos gap para o botão ficar logo abaixo */
+    margin-bottom: 0; /* tirar margem extra */
   }
 
   .upload-placeholder {
@@ -101,6 +74,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    margin-bottom: 0; /* remove espaço embaixo */
 
     &:hover {
       background: var(--grey-50);
@@ -108,17 +82,73 @@ const Wrapper = styled.div`
     }
   }
 
+  .form-section {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem; /* espaçamento maior entre campos */
+
+    label {
+      font-size: 0.9rem;
+      color: var(--text-color);
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      padding: 0.75rem;
+      border: 1px solid var(--grey-200);
+      border-radius: 0.5rem;
+      background: var(--white);
+      font-size: 0.9rem;
+
+      &:focus {
+        border-color: var(--primary-500);
+        outline: none;
+      }
+
+      &::placeholder {
+        color: var(--grey-400);
+      }
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      color: var(--text-color);
+      
+      &::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+      }
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+
   .button-group {
+    grid-column: 1 / -1;
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-100);
 
     button {
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
       font-size: 0.9rem;
       cursor: pointer;
+      transition: var(--transition);
     }
 
     .cancel-btn {
@@ -139,6 +169,16 @@ const Wrapper = styled.div`
       &:hover {
         background: var(--primary-50);
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    form {
+      grid-template-columns: 1fr;
+    }
+
+    .image-section {
+      text-align: center;
     }
   }
 `;

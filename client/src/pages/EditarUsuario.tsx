@@ -72,7 +72,7 @@ const EditarUsuario = () => {
         <div className="form-container">
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="image-section">
-              <h3>Foto de Perfil</h3>
+              
               <div className="image-upload">
                 {foto ? <img src={URL.createObjectURL(foto)} alt="Preview" className="preview-image" /> : <div className="upload-placeholder">Foto</div>}
                 <button type="button" className="upload-btn" onClick={() => document.getElementById("foto-input")?.click()}>

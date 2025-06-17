@@ -3,6 +3,7 @@ import Usuario from "../models/usuarioModel.js";
 import { senhaHash, compararSenha } from "../utils/senhaUtils.js";
 import { createJWT } from "../utils/tokenUtils.js"; 
 import { UnauthenticatedError } from "../errors/customErrors.js";
+import { validarCPF } from "../utils/validarCPF.js";
 
 
  //Lidando com o cadastro de usuários criando um novo usuário com os dados fornecidos no corpo da requisição.
