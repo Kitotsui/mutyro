@@ -8,6 +8,7 @@ interface Mutirao {
   descricao: string;
   imagemCapa: string;
   criadoPor?: { nome: string } | string;
+  finalizado?: boolean;
 }
 
 interface MutiroesListProps {
@@ -27,13 +28,13 @@ const MutiroesList = ({ mutiroes, filtrosElement }: MutiroesListProps) => {
           <Link
             to={`/mutirao/${mutirao._id}`}
             key={mutirao._id}
-            className="mutirao-card"
+            className={`mutirao-card ${mutirao.finalizado ? "finalizado" : ""}`}
           >
             {mutirao.imagemCapa && (
               <img
                 src={`http://localhost:5100${mutirao.imagemCapa}`}
                 alt={mutirao.titulo}
-                className="mutirao-image"
+                className="mutirao-card"
               />
             )}
             <div className="mutirao-info">

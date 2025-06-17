@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
+import { LoaderFunctionArgs, useNavigate } from "react-router-dom";
 import Wrapper from "../assets/wrappers/VisualizarMutirao";
-import { NavBar } from "../components";
 import customFetch from "@/utils/customFetch";
 import { useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
+import Modal from "../components/Modal";
 
 interface Avaliacao {
   _id: string;
@@ -123,6 +123,26 @@ const VisualizarMutirao = () => {
     isInscrito: initialIsInscrito,
     avaliacoes: initialAvaliacoes,
   } = useLoaderData() as VisualizarMutiraoLoaderData;
+
+  const [showModal, setShowModal] = useState(false); // controlar o modal
+  const [inscritos, setInscritos] = useState<{ _id: string; nome: string; email: string }[]>([]); // armazenar os inscritos
+
+  // Função para buscar inscritos
+  const fetchInscritos = async () => {
+    try {
+      const response = await customFetch.get(`/mutiroes/${mutirao._id}/inscritos`);
+      setInscritos(response.data.inscritos || []);
+    } catch (error) {
+      toast.error("Erro ao buscar inscritos.");
+    }
+  };
+
+  // Chama a função para buscar inscritos ao abrir o modal
+  useEffect(() => {
+    if (showModal) {
+      fetchInscritos();
+    }
+  }, [showModal]);
 
   // Estados para avaliações
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>(
@@ -353,6 +373,17 @@ const VisualizarMutirao = () => {
               <div className="info-section">
                 <Wrapper>
                   <div className="button-group">
+                    {currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin) && (
+                        <button
+                          className="back-btn"
+                          onClick={() => setShowModal(true)} // Abre o modal
+                          disabled={isSubmitting}
+                        >
+                          Visualizar Inscritos
+                        </button>
+                      )}
                     {podeEditar ? (
                       <button
                         className="edit-btn"
@@ -368,10 +399,14 @@ const VisualizarMutirao = () => {
                       (currentUser._id === mutirao.criadoPor._id ||
                         currentUser.isAdmin) && (
                         <div className="edicao-bloqueada">
-                          <p>
-                            Edição bloqueada: faltam menos de 48 horas para o
-                            início do mutirão.
-                          </p>
+                          {mutirao.finalizado === true ? (
+                            <p>Este mutirão já está encerrado.</p>
+                          ) : (
+                            <p>
+                              Edição bloqueada: faltam menos de 48 horas para o
+                              início do mutirão.
+                            </p>
+                          )}
                         </div>
                       )
                     )}
@@ -388,6 +423,25 @@ const VisualizarMutirao = () => {
                         </button>
                       )}
                   </div>
+                  <Modal
+                    title={mutirao.titulo}
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)} // Fecha o modal
+                  >
+                    {inscritos.length > 0 ? (
+                      <ul>
+                        {inscritos.map((inscrito) => (
+                          <li key={inscrito._id} className="inscrito-item">
+                            <input type="checkbox" className="checkbox" />
+                            <span className="inscrito-nome">{inscrito.nome}</span>
+                            <span className="inscrito-email">{inscrito.email}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>Nenhum inscrito neste mutirão.</p>
+                    )}
+                  </Modal>
                 </Wrapper>
               </div>
             </div>
@@ -487,7 +541,7 @@ const VisualizarMutirao = () => {
                 </div>
               </div>
 
-              {podeParticipar && (
+              {mutirao.finalizado === false && podeParticipar && (
                 <div className="section">
                   <h2>Termo de Aceitação</h2>
                   <p className="section-description">
@@ -681,7 +735,7 @@ const VisualizarMutirao = () => {
                 >
                   Voltar
                 </button>
-                {podeParticipar && (
+                {mutirao.finalizado === false && podeParticipar && (
                   <button
                     className={`submit-btn ${
                       !aceitouTermo || isSubmitting ? "disabled" : ""

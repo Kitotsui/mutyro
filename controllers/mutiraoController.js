@@ -75,6 +75,7 @@ export const createMutirao = async (req, res) => {
 export const getMutirao = async (req, res) => {
   const { id } = req.params;
   const mutirao = await Mutirao.findById(id).populate("criadoPor", "nome _id");
+  console.log("Mutirão encontrado CONTROLLER:", mutirao);
 
   res.status(StatusCodes.OK).json({ mutirao });
 };
@@ -179,6 +180,28 @@ export const cancelarInscricao = async (req, res) => {
     .json(
       `Usuário ${userId} cancelou a inscrição no mutirão ${id} com sucesso!`
     );
+};
+
+export const getInscritos = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Busca o mutirão e popula os inscritos com os campos necessários
+    const mutirao = await Mutirao.findById(id).populate(
+      "inscritos",
+      "_id nome email"
+    );
+
+    if (!mutirao) {
+      return res.status(404).json({ msg: "Mutirão não encontrado" });
+    }
+
+    // Retorna apenas os inscritos
+    res.status(200).json({ inscritos: mutirao.inscritos });
+  } catch (error) {
+    console.error("Erro ao buscar inscritos:", error);
+    res.status(500).json({ msg: "Erro ao buscar inscritos" });
+  }
 };
 
 //AVALIACOES

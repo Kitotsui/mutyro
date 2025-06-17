@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  min-height: 100vh;
+  //min-height: 100vh;
   background-color: var(--grey-50);
   font-family: "Open Sans", sans-serif;
 
@@ -512,6 +512,10 @@ const Wrapper = styled.div`
       background: #f8fafc;
       border-radius: 0.5rem;
       border: 1px dashed #e2e8f0;
+    }
+
+    .checkbox {
+      margin-right: 20px;
     }
 
     @media (max-width: 768px) {

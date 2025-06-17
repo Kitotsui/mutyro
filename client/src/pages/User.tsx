@@ -42,6 +42,7 @@ type Mutirao = {
   criadoPor: { _id: string; nome: string };
   imagemCapa: string;
   inscritos?: string[];
+  finalizado?: boolean;
 };
 // Mock data - Simulação do banco de dados
 export const mockMutiroes = [
@@ -118,6 +119,7 @@ const tiposMutirao = [
   { value: "CULTURA_EDUCACAO", label: "Cultura / Educação" },
   { value: "SAUDE", label: "Saúde" },
   { value: "TECNOLOGIA", label: "Tecnologia" },
+  { value: "ENCERRADOS", label: "Encerrados" },
 ];
 
 const User = () => {
@@ -142,12 +144,19 @@ const User = () => {
       })
     : [];
 
-  const displayedMutiroes = filtro === "meus" ? meusMutiroes : allMutiroes;
+  const displayedMutiroes = (filtro === "meus" ? meusMutiroes : allMutiroes).filter((mutirao) => {
+  if (tipoSelecionado === "ENCERRADOS") {
+    return mutirao.finalizado === true; // Mostra apenas finalizados
+  }
+  return mutirao.finalizado === false; // Exclui finalizados para outros filtros
+});
 
   // Novo filtro por tipo
-  const mutiroesFiltradosPorTipo = displayedMutiroes.filter((mutirao) =>
-    tipoSelecionado === "" ? true : mutirao.mutiraoTipo === tipoSelecionado
-  );
+const mutiroesFiltradosPorTipo = displayedMutiroes.filter((mutirao) => {
+  return tipoSelecionado === "" || tipoSelecionado === "ENCERRADOS"
+    ? true
+    : mutirao.mutiraoTipo === tipoSelecionado;
+});
 
   // Próximos mutirões: data futura e usuário inscrito ou criador
   const hoje = new Date();

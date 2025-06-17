@@ -36,6 +36,9 @@ const Blog = ({ mutiroes }: BlogProps) => {
     },
   ];
 
+    // Filtra os mutirões que não estão finalizados
+  const mutiroesAtivos = mutiroes.filter((mutirao) => mutirao.finalizado === false);
+
   return (
     <Wrapper>
       <FilterBar />
@@ -49,7 +52,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
           <span className="carousel-label">Novidades</span>
         </div>
         <Carousel>
-          {mutiroes.map((mutirao) => {
+          {mutiroesAtivos.map((mutirao) => {
             const { _id, imagemCapa, titulo, data, criadoPor } = mutirao;
             return (
               <Card
