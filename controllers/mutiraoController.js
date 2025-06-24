@@ -4,7 +4,9 @@ import Usuario from "../models/usuarioModel.js";
 import { MUTIRAO_TIPOS } from "../utils/constantes.js";
 import fs from "fs/promises";
 import Notificacao from "../models/Notificacao.js";
+
 import nodemailer from "nodemailer";
+import usuarioModel from "../models/usuarioModel.js";
 
 export const getMutiroes = async (req, res) => {
   //console.log(req.user);
@@ -12,14 +14,67 @@ export const getMutiroes = async (req, res) => {
     criadoPor: req.user.userId,
     ativo: true,
   }); // Busca todos os mutirões do usuário logado que estao ativos
-  res.status(StatusCodes.OK).json({mutiroes});
+  res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const getTodosMutiroes = async (req, res) => {
-  //console.log(req.user);
-  const mutiroes = await Mutirao.find({ativo: true}).populate("criadoPor", "nome");
+  const { search } = req.query; // Recebe um termo de busca do front (ex.: /mutiroes/todos?search=limpeza)
 
-  res.status(StatusCodes.OK).json({mutiroes});
+  console.log(`[ATLAS SEARCH] Buscando o termo: ${search}`);
+
+  let mutiroes;
+
+  if (search && search.trim() !== "") {
+    // Usa o Atlas Search se houver um termo de busca
+    mutiroes = await Mutirao.aggregate([
+      {
+        $search: {
+          index: "default", // Aqui é o nome do Index criado no Atlas Search Index
+          text: {
+            query: search,
+            path: ["titulo", "descricao"],
+            fuzzy: {
+              maxEdits: 1, // Número de erros de digitação permitidos
+              prefixLength: 2, // O número de primeiros caracteres que devem estar corretos
+            },
+          },
+        },
+      },
+      {
+        // Depois da busca, filtra conforme a linha abaixo
+        $match: { ativo: true },
+      },
+      // $lookup substituiu populate('criadoPor', 'nome') para compatibilidade
+      {
+        $lookup: {
+          from: "usuarios", // nome da coleção
+          localField: "criadoPor",
+          foreignField: "_id",
+          as: "criadoPorInfo",
+        },
+      },
+      {
+        $unwind: { path: "$criadoPorInfo", preserveNullAndEmptyArrays: true },
+      },
+      {
+        $addFields: {
+          "criadoPor.nome": "$criadoPorInfo.nome",
+          "criadoPor._id": "$criadoPorInfo._id",
+        },
+      },
+      {
+        $project: { criadoPorInfo: 0 },
+      },
+    ]);
+  } else {
+    // Se não houver tempo de busca, usa a lógica anterior à da implementação do Atlas Search
+    mutiroes = await Mutirao.find({ ativo: true }).populate(
+      "criadoPor",
+      "nome"
+    );
+  }
+
+  res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const createMutirao = async (req, res) => {
@@ -91,10 +146,30 @@ export const createMutirao = async (req, res) => {
         .json({ msg: "Valores de latitude ou longitude inválidos." });
     }
 
+    const defaultImages = {
+      SOCIAL:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/social_w337yo.jpg",
+      SAUDE:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/saude_jxyour.jpg",
+      CONSTRUCAO_REFORMA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/construcao_llhyii.avif",
+      AMBIENTAL_AGRICOLA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/ambiental_upuyed.avif",
+      CULTURA_EDUCACAO:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/educacao_zs4ywz.avif",
+      TECNOLOGIA:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/tecnologia_o5ui0u.avif",
+      FALLBACK:
+        "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png",
+    };
+
     // Define a imagem padrão ou a enviada
-    let imagePath = "/uploads/default.png";
+    let imagePath;
     if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
+      imagePath = req.file.path;
+    } else {
+      const tipo = req.body.mutiraoTipo;
+      imagePath = defaultImages[tipo] || defaultImages.FALLBACK;
     }
 
     // Salvando objeto location com GeoJSON
@@ -142,10 +217,10 @@ export const createMutirao = async (req, res) => {
 };
 
 export const getMutirao = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const mutirao = await Mutirao.findById(id).populate("criadoPor", "nome _id");
 
-  res.status(StatusCodes.OK).json({mutirao});
+  res.status(StatusCodes.OK).json({ mutirao });
 };
 
 // Busca de mutirões inativos
@@ -154,7 +229,7 @@ export const getMutiroesInativos = async (req, res) => {
     criadoPor: req.user.userId,
     ativo: false,
   });
-  res.status(StatusCodes.OK).json({mutiroes});
+  res.status(StatusCodes.OK).json({ mutiroes });
 };
 
 export const updateMutirao = async (req, res) => {
@@ -177,11 +252,14 @@ export const updateMutirao = async (req, res) => {
   // Verifica se o usuário eh o criador ou admin
   const mutiraoExistente = await Mutirao.findById(id);
   if (!mutiraoExistente) {
-    return res.status(404).json({msg: "Mutirão não encontrado"});
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
   }
 
-  if (mutiraoExistente.criadoPor.toString() !== req.user.userId && !req.user.isAdmin) {
-    return res.status(403).json({msg: "Não autorizado"});
+  if (
+    mutiraoExistente.criadoPor.toString() !== req.user.userId &&
+    !req.user.isAdmin
+  ) {
+    return res.status(403).json({ msg: "Não autorizado" });
   }
 
   // verifica se falta menos de 48 horas para o mutirão
@@ -196,10 +274,10 @@ export const updateMutirao = async (req, res) => {
   }
 
   // Atualiza a imagem se uma nova foi enviada
-  let imagePath = mutiraoExistente.imagemCapa;
+  let imagePath = mutiraoExistente.imagemCapa; // Mantém o mesmo caminho antigo por padrão
   if (req.file) {
-    imagePath = `/uploads/${req.file.filename}`;
-    // tem que implementar para apagar a imagem antiga
+    imagePath = req.file.path; // Se uma nova imagem for enviada, usa o Cloudinary
+    // TODO: Implementar remoção da imagem antiga no Cloudinary com o public_id
   }
 
   let enderecoBase;
@@ -266,14 +344,14 @@ export const updateMutirao = async (req, res) => {
 };
 
 export const deleteMutirao = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const updatedMutirao = await Mutirao.findByIdAndUpdate(
     id,
     {
       ativo: false,
       deletadoEm: new Date(),
     },
-    {new: true}
+    { new: true }
   );
 
   res.status(StatusCodes.OK).json({
@@ -283,28 +361,39 @@ export const deleteMutirao = async (req, res) => {
 };
 
 export const inscreverUsuario = async (req, res) => {
-  const {id} = req.params;
-  const {userId} = req.user;
+  const { id } = req.params;
+  const { userId } = req.user;
 
-  const usuario = await Usuario.findById(userId);
+  const usuario = await usuarioModel.findById(userId);
   if (!usuario) {
-    return res.status(StatusCodes.NOT_FOUND).json({msg: "Usuário não encontrado"});
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ msg: "Usuário não encontrado" });
   }
 
-  const multirao = await Mutirao.findByIdAndUpdate(id, {
-    $addToSet: {inscritos: userId},
-  }, { new: true });
+  const multirao = await Mutirao.findByIdAndUpdate(
+    id,
+    {
+      $addToSet: { inscritos: userId },
+    },
+    { new: true }
+  );
 
   // LOG PARA DEPURAÇÃO
-  console.log('Tentando criar notificação para usuário:', userId, 'no mutirão:', multirao.titulo);
+  console.log(
+    "Tentando criar notificação para usuário:",
+    userId,
+    "no mutirão:",
+    multirao.titulo
+  );
   await Notificacao.create({
     usuarioId: userId,
-    tipo: 'sucesso',
-    titulo: 'Inscrição Confirmada',
+    tipo: "sucesso",
+    titulo: "Inscrição Confirmada",
     mensagem: `Parabéns, você acaba de se cadastrar no mutirão "${multirao.titulo}" que acontecerá no dia ${multirao.data} às ${multirao.horario} no endereço ${multirao.local}. Sua inscrição foi confirmada!`,
-    mutiraoId: multirao._id
+    mutiraoId: multirao._id,
   });
-  console.log('Notificação criada com sucesso!');
+  console.log("Notificação criada com sucesso!");
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -327,22 +416,24 @@ export const inscreverUsuario = async (req, res) => {
     console.error("Erro ao enviar e-mail:", error);
   }
 
-  res.status(StatusCodes.OK).json(`Usuário ${userId} inscrito com sucesso no mutirão ${id} !`);
+  res
+    .status(StatusCodes.OK)
+    .json(`Usuário ${userId} inscrito com sucesso no mutirão ${id} !`);
 };
 
 export const cancelarInscricao = async (req, res) => {
-  const {id} = req.params;
-  const {userId} = req.user;
+  const { id } = req.params;
+  const { userId } = req.user;
   const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
-    $pull: {inscritos: userId},
+    $pull: { inscritos: userId },
   });
   // Cria notificação de cancelamento
   await Notificacao.create({
     usuarioId: userId,
-    tipo: 'alerta',
-    titulo: 'Inscrição Cancelada',
+    tipo: "alerta",
+    titulo: "Inscrição Cancelada",
     mensagem: `Sua inscrição no mutirão "${mutiraoInscricao.titulo}" foi cancelada. Esperamos ver você em outros mutirões!`,
-    mutiraoId: mutiraoInscricao._id
+    mutiraoId: mutiraoInscricao._id,
   });
   res
     .status(StatusCodes.OK)

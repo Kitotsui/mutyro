@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 //import { formatDate } from "react-calendar/dist/esm/shared/dateFormatter.js";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import getImageUrl from "@/utils/imageUrlHelper";
+
+
 
 interface Mutirao {
   _id: string;
@@ -152,7 +155,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
               <Card
                 key={_id}
                 id={_id}
-                image={"http://localhost:5100" + imagemCapa}
+                image={getImageUrl(imagemCapa)}
                 title={titulo}
                 date={data}
                 user={criadoPor?.nome || "Usuário desconhecido"}
@@ -190,7 +193,14 @@ const Blog = ({ mutiroes }: BlogProps) => {
             ))}
           </ul>
           {/* Implementar página de calendário completo */}
-          <button>Calendário Completo</button>
+          <Link
+            className="btn-calendario"
+            to="/mutiroes"
+            state={{ initialView: "month" }}
+          >
+            <i className="fas fa-calendar" style={{ paddingRight: "10px" }}></i>
+            Calendário Completo
+          </Link>
         </div>
 
         <div className="calendar-column">

@@ -12,15 +12,31 @@ import { toast } from "react-toastify";
 
 import { useAuth } from "@/context/AuthContext";
 
-import { MapContainer, TileLayer, Marker, Popup, MapContainerProps } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  MapContainerProps,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { FaCalendarAlt, FaClock, FaUsers, FaMapMarkerAlt, FaTasks, FaTools, FaLightbulb } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaUsers,
+  FaMapMarkerAlt,
+  FaTasks,
+  FaTools,
+  FaLightbulb,
+} from "react-icons/fa";
 
 // Correção para que os ícones padrões do Leaflet carreguem corretamente com Vite
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+import getImageUrl from "@/utils/imageUrlHelper";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -136,6 +152,53 @@ export const loader = async ({
 
 import ShareMutirao from "@/components/ShareMutirao";
 
+type MapWrapperProps = {
+  mutirao: any;
+  mapPosition: [number, number];
+};
+
+function MapWrapper({ mutirao, mapPosition }: MapWrapperProps) {
+  return (
+    <div
+      key={`map-${mutirao._id}`} // Isso forçará o React a recriar o container se mudar
+      style={{
+        height: 250,
+        borderRadius: 12,
+        overflow: "hidden",
+        marginTop: 10,
+        border: "1px solid #eee",
+      }}
+    >
+      <MapContainer
+        center={mapPosition}
+        zoom={15}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <Marker position={mapPosition}>
+          <Popup>
+            {mutirao.local}
+            {mutirao.numeroEComplemento && (
+              <>
+                <br />
+                {mutirao.numeroEComplemento}
+              </>
+            )}
+            <br />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Abrir no Google Maps
+            </a>
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
+  );
+}
+
 const VisualizarMutirao = () => {
   const navigate = useNavigate();
   const { mutirao, isInscrito: initialIsInscrito } =
@@ -236,7 +299,10 @@ const VisualizarMutirao = () => {
       revalidator.revalidate(); // REVALIDATE LOADER para atualizar 'mutirao.inscritos' e 'initialIsInscrito'
     } catch (error: unknown) {
       console.error("Erro ao processar inscrição/cancelamento:", error);
-      const apiError = error as { response?: { data?: { msg?: string } }; message?: string };
+      const apiError = error as {
+        response?: { data?: { msg?: string } };
+        message?: string;
+      };
       toast.error(
         apiError?.response?.data?.msg ||
           apiError?.message ||
@@ -258,7 +324,10 @@ const VisualizarMutirao = () => {
       toast.success("Mutirão excluído com sucesso!");
       navigate("/user"); // Redireciona para a página do usuário após exclusão
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { msg?: string } }; message?: string };
+      const err = error as {
+        response?: { data?: { msg?: string } };
+        message?: string;
+      };
       const errorMsg =
         err.response?.data?.msg || err.message || "Erro ao excluir mutirão";
       toast.error(errorMsg);
@@ -312,20 +381,23 @@ const VisualizarMutirao = () => {
         <div className="mutirao-card">
           {/* TOPO DESTACADO */}
           <div className="mutirao-header">
-              <div className="header-content">
+            <div className="header-content">
               <img
-                src={
-                  mutirao.imagemCapa
-                    ? `http://localhost:5100${mutirao.imagemCapa}`
-                    : "http://localhost:5100/uploads/default.png"
-                }
+                src={getImageUrl(mutirao.imagemCapa)}
+                // src={
+                //   mutirao.imagemCapa
+                //     ? `http://localhost:5100${mutirao.imagemCapa}`
+                //     : "http://localhost:5100/uploads/default.png"
+                // }
                 alt={`Imagem do mutirão: ${mutirao.titulo}`}
                 className="mutirao-img"
               />
               <div className="org-info">
                 <span className="org-label">Organizado por</span>
                 <span className="org-name">{mutirao.criadoPor.nome}</span>
-                <span className="org-extra"><FaUsers /> {mutirao.inscritos?.length || 0} voluntários</span>
+                <span className="org-extra">
+                  <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
+                </span>
               </div>
             </div>
           </div>
@@ -342,46 +414,29 @@ const VisualizarMutirao = () => {
                 </div>
               </div>
               <div className="mutirao-info-row">
-                <span className="info-item"><FaCalendarAlt /> {dataFormatada}</span>
-                <span className="info-item"><FaClock /> {mutirao.horario}</span>
-                <span className="info-item"><FaUsers /> {mutirao.inscritos?.length || 0} voluntários</span>
+                <span className="info-item">
+                  <FaCalendarAlt /> {dataFormatada}
+                </span>
+                <span className="info-item">
+                  <FaClock /> {mutirao.horario}
+                </span>
+                <span className="info-item">
+                  <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
+                </span>
               </div>
               <div className="card-section">
-                <h3><FaTasks /> Descrição</h3>
+                <h3>
+                  <FaTasks /> Descrição
+                </h3>
                 <p>{mutirao.descricao}</p>
               </div>
               <div className="card-section">
-                <h3><FaMapMarkerAlt /> Local</h3>
+                <h3>
+                  <FaMapMarkerAlt /> Local
+                </h3>
                 <p className="section-description">{mutirao.local}</p>
-                {canDisplayMap ? (
-                  <div style={{ height: 250, borderRadius: 12, overflow: 'hidden', marginTop: 10, border: '1px solid #eee' }}>
-                    <MapContainer
-                      {...({ center: mapPosition, zoom: 15 } as MapContainerProps)}
-                      style={{ height: "100%", width: "100%" }}
-                    >
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <Marker position={mapPosition}>
-                        <Popup>
-                          {mutirao.local} <br />
-                          {mutirao.numeroEComplemento && (
-                            <>
-                              {mutirao.numeroEComplemento}
-                              <br />
-                            </>
-                          )}
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${mutirao.local}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Abrir no Google Maps
-                          </a>
-                        </Popup>
-                      </Marker>
-                    </MapContainer>
-                  </div>
+                {canDisplayMap && mapPosition ? (
+                  <MapWrapper mutirao={mutirao} mapPosition={mapPosition} />
                 ) : (
                   <p style={{ color: "#aaa", marginTop: 8 }}>
                     Localização não disponível no mapa.
@@ -389,18 +444,24 @@ const VisualizarMutirao = () => {
                 )}
               </div>
               <div className="card-section">
-                <h3><FaTasks /> Tarefas</h3>
+                <h3>
+                  <FaTasks /> Tarefas
+                </h3>
                 <p className="section-description">
                   Atividades que serão desenvolvidas no evento
                 </p>
                 <div className="task-list">
                   {mutirao.tarefas.map((tarefa, index) => (
-                    <div key={index} className="task-item">{tarefa}</div>
+                    <div key={index} className="task-item">
+                      {tarefa}
+                    </div>
                   ))}
                 </div>
               </div>
               <div className="card-section">
-                <h3><FaTools /> Habilidades</h3>
+                <h3>
+                  <FaTools /> Habilidades
+                </h3>
                 <p className="section-description">
                   Selecione pelo menos uma habilidade
                 </p>
@@ -419,7 +480,9 @@ const VisualizarMutirao = () => {
                 </div>
               </div>
               <div className="card-section">
-                <h3><FaTools /> Materiais e Ferramentas</h3>
+                <h3>
+                  <FaTools /> Materiais e Ferramentas
+                </h3>
                 <p className="section-description">
                   Selecione caso possa trazer os seguintes itens
                 </p>
@@ -454,66 +517,132 @@ const VisualizarMutirao = () => {
                     <span>{mutirao.inscritos?.length || 0}/60</span>
                   </div>
                   <div className="progress-bar-bg">
-                    <div className="progress-bar" style={{ width: `${Math.min(100, ((mutirao.inscritos?.length || 0) / 60) * 100)}%` }} />
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          ((mutirao.inscritos?.length || 0) / 60) * 100
+                        )}%`,
+                      }}
+                    />
                   </div>
                 </div>
               </div>
               {/* Se não estiver logado, exibe só os botões de cadastro e voltar */}
               {!authContextUsuario ? (
-                <div className="side-card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div
+                  className="side-card"
+                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
+                >
                   <button
                     className="submit-btn"
-                    onClick={() => navigate(location.pathname, { state: { showRegisterModal: true, from: location.pathname }, replace: true })}
+                    onClick={() =>
+                      navigate(location.pathname, {
+                        state: {
+                          showRegisterModal: true,
+                          from: location.pathname,
+                        },
+                        replace: true,
+                      })
+                    }
                   >
                     Cadastre-se para poder participar
                   </button>
-                  <button className="back-btn" onClick={() => navigate("/user")}>Voltar</button>
+                  <button
+                    className="back-btn"
+                    onClick={() => navigate("/user")}
+                  >
+                    Voltar
+                  </button>
                 </div>
               ) : (
                 <>
                   <div className="side-card">
                     <h3>Termo de Aceitação</h3>
                     <div className="side-termo">
-                      Eu concordo em participar deste mutirão de forma voluntária, contribuindo com minhas habilidades e seguindo as orientações dos organizadores. Entendo que o objetivo é desenvolver melhorias para a comunidade e, se necessário, trarei meus próprios equipamentos para colaborar. Comprometo-me a agir com respeito, responsabilidade e colaboração, garantindo um ambiente seguro e inclusivo para todos os participantes.
+                      Eu concordo em participar deste mutirão de forma
+                      voluntária, contribuindo com minhas habilidades e seguindo
+                      as orientações dos organizadores. Entendo que o objetivo é
+                      desenvolver melhorias para a comunidade e, se necessário,
+                      trarei meus próprios equipamentos para colaborar.
+                      Comprometo-me a agir com respeito, responsabilidade e
+                      colaboração, garantindo um ambiente seguro e inclusivo
+                      para todos os participantes.
                     </div>
                     <label className="side-checkbox">
-                      <input type="checkbox" checked={aceitouTermo} onChange={(e) => setAceitouTermo(e.target.checked)} />
+                      <input
+                        type="checkbox"
+                        checked={aceitouTermo}
+                        onChange={(e) => setAceitouTermo(e.target.checked)}
+                      />
                       <span>Aceito os termos e condições</span>
                     </label>
                     <div className="side-btns">
                       {podeParticipar && (
-                        <button className={`submit-btn${!aceitouTermo || isSubmitting ? " disabled" : ""}`} onClick={handleInscricao} disabled={!aceitouTermo || isSubmitting}>
-                          {isSubmitting ? "Processando..." : isInscrito ? "Cancelar Participação" : "Quero Ser Voluntário"}
+                        <button
+                          className={`submit-btn${
+                            !aceitouTermo || isSubmitting ? " disabled" : ""
+                          }`}
+                          onClick={handleInscricao}
+                          disabled={!aceitouTermo || isSubmitting}
+                        >
+                          {isSubmitting
+                            ? "Processando..."
+                            : isInscrito
+                            ? "Cancelar Participação"
+                            : "Quero Ser Voluntário"}
                         </button>
                       )}
                       {podeEditar && (
-                        <button className="submit-btn" style={{ background: "var(--primary-300)" }} onClick={() => navigate(`/mutirao/${mutirao._id}/editar`)} disabled={isSubmitting}>
+                        <button
+                          className="submit-btn"
+                          style={{ background: "var(--primary-300)" }}
+                          onClick={() =>
+                            navigate(`/mutirao/${mutirao._id}/editar`)
+                          }
+                          disabled={isSubmitting}
+                        >
                           Editar
                         </button>
                       )}
-                      {(authContextUsuario && (authContextUsuario._id === mutirao.criadoPor._id || authContextUsuario.isAdmin)) && (
-                        <button className="back-btn" onClick={handleExcluirMutirao} disabled={isSubmitting}>
-                          {isSubmitting ? "Processando..." : "Excluir"}
-                        </button>
-                      )}
-                      <button className="back-btn" onClick={() => navigate("/user")}>Voltar</button>
+                      {authContextUsuario &&
+                        (authContextUsuario._id === mutirao.criadoPor._id ||
+                          authContextUsuario.isAdmin) && (
+                          <button
+                            className="back-btn"
+                            onClick={handleExcluirMutirao}
+                            disabled={isSubmitting}
+                          >
+                            {isSubmitting ? "Processando..." : "Excluir"}
+                          </button>
+                        )}
+                      <button
+                        className="back-btn"
+                        onClick={() => navigate("/user")}
+                      >
+                        Voltar
+                      </button>
                     </div>
                   </div>
                 </>
               )}
               <div className="side-card share-card">
-              <div className="share-row">
-                <ShareMutirao
-                  url={`${window.location.origin}/mutirao/${mutirao._id}`}
-                  titulo={mutirao.titulo}
-                />
-              </div>
+                <div className="share-row">
+                  <ShareMutirao
+                    url={`${window.location.origin}/mutirao/${mutirao._id}`}
+                    titulo={mutirao.titulo}
+                  />
+                </div>
               </div>
               <div className="side-card side-dica">
                 <FaLightbulb className="dica-icon" />
                 <div className="dica-content">
                   <h4>Dica</h4>
-                  <p>Traga uma garrafa d'água e use roupas confortáveis para o trabalho voluntário.</p>
+                  <p>
+                    Traga uma garrafa d'água e use roupas confortáveis para o
+                    trabalho voluntário.
+                  </p>
                 </div>
               </div>
             </div>
