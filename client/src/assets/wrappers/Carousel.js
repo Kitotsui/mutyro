@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     scroll-snap-type: x mandatory;
     padding-bottom: 1rem;
     scroll-behavior: smooth;
-    transition: scroll-left 0.2s ease-in-out;
+    /* transition: scroll-left 0.2s ease-in-out; */
     max-width: 100%;
 
     scrollbar-width: none; /* Hide scrollbar Firefox */

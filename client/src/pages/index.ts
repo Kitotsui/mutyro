@@ -5,4 +5,6 @@ export { default as Login } from "./Login";
 export { default as Error } from "./Error";
 export { default as User } from "./User";
 export { default as NovoMutirao } from "./NovoMutirao";
-export { default as VisualizarMutirao } from "./VisualizarMutirao"; 
+export { default as Notificacoes } from "./Notificacoes";
+export { default as VisualizarMutirao } from "./VisualizarMutirao";
+export { default as CalendarioCompleto } from "./CalendarioCompleto";

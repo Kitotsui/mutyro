@@ -74,8 +74,23 @@ const MutiraoSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    
+
     avaliacoes: [AvaliacaoSchema],
+    
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+
+    numeroEComplemento: String,
   },
   { timestamps: true }
 );

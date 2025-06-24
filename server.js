@@ -16,6 +16,7 @@ import swaggerSpec from "./swaggerConfig.js";
 import mutiraoRoute from "./routes/mutiraoRoute.js";
 import authRoute from "./routes/authRoute.js";
 import userRouter from "./routes/userRouter.js";
+import notificacaoRoutes from "./routes/notificacaoRoutes.js";
 
 //Middlewares
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
@@ -92,10 +93,10 @@ app.get("/api/v1/test", (req, res) => {
 });
 
 //Rotas
-app.use("/api/v1/mutiroes/todos", mutiraoRoute);
-app.use("/api/v1/mutiroes", authenticateUser, mutiraoRoute);
+app.use("/api/v1/mutiroes", mutiraoRoute);
 app.use("/api/v1/usuarios", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/notificacoes", notificacaoRoutes);
 
 // Rotas de erro tem que vir depois das Rotas do CRUD
 app.use("*", (req, res) => {
@@ -111,6 +112,7 @@ try {
   await mongoose.connect(process.env.MONGO_URL);
   app.listen(port, async () => {
     console.log(`Servidor rodando na porta ${port}....`);
+    console.log(`Swagger docs disponíveis em: http://localhost:${port}/api-docs`);
     await iniciarVerificacaoPeriodica();
   });
 } catch (error) {

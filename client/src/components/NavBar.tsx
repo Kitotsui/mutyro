@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -32,24 +32,30 @@ const NavBar = () => {
   const handleHomeNavigation = () => {
     setIsOpen(false);
     setShowUserDropdown(false);
-    navigate('/');
+    navigate("/");
   };
 
-  const handleLoginClick = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    setShowLogin(true);
-    setShowRegister(false);
-    setIsOpen(false);
-    setShowUserDropdown(false);
-  };
+  const handleLoginClick = useCallback(
+    (e?: React.MouseEvent) => {
+      if (e) e.preventDefault();
+      setShowLogin(true);
+      setShowRegister(false);
+      setIsOpen(false);
+      setShowUserDropdown(false);
+    },
+    [setShowLogin, setShowRegister, setIsOpen, setShowUserDropdown]
+  );
 
-  const handleRegisterClick = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    setShowRegister(true);
-    setShowLogin(false);
-    setIsOpen(false);
-    setShowUserDropdown(false);
-  };
+  const handleRegisterClick = useCallback(
+    (e?: React.MouseEvent) => {
+      if (e) e.preventDefault();
+      setShowRegister(true);
+      setShowLogin(false);
+      setIsOpen(false);
+      setShowUserDropdown(false);
+    },
+    [setShowRegister, setShowLogin, setIsOpen, setShowUserDropdown]
+  );
 
   const handleCloseModals = () => {
     setShowLogin(false);
@@ -97,15 +103,31 @@ const NavBar = () => {
     };
   }, [showUserDropdown]);
 
+  useEffect(() => {
+    const currentState = location.state || {};
+    let stateChanged = false;
+    // const fromPath = currentState.from || "/user"; // Default redirect if 'from' is not set
+
+    if (currentState.showLoginModal) {
+      handleLoginClick();
+      delete currentState.showLoginModal;
+      stateChanged = true;
+    } else if (currentState.showRegisterModal) {
+      handleRegisterClick();
+      delete currentState.showRegisterModal;
+      stateChanged = true;
+    }
+
+    if (stateChanged) {
+      navigate(location.pathname, { replace: true, state: currentState });
+    }
+  }, [location.state, navigate, handleLoginClick, handleRegisterClick]);
+
   return (
     <Wrapper>
       <nav className="navbar">
         <div className="navbar-flex container">
-          <Link
-            to="/"
-            aria-label="Logo Home"
-            onClick={handleHomeNavigation}
-          >
+          <Link to="/" aria-label="Logo Home" onClick={handleHomeNavigation}>
             <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
           </Link>
 

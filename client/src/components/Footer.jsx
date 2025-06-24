@@ -5,11 +5,11 @@ const Footer = () => {
   return (
     <Wrapper>
       <footer className="footer">
-        <div class="container footer-flex">
-          <ul class="footer-links">
-            <li>
-              <img src={logo} alt="" />
-            </li>
+        <div className="container footer-flex">
+          <div className="footer-left">
+            <img src={logo} alt="Mutyro logo" />
+          </div>
+          <ul className="footer-links">
             <li>
               <a href="/">Home</a>
             </li>
@@ -23,13 +23,14 @@ const Footer = () => {
               <a href="mailto:">Contato</a>
             </li>
           </ul>
-          <p>
-            &copy; {new Date().getFullYear()} Mutyro. Todos os direitos
-            reservados.
-          </p>
         </div>
+        <p className="footer-copy">
+          &copy; {new Date().getFullYear()} Mutyro. Todos os direitos
+          reservados.
+        </p>
       </footer>
     </Wrapper>
   );
 };
+
 export default Footer;

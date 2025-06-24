@@ -13,7 +13,6 @@ const Wrapper = styled.div`
     align-items: center;
     z-index: 1000;
   }
-
   .modal-content {
     background: white;
     padding: 2rem;
@@ -22,38 +21,31 @@ const Wrapper = styled.div`
     max-width: 500px;
     text-align: center;
   }
-
   h1 {
     font-size: 1.5rem;
   }
-
   .modal-body {
     margin: 1rem 0;
   }
-
   .modal-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
   }
-
   .inscrito-item {
     display: flex;
     justify-content: space-between; /* Alinha os itens nas extremidades */
     padding: 0.5rem 0;
     border-bottom: 1px solid #ddd; /* Linha separadora opcional */
   }
-
   .inscrito-nome {
     text-align: left; /* Alinha o nome à esquerda */
     flex: 1; /* Faz o nome ocupar o espaço disponível */
   }
-
   .inscrito-email {
     text-align: right; /* Alinha o email à direita */
     flex: 1; /* Faz o email ocupar o espaço disponível */
   }
-
   .print-btn,
   .close-btn {
     margin-top: 1rem;
@@ -65,7 +57,6 @@ const Wrapper = styled.div`
     cursor: pointer;
     transition: background 0.2s;
   }
-
   .print-btn:hover,
   .close-btn:hover {
     background: var(--primary-50);

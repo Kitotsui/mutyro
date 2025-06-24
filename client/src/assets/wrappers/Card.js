@@ -55,7 +55,6 @@ const Wrapper = styled.article`
   &.finalizado {
     background-color: #f1f3f5;
     border: 1px solid #e9ecef;
-
     &::after {
       content: "FINALIZADO";
       position: absolute;
@@ -71,17 +70,14 @@ const Wrapper = styled.article`
       letter-spacing: 0.5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
     img {
       filter: grayscale(30%) brightness(0.95);
     }
-
     h4,
     p,
     time {
       color: #868e96;
     }
-
     .card-content {
       opacity: 0.9;
     }

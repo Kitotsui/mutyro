@@ -6,15 +6,20 @@ import {
   User,
   NovoMutirao,
   VisualizarMutirao,
+  Notificacoes,
 } from "./pages";
 import { AuthProvider } from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
+import CalendarioCompleto from "./pages/CalendarioCompleto";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
 import { loader as visualizarMutiraoLoader } from "./pages/VisualizarMutirao";
 import { action as editarMutiraoAction } from "./pages/EditarMutirao";
 import { loader as landingLoader } from "./pages/Landing";
+import { loader as novoMutiraoLoader } from "./pages/NovoMutirao";
+import { loader as calendarioCompletoLoader } from "./pages/CalendarioCompleto";
+import EditarUsuario from "./pages/EditarUsuario";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +33,11 @@ const router = createBrowserRouter([
         loader: landingLoader,
       },
       {
+        path: "mutiroes",
+        element: <CalendarioCompleto />,
+        loader: calendarioCompletoLoader,
+      },
+      {
         path: "user",
         element: <User />,
         loader: userLoader,
@@ -36,6 +46,7 @@ const router = createBrowserRouter([
         path: "novo-mutirao",
         element: <NovoMutirao />,
         action: novoMutiraoAction,
+        loader: novoMutiraoLoader,
       },
       {
         path: "mutirao/:id",
@@ -48,27 +59,19 @@ const router = createBrowserRouter([
         loader: visualizarMutiraoLoader,
         action: editarMutiraoAction,
       },
+      {
+        path: "notificacoes",
+        element: <Notificacoes />,
+      },
+      {
+        path: "editarusuario",
+        element: <EditarUsuario />,
+      },
     ],
-  },
-  {
-    path: "/landing",
-    element: <Landing />,
   },
   {
     path: "/error",
     element: <Error />,
-  },
-  {
-    path: "user",
-    element: <User />,
-  },
-  {
-    path: "novo-mutirao",
-    element: <NovoMutirao />,
-  },
-  {
-    path: "mutirao/:id",
-    element: <VisualizarMutirao />,
   },
 ]);
 

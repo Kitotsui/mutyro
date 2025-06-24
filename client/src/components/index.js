@@ -10,3 +10,6 @@ export { default as Carousel } from "./Carousel";
 export { default as Card } from "./Card";
 export { default as UserCard } from "./UserCard";
 export { default as MutiraoItem } from "./MutiraoItem";
+export { default as SearchBar } from "./SearchBar";
+export { default as Calendar } from "./Calendar";
+export { default as ShareMutirao } from "./ShareMutirao";

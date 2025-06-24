@@ -11,12 +11,20 @@ export default defineConfig({
     }
   },
   server: {
+    host: true,
     proxy: {
       "/api": {
-        target: "http://localhost:5100/api",
+        //target: "http://backend:5100", quando for buildar o container e colocar online, trocar para isso
+        target: "http://localhost:5100",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        secure: false,
       },
     },
+    allowedHosts: [
+      'mutyro.com.br',
+      'www.mutyro.com.br',
+      'localhost',
+      '127.0.0.1'
+    ]
   },
 });

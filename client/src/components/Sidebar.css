@@ -1,14 +1,20 @@
 .main-sidebar {
-  width: 100px;
-  height: 100vh;
+  min-width: 5rem;
+  height: fit-content;
   background: #fff;
-  border-right: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 12px 12px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
-  transition: width 0.3s ease;
-  position: relative;
+  transition: width 0.8s ease-in-out;
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0 auto;
 }
 
 .main-sidebar:hover {
@@ -36,16 +42,17 @@
   width: 100%;
   min-height: 60px;
   overflow: visible;
+  position: relative;
 }
 
-.main-sidebar li span {
+.main-sidebar li .sidebar-label {
   margin-left: 0;
   font-size: 16px;
   line-height: 22px;
   opacity: 0;
   max-width: 0;
   overflow: hidden;
-  transition: opacity 0.2s, max-width 0.2s, margin-left 0.2s;
+  transition: opacity 0.8s ease-in-out, max-width 0.8s ease-in-out, margin-left 0.8s ease-in-out;
   display: inline-block;
   vertical-align: middle;
 }
@@ -53,12 +60,14 @@
 .main-sidebar:hover li {
   padding-left: 0;
   overflow: visible;
+  transition: all 0.8s ease-in-out;
 }
 
-.main-sidebar:hover li span {
+.main-sidebar:hover li .sidebar-label {
   opacity: 1;
   max-width: 200px;
   margin-left: 15px;
+  transition: opacity 0.8s ease-in-out, max-width 0.8s ease-in-out, margin-left 0.8s ease-in-out;
 }
 
 .main-sidebar li:hover {
@@ -70,6 +79,32 @@
   width: 24px;
   height: 24px;
   display: block;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #f44336;
+  color: #fff;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+  border: 2px solid #fff;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.main-sidebar:hover .badge {
+  right: 16px;
 }
 
 /* Media Queries para Responsividade */
@@ -97,8 +132,14 @@
     padding-left: 0;
   }
 
-  .main-sidebar li span {
+  .main-sidebar li .sidebar-label {
     font-size: 14px;
+  }
+
+  .badge {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
   }
 }
 
@@ -127,7 +168,13 @@
     padding-left: 0;
   }
 
-  .main-sidebar li span {
+  .main-sidebar li .sidebar-label {
     font-size: 12px;
   }
-} 
+
+  .badge {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+  }
+}

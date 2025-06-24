@@ -104,27 +104,38 @@ export const validateUpdateUserInput = withValidationErrors([
     .notEmpty()
     .withMessage("Nome é obrigatório!")
     .isLength({ min: 3, max: 50 })
-    .withMessage("Nome tem que ter entre 3 e 50 caracteres!"),
+    .withMessage("Nome deve ter entre 3 e 50 caracteres!"),
   body("email")
     .notEmpty()
     .withMessage("Email é obrigatório!")
-    .isEmail()
-    .withMessage("Email inválido!")
-    .custom(async (email, { req }) => {
-      const user = await Usuario.findOne({ email });
-      if (user && user._id.toString() !== req.user.userId) {
-        //verifica se o email já existe e se não é o mesmo do usuário logado
-        throw new Error("Email já cadastrado!");
-      }
-    }),
-  body("senha")
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Email deve ter entre 3 e 100 caracteres!"),
+  body("endereco")
     .notEmpty()
-    .withMessage("Senha é obrigatória!")
-    .isLength({ min: 6, max: 12 })
-    .withMessage("Senha tem que ter entre 6 e 12 caracteres!"),
+    .withMessage("Endereço é obrigatório!")
+    .isLength({ min: 5, max: 100 })
+    .withMessage("Endereço deve ter entre 5 e 100 caracteres!"),
   body("cpf")
     .notEmpty()
     .withMessage("CPF é obrigatório!")
     .isLength({ min: 11, max: 11 })
-    .withMessage("CPF tem que ter 11 caracteres!"),
+    .withMessage("CPF deve ter 11 caracteres!")
+    .matches(/^\d{11}$/)
+    .withMessage("CPF deve conter apenas números!"),
+  body("dataNascimento")
+    .notEmpty()
+    .withMessage("Data de nascimento é obrigatória!")
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage("Data de nascimento deve estar no formato YYYY-MM-DD!")
+    .custom((value) => {
+      const date = new Date(value + "T00:00:00Z");
+      const hoje = new Date();
+      if (isNaN(date.getTime())) {
+        throw new Error("Data de nascimento inválida!");
+      }
+      if (date > hoje) {
+        throw new Error("Data de nascimento não pode ser no futuro!");
+      }
+      return true;
+    }),
 ]);
