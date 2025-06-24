@@ -8,7 +8,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 import { Link } from "react-router-dom";
-import { formatDate } from "react-calendar/dist/esm/shared/dateFormatter.js";
+//import { formatDate } from "react-calendar/dist/esm/shared/dateFormatter.js";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
