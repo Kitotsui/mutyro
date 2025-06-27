@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import getImageUrl from "@/utils/imageUrlHelper";
 
-const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
+const Card = ({ id, image, title, date, user, wasDraggingRef, finalizado }) => {
   const handleClickCapture = (e) => {
     if (wasDraggingRef?.current) {
       e.preventDefault();
@@ -12,7 +12,7 @@ const Card = ({ id, image, title, date, user, wasDraggingRef }) => {
   };
 
   return (
-    <Wrapper className="card">
+    <Wrapper className={`card ${finalizado ? "finalizado" : ""}`}>
       <Link
         className="link-card"
         to={`/mutirao/${id}`}
