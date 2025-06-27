@@ -71,7 +71,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
     return classes.length > 0 ? classes.join(" ") : null;
   };
 
-  const handleDateChange = (value: any) => {
+  const handleDateChange = (value: unknown) => {
     // react-calendar onChange can return Date or Date[]
     if (value instanceof Date) {
       setSelectedDate(value);
