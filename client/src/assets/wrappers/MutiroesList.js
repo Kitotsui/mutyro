@@ -29,6 +29,12 @@ const Wrapper = styled.div`
       transform: translateY(-2px);
     }
 
+    &.finalizado {
+      background: var(--grey-200);
+      opacity: 0.8;
+      //pointer-events: none;
+    }
+
     img {
       width: 100%;
       height: 200px;

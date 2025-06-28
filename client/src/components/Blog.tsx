@@ -8,7 +8,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 import { Link } from "react-router-dom";
-import { formatDate } from "react-calendar/dist/esm/shared/dateFormatter.js";
+//import { formatDate } from "react-calendar/dist/esm/shared/dateFormatter.js";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import getImageUrl from "@/utils/imageUrlHelper";
@@ -19,6 +19,7 @@ interface Mutirao {
   titulo: string;
   data: string;
   criadoPor?: { nome?: string };
+  finalizado?: boolean;
 }
 
 interface BlogProps {
@@ -69,7 +70,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
     return classes.length > 0 ? classes.join(" ") : null;
   };
 
-  const handleDateChange = (value: any) => {
+  const handleDateChange = (value: unknown) => {
     // react-calendar onChange can return Date or Date[]
     if (value instanceof Date) {
       setSelectedDate(value);
@@ -134,6 +135,11 @@ const Blog = ({ mutiroes }: BlogProps) => {
     },
   ];
 
+  // Filtra os mutirões que não estão finalizados
+  const mutiroesAtivos = mutiroes.filter(
+    (mutirao) => mutirao.finalizado === false
+  );
+
   return (
     <Wrapper>
       <FilterBar />
@@ -147,7 +153,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
           <span className="carousel-label">Novidades</span>
         </div>
         <Carousel>
-          {mutiroes.map((mutirao) => {
+          {mutiroesAtivos.map((mutirao) => {
             const { _id, imagemCapa, titulo, data, criadoPor } = mutirao;
             return (
               <Card
@@ -196,7 +202,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
             to="/mutiroes"
             state={{ initialView: "month" }}
           >
-            <i class="fas fa-calendar" style={{ paddingRight: "10px" }}></i>
+            <i className="fas fa-calendar" style={{ paddingRight: "10px" }}></i>
             Calendário Completo
           </Link>
         </div>

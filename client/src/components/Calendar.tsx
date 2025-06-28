@@ -11,7 +11,7 @@ interface CalendarProps {
 const CustomCalendar = ({ onChange, value }: CalendarProps) => {
   const [selectedDate, setSelectedDate] = useState(value || new Date());
 
-  const handleDateChange = (value: any) => {
+  const handleDateChange = (value: unknown) => {
     if (value instanceof Date) {
       setSelectedDate(value);
       onChange?.(value);

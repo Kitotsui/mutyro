@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   background: var(--background-color);
-  min-height: 100vh;
+  //min-height: 100vh;
   font-family: "Open Sans", sans-serif;
 
   .main-container {
@@ -155,6 +155,25 @@ const Wrapper = styled.div`
         font-size: 1.2rem;
       }
     }
+
+    .back-btn {
+      background: none; /* Remove o fundo do botão */
+      border: none; /* Remove a borda do botão */
+      color: var(--primary-400); /* Define a cor padrão */
+      font-size: 1rem; /* Ajusta o tamanho da fonte */
+      font-weight: 600; /* Torna o texto mais destacado */
+      cursor: default; /* Cursor padrão para usuários sem permissão */
+      padding: 0; /* Remove o padding interno */
+      transition: color 0.2s ease;
+    }
+
+    .back-btn.clickable {
+      cursor: pointer; /* Cursor de clique para usuários com permissão */
+    }
+
+    .back-btn.clickable:hover {
+      text-decoration: underline; /* Opcional: adiciona sublinhado no hover */
+    }
   }
 
   .share-row {
@@ -212,6 +231,167 @@ const Wrapper = styled.div`
       transition: box-shadow 0.2s;
       &:hover {
         box-shadow: var(--shadow-3);
+      }
+    }
+
+    .avaliar-container {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+      label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+      }
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        transition: border-color 0.2s;
+        &:focus {
+          outline: none;
+          border-color: #0d9488;
+        }
+      }
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      button {
+        flex: 1;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .submit-btn {
+        background-color: #ff6f00;
+        color: white;
+        border: none;
+        &:hover {
+          background-color: #ff6f00;
+        }
+      }
+      .cancel-btn {
+        background-color: white;
+        color: #ff6f00;
+        border: 1px solid #e2e8f0;
+        &:hover {
+          background-color: #f8fafc;
+        }
+      }
+    }
+    .avaliacoes-list {
+      margin-top: 2rem;
+    }
+    .avaliacao-item {
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .avaliacao-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      h4 {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--grey-900);
+        margin: 0;
+        margin-right: 1rem;
+      }
+      .rating {
+        color: var(--grey-900);
+        font-weight: 600;
+        margin-right: auto;
+      }
+    }
+    .avaliacao-actions {
+      display: flex;
+      gap: 0.5rem;
+      button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .edit-btn {
+        background-color: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+        &:hover {
+          background-color: #dcfce7;
+        }
+      }
+      .delete-btn {
+        background-color: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        &:hover {
+          background-color: #fee2e2;
+        }
+      }
+    }
+    .comentario {
+      font-size: 0.875rem;
+      color: #334155;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .avaliacao-date {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .no-avaliacoes,
+    .avaliacoes-disabled {
+      text-align: center;
+      padding: 1.5rem;
+      color: #64748b;
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      border: 1px dashed #e2e8f0;
+    }
+    .checkbox {
+      margin-right: 20px;
+    }
+    @media (max-width: 768px) {
+      .button-group {
+        flex-direction: column;
+        button {
+          width: 100%;
+        }
+      }
+      .avaliacao-header {
+        flex-wrap: wrap;
+        h4 {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+      }
+      .avaliacao-actions {
+        width: 100%;
+        justify-content: flex-end;
       }
     }
   }

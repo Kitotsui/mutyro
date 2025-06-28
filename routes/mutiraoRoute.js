@@ -18,6 +18,12 @@ import {
   inscreverUsuario,
   cancelarInscricao,
   getMutiroesInativos,
+  getAvaliacoes,
+  criarAvaliacao,
+  atualizarAvaliacao,
+  deletarAvaliacao,
+  finalizarMutirao,
+  getInscritos,
 } from "../controllers/mutiraoController.js";
 
 const router = Router();
@@ -235,5 +241,97 @@ router
 router
   .route("/:id/cancelar")
   .delete(authenticateUser, validateIdParam, cancelarInscricao);
+
+  /**
+ * @swagger
+ * /mutiroes/{id}/inscritos:
+ *   get:
+ *     summary: Retorna os dados dos usuários inscritos em um mutirão
+ *     tags: [Mutiroes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     responses:
+ *       200:
+ *         description: Lista de usuários inscritos retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   nome:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       404:
+ *         description: Mutirão não encontrado
+ */
+router.route("/:id/inscritos").get(validateIdParam, getInscritos);
+
+router.route("/:id/avaliacoes")
+  .get(getAvaliacoes)
+  .post(authenticateUser, criarAvaliacao);
+
+router
+  .route("/:id/avaliacoes/:avaliacaoId")
+  .patch(authenticateUser, atualizarAvaliacao)
+  .delete(authenticateUser, deletarAvaliacao);
+
+router.route("/:id/finalizar")
+  .post(authenticateUser, finalizarMutirao);
+
+/**
+ * @swagger
+ * /mutiroes/{id}/inscritos:
+ *   get:
+ *     summary: Retorna os dados dos usuários inscritos em um mutirão
+ *     tags: [Mutiroes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     responses:
+ *       200:
+ *         description: Lista de usuários inscritos retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   nome:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       404:
+ *         description: Mutirão não encontrado
+ */
+router.route("/:id/inscritos").get(validateIdParam, getInscritos);
+
+router.route("/:id/avaliacoes")
+  .get(getAvaliacoes)
+  .post(authenticateUser, criarAvaliacao);
+
+router
+  .route("/:id/avaliacoes/:avaliacaoId")
+  .patch(authenticateUser, atualizarAvaliacao)
+  .delete(authenticateUser, deletarAvaliacao);
+
+router.route("/:id/finalizar")
+  .post(authenticateUser, finalizarMutirao);
 
 export default router;

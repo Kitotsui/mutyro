@@ -118,11 +118,11 @@ export const createMutirao = async (req, res) => {
     const diferencaMs = dataMutirao.getTime() - agora.getTime();
     const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
 
-    if (horasQueFaltam < 48) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
-      });
-    }
+    //if (horasQueFaltam < 48) {
+    //  return res.status(StatusCodes.BAD_REQUEST).json({
+    //    msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
+    //  });
+    //}
 
     // Validação dos dados de localização
 
@@ -267,11 +267,11 @@ export const updateMutirao = async (req, res) => {
   const agora = new Date();
   const diferencaMs = dataMutirao - agora;
 
-  if (diferencaMs < 48 * 60 * 60 * 1000) {
-    return res.status(400).json({
-      msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
-    });
-  }
+  //if (diferencaMs < 48 * 60 * 60 * 1000) {
+  //  return res.status(400).json({
+  //    msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
+  //  });
+  //}
 
   // Atualiza a imagem se uma nova foi enviada
   let imagePath = mutiraoExistente.imagemCapa; // Mantém o mesmo caminho antigo por padrão
@@ -442,8 +442,171 @@ export const cancelarInscricao = async (req, res) => {
     );
 };
 
-// Helper Functions
+//INSCRITOS
+export const getInscritos = async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    // Busca o mutirão e popula os inscritos com os campos necessários
+    const mutirao = await Mutirao.findById(id).populate(
+      "inscritos",
+      "_id nome email"
+    );
+
+    if (!mutirao) {
+      return res.status(404).json({ msg: "Mutirão não encontrado" });
+    }
+
+    // Retorna apenas os inscritos
+    res.status(200).json({ inscritos: mutirao.inscritos });
+  } catch (error) {
+    console.error("Erro ao buscar inscritos:", error);
+    res.status(500).json({ msg: "Erro ao buscar inscritos" });
+  }
+};
+
+//AVALIACOES
+export const getAvaliacoes = async (req, res) => {
+  const { id } = req.params;
+  const mutirao = await Mutirao.findById(id)
+    .populate("avaliacoes.usuario", "nome")
+    .select("avaliacoes");
+
+  if (!mutirao) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  res.status(200).json({ avaliacoes: mutirao.avaliacoes });
+};
+
+export const criarAvaliacao = async (req, res) => {
+  const { id } = req.params;
+  const { nota, comentario } = req.body;
+  const { userId } = req.user;
+
+  // Verifica se o mutirão existe e está finalizado
+  const mutirao = await Mutirao.findById(id);
+  if (!mutirao) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  if (!mutirao.finalizado) {
+    return res
+      .status(400)
+      .json({ msg: "Este mutirão ainda não foi finalizado" });
+  }
+
+  // Verifica se o usuário está inscrito no mutirão
+  if (!mutirao.inscritos.includes(userId)) {
+    return res
+      .status(403)
+      .json({ msg: "Apenas participantes podem avaliar este mutirão" });
+  }
+
+  // Verifica se o usuário já avaliou
+  const jaAvaliou = mutirao.avaliacoes.some(
+    (av) => av.usuario.toString() === userId
+  );
+  if (jaAvaliou) {
+    return res.status(400).json({ msg: "Você já avaliou este mutirão" });
+  }
+
+  // Cria a avaliação
+  const novaAvaliacao = {
+    usuario: userId,
+    nota,
+    comentario: comentario || "",
+  };
+
+  mutirao.avaliacoes.push(novaAvaliacao);
+  await mutirao.save();
+
+  res
+    .status(201)
+    .json({ msg: "Avaliação criada com sucesso", avaliacao: novaAvaliacao });
+};
+
+export const atualizarAvaliacao = async (req, res) => {
+  const { id, avaliacaoId } = req.params;
+  const { nota, comentario } = req.body;
+  const { userId } = req.user;
+
+  const mutirao = await Mutirao.findById(id);
+  if (!mutirao) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  const avaliacao = mutirao.avaliacoes.id(avaliacaoId);
+  if (!avaliacao) {
+    return res.status(404).json({ msg: "Avaliação não encontrada" });
+  }
+
+  // Verifica se o usuário é o autor da avaliação
+  if (avaliacao.usuario.toString() !== userId) {
+    return res.status(403).json({ msg: "Não autorizado" });
+  }
+
+  // Atualiza a avaliação
+  avaliacao.nota = nota;
+  avaliacao.comentario = comentario || "";
+  await mutirao.save();
+
+  res.status(200).json({ msg: "Avaliação atualizada com sucesso", avaliacao });
+};
+
+export const deletarAvaliacao = async (req, res) => {
+  const { id, avaliacaoId } = req.params;
+  const { userId } = req.user;
+
+  const mutirao = await Mutirao.findById(id);
+  if (!mutirao) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+
+  const avaliacao = mutirao.avaliacoes.id(avaliacaoId);
+  if (!avaliacao) {
+    return res.status(404).json({ msg: "Avaliação não encontrada" });
+  }
+
+  // Verifica se o usuário é o autor da avaliação ou admin
+  if (avaliacao.usuario.toString() !== userId && !req.user.isAdmin) {
+    return res.status(403).json({ msg: "Não autorizado" });
+  }
+
+  // Remove a avaliação
+  mutirao.avaliacoes.pull(avaliacaoId);
+  await mutirao.save();
+
+  res.status(200).json({ msg: "Avaliação removida com sucesso" });
+};
+
+export const finalizarMutirao = async () => {
+  const agora = new Date();
+  const mutiroesNaoFinalizados = await Mutirao.find({
+    finalizado: false,
+    data: { $lt: agora },
+  });
+
+  let marcados = 0;
+
+  for (const mutirao of mutiroesNaoFinalizados) {
+    const dataHoraMutirao = new Date(
+      `${mutirao.data}T${mutirao.horario || "00:00"}`
+    );
+    if (dataHoraMutirao < agora) {
+      mutirao.finalizado = true;
+      await mutirao.save();
+      marcados++;
+    }
+  }
+
+  return {
+    total: mutiroesNaoFinalizados.length,
+    marcados: marcados,
+  };
+};
+
+// Helper Functions
 function mergeEndereco(local, numeroEComplemento) {
   if (!local) return "";
   let enderecoFinal = local.trim();

@@ -6,7 +6,6 @@ import { RATE_LIMIT_DELAY } from "../config";
 import { getActiveGeocodingService } from "../services/geocodingServiceFactory";
 import {
   GeocodingSuggestion,
-  AddressComponents,
 } from "../services/geocodingService.types";
 
 interface AddressAutocompleteProps {
