@@ -1,4 +1,4 @@
-import { FaUser, FaCog, FaUsers, FaEnvelope, FaComments } from "react-icons/fa";
+import { FaUser, FaCog, FaEnvelope, FaComments, FaCalendarAlt } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       active: true,
       onClick: () => navigate("/editarusuario"), // Aqui é o redirecionamento para a página EditarUsuario
     },
-    { icon: <FaUsers />, label: "Comunidade" },
+    { icon: <FaCalendarAlt />, label: "Mutirões", onClick: () => navigate('/mutiroes') },
     {
       icon: (
         <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32 }}>
@@ -48,8 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       label: "Notificações",
       onClick: () => navigate('/notificacoes'),
     },
-    { icon: <FaComments />, label: "Chat", onClick: () => navigate('/chat') },
-    { icon: <FaCog />, label: "Configurações" },
+    { icon: <FaComments />, label: "FAQ", onClick: () => navigate('/faq') },
+    { icon: <FaCog />, label: "Configurações", onClick: () => navigate('/configuracoes') },
   ];
 
   const menuItemsToUse = menuItems || defaultMenu;
