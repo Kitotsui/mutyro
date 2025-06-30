@@ -8,3 +8,5 @@ export { default as NovoMutirao } from "./NovoMutirao";
 export { default as Notificacoes } from "./Notificacoes";
 export { default as VisualizarMutirao } from "./VisualizarMutirao";
 export { default as CalendarioCompleto } from "./CalendarioCompleto";
+export { default as FAQ } from "./FAQ";
+export { default as Configuracoes } from "./Configuracoes";

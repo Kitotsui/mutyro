@@ -11,6 +11,8 @@ import {
 import { AuthProvider } from "./context/AuthContext";
 import EditarMutirao from "./pages/EditarMutirao";
 import CalendarioCompleto from "./pages/CalendarioCompleto";
+import FAQ from "./pages/FAQ";
+import Configuracoes from "./pages/Configuracoes";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
@@ -20,6 +22,7 @@ import { loader as landingLoader } from "./pages/Landing";
 import { loader as novoMutiraoLoader } from "./pages/NovoMutirao";
 import { loader as calendarioCompletoLoader } from "./pages/CalendarioCompleto";
 import EditarUsuario from "./pages/EditarUsuario";
+import { IdiomaProvider } from "./context/IdiomaContext";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +70,14 @@ const router = createBrowserRouter([
         path: "editarusuario",
         element: <EditarUsuario />,
       },
+      {
+        path: "faq",
+        element: <FAQ />,
+      },
+      {
+        path: "configuracoes",
+        element: <Configuracoes />,
+      },
     ],
   },
   {
@@ -77,9 +88,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <IdiomaProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </IdiomaProvider>
   );
 };
 
