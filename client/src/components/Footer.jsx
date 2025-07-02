@@ -14,10 +14,10 @@ const Footer = () => {
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="#">Termos</a>
+              <a href="/termosdeuso">Termos</a>
             </li>
             <li>
-              <a href="#">Privacidade</a>
+              <a href="/politicaprivacidade">Privacidade</a>
             </li>
             <li>
               <a href="mailto:">Contato</a>

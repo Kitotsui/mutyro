@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import {
@@ -120,9 +121,27 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
         <FormRow
           placeHolder="Confirmar Senha"
           type="password"
-          name="confirmarSenha"
+          name="confirmar Senha"
           //defaultValue="88888888"
         />
+        <div className="termos">
+          <label htmlFor="terms">
+            <input type="checkbox" required />
+            Eu li e concordo com os{" "}
+            <a href="/termosdeuso" target="_blank" rel="noopener noreferrer">
+              Termos de Uso
+            </a>{" "}
+            e a{" "}
+            <a
+              href="/politicaprivacidade"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Política de Privacidade
+            </a>
+            .
+          </label>
+        </div>
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? "Cadastrando..." : "Cadastrar"}
         </button>

@@ -1,15 +1,24 @@
-import React from "react";
-import { Link, useRouteError } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Wrapper from "../assets/wrappers/Error404";
 
-const Error = () => {
-    const error = useRouteError();
-    console.log(error);
+const Error404 = () => {
   return (
-    <div>
-      <h1>Error</h1>
-      <Link to="/">Home</Link>
-    </div>
+    <Wrapper>
+      <div className="error-container">
+        <div className="error-content">
+          <h1>404</h1>
+          <h2>Página não encontrada</h2>
+          <p>
+            Desculpe, a página que você está tentando acessar não existe ou foi
+            removida.
+          </p>
+          <Link to="/" className="back-btn">
+            Voltar para a página inicial
+          </Link>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 
-export default Error;
+export default Error404;

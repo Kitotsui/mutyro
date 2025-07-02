@@ -139,21 +139,6 @@ router.route("/inativos").get(authenticateUser, getMutiroesInativos);
 /**
  * @swagger
  * /mutiroes/{id}:
- *   parameters:
- *     - name: id
- *       in: path
- *       required: true
- *       description: ID do mutirão
- *       schema:
- *         type: string
- *   get:
- *     summary: Retorna um mutirão específico (acessível por guests e usuários)
- *     tags: [Mutiroes]
- *     responses:
- *       200:
- *         description: Mutirão retornado com sucesso
- *       404:
- *         description: Mutirão não encontrado
  *   patch:
  *     summary: Atualiza um mutirão existente (requer autenticação e ser o dono ou admin)
  *     tags: [Mutiroes]
@@ -175,25 +160,11 @@ router.route("/inativos").get(authenticateUser, getMutiroesInativos);
  *       200:
  *         description: Mutirão atualizado com sucesso
  *       400:
- *         description: Dados inválidos ou regra de negócio violada (ex: 48h)
+ *         description: Dados inválidos ou regra de negócio violada, como o prazo de 48 horas
  *       401:
  *         description: Não autenticado
  *       403:
  *         description: Não autorizado (não é o dono ou admin)
- *       404:
- *         description: Mutirão não encontrado
- *   delete:
- *     summary: Marca um mutirão como inativo (requer autenticação e ser o dono ou admin)
- *     tags: [Mutiroes]
- *     security:
- *       - cookieAuth: []
- *     responses:
- *       200:
- *         description: Mutirão marcado como inativo com sucesso
- *       401:
- *         description: Não autenticado
- *       403:
- *         description: Não autorizado
  *       404:
  *         description: Mutirão não encontrado
  */

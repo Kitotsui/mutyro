@@ -138,6 +138,29 @@ const Wrapper = styled.section`
       text-decoration: underline;
     }
   }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--grey-700);
+
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      transform: scale(1.2);
+    }
+
+    a {
+      color: var(--primary-100);
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--primary-300);
+      }
+    }
+  }
 `;
 
 export default Wrapper;
