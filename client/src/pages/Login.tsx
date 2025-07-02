@@ -81,13 +81,13 @@ const Login = ({ switchToRegister, closeModal }: Props) => {
           placeHolder="Usuário ou Email"
           type="email"
           name="email"
-          defaultValue="grosbilda@gmail.com"
+          //defaultValue="grosbilda@gmail.com"
         />
         <FormRow
           placeHolder="Senha"
           type="password"
           name="senha"
-          defaultValue="secret123"
+          //defaultValue="secret123"
         />
         <button type="submit" className="btn btn-block">
           Login

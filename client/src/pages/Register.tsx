@@ -97,31 +97,31 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
           placeHolder="Nome"
           type="text"
           name="nome"
-          defaultValue="Usuario"
+          //defaultValue="Usuario"
         />
         <FormRow
           placeHolder="Email"
           type="email"
           name="email"
-          defaultValue="usuario@gmail.com"
+          //defaultValue="usuario@gmail.com"
         />
         <FormRow
           placeHolder="CPF"
           type="text"
           name="cpf"
-          defaultValue="00000000000"
+          //defaultValue="00000000000"
         />
         <FormRow
           placeHolder="Senha"
           type="password"
           name="senha"
-          defaultValue="88888888"
+          //defaultValue="88888888"
         />
         <FormRow
           placeHolder="Confirmar Senha"
           type="password"
           name="confirmarSenha"
-          defaultValue="88888888"
+          //defaultValue="88888888"
         />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? "Cadastrando..." : "Cadastrar"}

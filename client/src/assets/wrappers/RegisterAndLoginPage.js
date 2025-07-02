@@ -117,6 +117,7 @@ const Wrapper = styled.section`
     justify-content: center;
     gap: 0.5rem;
     transition: all 0.2s;
+    cursor: pointer;
     &:hover {
       background: var(--grey-100);
       border-color: var(--grey-300);

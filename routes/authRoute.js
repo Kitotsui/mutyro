@@ -36,9 +36,15 @@ router.post('/cadastro', validateCadastroInput, cadastro);
  *                 type: string
  *               senha:
  *                 type: string
+ *             example:
+ *               nome: "João Silva"
+ *               email: "joaosilva@gmail.com"
+ *               senha: "123456"
  *     responses:
  *       201:
  *         description: Usuário cadastrado com sucesso
+ *       400:
+ *         description: Dados inválidos
  */
 router.post('/cadastro', validateCadastroInput, cadastro);
 
@@ -62,9 +68,34 @@ router.post('/cadastro', validateCadastroInput, cadastro);
  *                 type: string
  *               senha:
  *                 type: string
+ *             example:
+ *               email: "joaosilva@gmail.com"
+ *               senha: "123456"
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 usuario:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     nome:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     isAdmin:
+ *                       type: boolean
+ *       401:
+ *         description: Credenciais inválidas
  */
 router.post('/login', validateLoginInput, login);
 
@@ -80,9 +111,31 @@ router.post('/login', validateLoginInput, login);
  */
 router.get('/logout', logout);
 
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary: Inicia o processo de autenticação via Google
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: Redireciona para a página de login do Google
+ */
 router.get('/google', passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+/**
+ * @swagger
+ * /auth/google/callback:
+ *   get:
+ *     summary: Callback do Google após autenticação
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: Redireciona para a página de usuário no frontend
+ *       500:
+ *         description: Erro ao processar autenticação via Google
+ */
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/" }), googleCallback);
 
 
