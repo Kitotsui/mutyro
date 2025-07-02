@@ -110,6 +110,7 @@ const Wrapper = styled.section`
     border: 1px solid var(--grey-200);
     border-radius: 8px;
     padding: 12px 16px;
+    margin-top: 5px;
     width: 100%;
     display: flex;
     align-items: center;

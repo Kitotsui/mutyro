@@ -1,6 +1,7 @@
 import {Router} from 'express';
-import {login, cadastro, logout} from '../controllers/authController.js';
+import {login, cadastro, logout, googleCallback} from '../controllers/authController.js';
 import { validateCadastroInput, validateLoginInput } from '../middleware/validationMiddleware.js';
+import passport from "passport";
 const router = Router();
 
 router.post('/cadastro', validateCadastroInput, cadastro);
@@ -78,6 +79,11 @@ router.post('/login', validateLoginInput, login);
  *         description: Logout realizado com sucesso
  */
 router.get('/logout', logout);
+
+router.get('/google', passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/" }), googleCallback);
 
 
 export default router;
