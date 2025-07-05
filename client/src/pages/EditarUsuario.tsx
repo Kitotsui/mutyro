@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Wrapper from "../assets/wrappers/EditarUsuario";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect } from "react-router-dom";
 import customFetch from "@/utils/customFetch";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
+
+export const loader = async () => {
+  try {
+    await customFetch.get("/usuarios/atual-usuario");
+    return null; // Usuário autenticado, permite acesso
+  } catch {
+    toast.error("Você precisa estar logado para editar seu perfil.");
+    return redirect("/"); // Redireciona para a tela inicial
+  }
+};
 
 const EditarUsuario = () => {
   const { usuario, setUsuario } = useAuth();

@@ -118,11 +118,11 @@ export const createMutirao = async (req, res) => {
     const diferencaMs = dataMutirao.getTime() - agora.getTime();
     const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
 
-    //if (horasQueFaltam < 48) {
-    //  return res.status(StatusCodes.BAD_REQUEST).json({
-    //    msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
-    //  });
-    //}
+    if (horasQueFaltam < 48) {
+     return res.status(StatusCodes.BAD_REQUEST).json({
+       msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
+     });
+    }
 
     // Validação dos dados de localização
 
@@ -267,11 +267,11 @@ export const updateMutirao = async (req, res) => {
   const agora = new Date();
   const diferencaMs = dataMutirao - agora;
 
-  //if (diferencaMs < 48 * 60 * 60 * 1000) {
-  //  return res.status(400).json({
-  //    msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
-  //  });
-  //}
+  if (diferencaMs < 48 * 60 * 60 * 1000) {
+   return res.status(400).json({
+     msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
+   });
+  }
 
   // Atualiza a imagem se uma nova foi enviada
   let imagePath = mutiraoExistente.imagemCapa; // Mantém o mesmo caminho antigo por padrão

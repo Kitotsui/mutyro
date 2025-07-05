@@ -110,12 +110,14 @@ const Wrapper = styled.section`
     border: 1px solid var(--grey-200);
     border-radius: 8px;
     padding: 12px 16px;
+    margin-top: 5px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     transition: all 0.2s;
+    cursor: pointer;
     &:hover {
       background: var(--grey-100);
       border-color: var(--grey-300);
@@ -134,6 +136,29 @@ const Wrapper = styled.section`
     &:hover {
       color: var(--primary-50);
       text-decoration: underline;
+    }
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--grey-700);
+
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      transform: scale(1.2);
+    }
+
+    a {
+      color: var(--primary-100);
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--primary-300);
+      }
     }
   }
 `;

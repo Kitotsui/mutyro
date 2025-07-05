@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     padding: 2rem;
     border-radius: 0.5rem;
     width: 90%;
-    max-width: 500px;
+    max-width: 45vmax;
     text-align: center;
   }
   h1 {
@@ -41,6 +41,7 @@ const Wrapper = styled.div`
   .inscrito-nome {
     text-align: left; /* Alinha o nome à esquerda */
     flex: 1; /* Faz o nome ocupar o espaço disponível */
+    margin-left: 1rem; /* Margem à esquerda para espaçamento */
   }
   .inscrito-email {
     text-align: right; /* Alinha o email à direita */

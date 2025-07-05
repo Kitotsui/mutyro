@@ -42,8 +42,8 @@ const router = Router();
  *     summary: Lista todos os mutirões ativos (acessível por guests e usuários)
  *     tags: [Mutiroes]
  *     responses:
- *       '200':
- *         description: "Lista de mutirões retornada com sucesso"
+ *       200:
+ *         description: Lista de mutirões retornada com sucesso
  */
 router.route("/todos").get(populateUserIfLoggedIn, getTodosMutiroes);
 
@@ -56,10 +56,10 @@ router.route("/todos").get(populateUserIfLoggedIn, getTodosMutiroes);
  *     security:
  *       - cookieAuth: []
  *     responses:
- *       '200':
- *         description: "Lista de mutirões do usuário retornada com sucesso"
- *       '401':
- *         description: "Não autenticado"
+ *       200:
+ *         description: Lista de mutirões do usuário retornada com sucesso
+ *       401:
+ *         description: Não autenticado
  *   post:
  *     summary: Cria um novo mutirão (requer autenticação)
  *     tags: [Mutiroes]
@@ -72,25 +72,43 @@ router.route("/todos").get(populateUserIfLoggedIn, getTodosMutiroes);
  *           schema:
  *             type: object
  *             properties:
- *               titulo: { type: string }
- *               data: { type: string, format: date }
- *               horario: { type: string }
- *               descricao: { type: string }
- *               local: { type: string }
- *               numeroEComplemento: { type: string }
- *               latitude: { type: string }
- *               longitude: { type: string }
- *               materiais: { type: array, items: { type: string } }
- *               tarefas: { type: array, items: { type: string } }
- *               mutiraoTipo: { type: string }
- *               imagemCapa: { type: string, format: binary }
+ *               titulo:
+ *                 type: string
+ *               data:
+ *                 type: string
+ *                 format: date
+ *               horario:
+ *                 type: string
+ *               descricao:
+ *                 type: string
+ *               local:
+ *                 type: string
+ *               numeroEComplemento:
+ *                 type: string
+ *               latitude:
+ *                 type: string
+ *               longitude:
+ *                 type: string
+ *               materiais:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               tarefas:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               mutiraoTipo:
+ *                 type: string
+ *               imagemCapa:
+ *                 type: string
+ *                 format: binary
  *     responses:
- *       '201':
- *         description: "Mutirão criado com sucesso"
- *       '400':
- *         description: "Dados de entrada inválidos"
- *       '401':
- *         description: "Não autenticado"
+ *       201:
+ *         description: Mutirão criado com sucesso
+ *       400:
+ *         description: Dados de entrada inválidos
+ *       401:
+ *         description: Não autenticado
  */
 router
   .route("/")
@@ -111,31 +129,16 @@ router
  *     security:
  *       - cookieAuth: []
  *     responses:
- *       '200':
- *         description: "Lista de mutirões inativos retornada com sucesso"
- *       '401':
- *         description: "Não autenticado"
+ *       200:
+ *         description: Lista de mutirões inativos retornada com sucesso
+ *       401:
+ *         description: Não autenticado
  */
 router.route("/inativos").get(authenticateUser, getMutiroesInativos);
 
 /**
  * @swagger
  * /mutiroes/{id}:
- *   parameters:
- *     - name: id
- *       in: path
- *       required: true
- *       description: ID do mutirão
- *       schema:
- *         type: string
- *   get:
- *     summary: Retorna um mutirão específico (acessível por guests e usuários)
- *     tags: [Mutiroes]
- *     responses:
- *       '200':
- *         description: "Mutirão retornado com sucesso"
- *       '404':
- *         description: "Mutirão não encontrado"
  *   patch:
  *     summary: Atualiza um mutirão existente (requer autenticação e ser o dono ou admin)
  *     tags: [Mutiroes]
@@ -148,33 +151,22 @@ router.route("/inativos").get(authenticateUser, getMutiroesInativos);
  *           schema:
  *             type: object
  *             properties:
- *               titulo: { type: string }
- *               imagemCapa: { type: string, format: binary }
+ *               titulo:
+ *                 type: string
+ *               imagemCapa:
+ *                 type: string
+ *                 format: binary
  *     responses:
- *       '200':
- *         description: "Mutirão atualizado com sucesso"
- *       '400':
- *         description: "Dados inválidos ou regra de negócio violada (ex: 48h)"
- *       '401':
- *         description: "Não autenticado"
- *       '403':
- *         description: "Não autorizado (não é o dono ou admin)"
- *       '404':
- *         description: "Mutirão não encontrado"
- *   delete:
- *     summary: Marca um mutirão como inativo (requer autenticação e ser o dono ou admin)
- *     tags: [Mutiroes]
- *     security:
- *       - cookieAuth: []
- *     responses:
- *       '200':
- *         description: "Mutirão marcado como inativo com sucesso"
- *       '401':
- *         description: "Não autenticado"
- *       '403':
- *         description: "Não autorizado"
- *       '404':
- *         description: "Mutirão não encontrado"
+ *       200:
+ *         description: Mutirão atualizado com sucesso
+ *       400:
+ *         description: Dados inválidos ou regra de negócio violada, como o prazo de 48 horas
+ *       401:
+ *         description: Não autenticado
+ *       403:
+ *         description: Não autorizado (não é o dono ou admin)
+ *       404:
+ *         description: Mutirão não encontrado
  */
 router
   .route("/:id")
@@ -204,12 +196,12 @@ router
  *         schema:
  *           type: string
  *     responses:
- *       '200':
- *         description: "Usuário inscrito com sucesso no mutirão"
- *       '401':
- *         description: "Não autenticado"
- *       '404':
- *         description: "Mutirão não encontrado"
+ *       200:
+ *         description: Usuário inscrito com sucesso no mutirão
+ *       401:
+ *         description: Não autenticado
+ *       404:
+ *         description: Mutirão não encontrado
  */
 router
   .route("/:id/inscrever")
@@ -231,18 +223,18 @@ router
  *         schema:
  *           type: string
  *     responses:
- *       '200':
- *         description: "Inscrição cancelada com sucesso"
- *       '401':
- *         description: "Não autenticado"
- *       '404':
- *         description: "Mutirão não encontrado"
+ *       200:
+ *         description: Inscrição cancelada com sucesso
+ *       401:
+ *         description: Não autenticado
+ *       404:
+ *         description: Mutirão não encontrado
  */
 router
   .route("/:id/cancelar")
   .delete(authenticateUser, validateIdParam, cancelarInscricao);
 
-  /**
+/**
  * @swagger
  * /mutiroes/{id}/inscritos:
  *   get:
@@ -276,15 +268,180 @@ router
  */
 router.route("/:id/inscritos").get(validateIdParam, getInscritos);
 
+/**
+ * @swagger
+ * /mutiroes/{id}/avaliacoes:
+ *   get:
+ *     summary: Retorna as avaliações de um mutirão
+ *     tags: [Mutiroes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     responses:
+ *       200:
+ *         description: Lista de avaliações retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   usuario:
+ *                     type: object
+ *                     properties:
+ *                       nome:
+ *                         type: string
+ *                   nota:
+ *                     type: number
+ *                   comentario:
+ *                     type: string
+ *       404:
+ *         description: Mutirão não encontrado
+ *   post:
+ *     summary: Cria uma avaliação para um mutirão
+ *     tags: [Mutiroes]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nota:
+ *                 type: number
+ *               comentario:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Avaliação criada com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Não autenticado
+ *       403:
+ *         description: Não autorizado
+ *       404:
+ *         description: Mutirão não encontrado
+ */
 router.route("/:id/avaliacoes")
   .get(getAvaliacoes)
   .post(authenticateUser, criarAvaliacao);
 
+/**
+ * @swagger
+ * /mutiroes/{id}/avaliacoes/{avaliacaoId}:
+ *   patch:
+ *     summary: Atualiza uma avaliação de um mutirão
+ *     tags: [Mutiroes]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *       - in: path
+ *         name: avaliacaoId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da avaliação
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nota:
+ *                 type: number
+ *               comentario:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Avaliação atualizada com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Não autenticado
+ *       403:
+ *         description: Não autorizado
+ *       404:
+ *         description: Mutirão ou avaliação não encontrado
+ *   delete:
+ *     summary: Remove uma avaliação de um mutirão
+ *     tags: [Mutiroes]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *       - in: path
+ *         name: avaliacaoId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID da avaliação
+ *     responses:
+ *       200:
+ *         description: Avaliação removida com sucesso
+ *       401:
+ *         description: Não autenticado
+ *       403:
+ *         description: Não autorizado
+ *       404:
+ *         description: Mutirão ou avaliação não encontrado
+ */  
 router
   .route("/:id/avaliacoes/:avaliacaoId")
   .patch(authenticateUser, atualizarAvaliacao)
   .delete(authenticateUser, deletarAvaliacao);
 
+/**
+ * @swagger
+ * /mutiroes/{id}/finalizar:
+ *   post:
+ *     summary: Finaliza um mutirão
+ *     tags: [Mutiroes]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID do mutirão
+ *     responses:
+ *       200:
+ *         description: Mutirão finalizado com sucesso
+ *       401:
+ *         description: Não autenticado
+ *       403:
+ *         description: Não autorizado
+ *       404:
+ *         description: Mutirão não encontrado
+ */  
 router.route("/:id/finalizar")
   .post(authenticateUser, finalizarMutirao);
 
