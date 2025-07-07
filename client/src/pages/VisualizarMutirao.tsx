@@ -565,13 +565,29 @@ const VisualizarMutirao = () => {
                 </span>
                 <span className="info-item">
                   <button
-                    className={`back-btn ${currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) ? "clickable" : ""}`}
+                    className={`back-btn ${
+                      currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin)
+                        ? "clickable"
+                        : ""
+                    }`}
                     onClick={() => {
-                      if (currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)) {
+                      if (
+                        currentUser &&
+                        (currentUser._id === mutirao.criadoPor._id ||
+                          currentUser.isAdmin)
+                      ) {
                         setShowModal(true); // Abre o modal apenas para o criador ou admin
                       }
                     }}
-                    disabled={!currentUser || !(currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)}
+                    disabled={
+                      !currentUser ||
+                      !(
+                        currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin
+                      )
+                    }
                   >
                     <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
                   </button>
@@ -611,7 +627,7 @@ const VisualizarMutirao = () => {
                   ))}
                 </div>
               </div>
-              <div className="card-section">
+              {/* <div className="card-section">
                 <h3>
                   <FaTools /> Habilidades
                 </h3>
@@ -631,7 +647,7 @@ const VisualizarMutirao = () => {
                     </label>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <div className="card-section">
                 <h3>
                   <FaTools /> Materiais e Ferramentas
@@ -877,25 +893,34 @@ const VisualizarMutirao = () => {
               ) : (
                 <>
                   <div className="side-card">
-                    <h3>Termo de Aceitação</h3>
-                    <div className="side-termo">
-                      Eu concordo em participar deste mutirão de forma
-                      voluntária, contribuindo com minhas habilidades e seguindo
-                      as orientações dos organizadores. Entendo que o objetivo é
-                      desenvolver melhorias para a comunidade e, se necessário,
-                      trarei meus próprios equipamentos para colaborar.
-                      Comprometo-me a agir com respeito, responsabilidade e
-                      colaboração, garantindo um ambiente seguro e inclusivo
-                      para todos os participantes.
-                    </div>
-                    <label className="side-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={aceitouTermo}
-                        onChange={(e) => setAceitouTermo(e.target.checked)}
-                      />
-                      <span>Aceito os termos e condições</span>
-                    </label>
+                    {authContextUsuario &&
+                      authContextUsuario._id !== mutirao.criadoPor._id &&
+                      (
+                        <>
+                          <h3>Termo de Aceitação</h3>
+                          <div className="side-termo">
+                            Eu concordo em participar deste mutirão de forma
+                            voluntária, contribuindo com minhas habilidades e
+                            seguindo as orientações dos organizadores. Entendo
+                            que o objetivo é desenvolver melhorias para a
+                            comunidade e, se necessário, trarei meus próprios
+                            equipamentos para colaborar. Comprometo-me a agir
+                            com respeito, responsabilidade e colaboração,
+                            garantindo um ambiente seguro e inclusivo para todos
+                            os participantes.
+                          </div>
+                          <label className="side-checkbox">
+                            <input
+                              type="checkbox"
+                              checked={aceitouTermo}
+                              onChange={(e) =>
+                                setAceitouTermo(e.target.checked)
+                              }
+                            />
+                            <span>Aceito os termos e condições</span>
+                          </label>
+                        </>
+                      )}
                     <div className="side-btns">
                       {podeParticipar && (
                         <button

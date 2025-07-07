@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Wrapper from "../assets/wrappers/TermosUso";
 
 const TermosUso = () => {
@@ -125,6 +126,12 @@ const TermosUso = () => {
           que quaisquer disputas decorrentes do uso da plataforma deverão ser
           dirimidas no foro da comarca onde se situa a sede da Mutyro.
         </p>
+
+        <div className="cta-section">
+          <Link to="/" className="btn cta-btn">
+            Voltar para página inicial
+          </Link>
+        </div>        
       </div>
     </Wrapper>
   );

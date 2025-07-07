@@ -62,6 +62,36 @@ const Wrapper = styled.div`
       color: var(--primary-300);
     }
   }
+
+  .cta-section {
+    text-align: center;
+    padding: 2rem;
+    background: var(--grey-50);
+    border-radius: var(--border-radius);
+  }
+
+  .cta-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+  }
+
+  .cta-btn {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+
+  .cta-btn:hover {
+    background: var(--secondary-color);
+    color: var(--white);
+  }
 `;
 
 export default Wrapper;

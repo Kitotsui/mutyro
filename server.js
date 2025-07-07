@@ -37,7 +37,7 @@ const __dirname = dirname(__filename);
 // Configuração do express-session
 app.use(
   session({
-    secret: process.env.JWT_SECRET, // Substitua por uma string segura em produção
+    secret: process.env.JWT_SECRET, 
     resave: false, // Não salva a sessão novamente se não houver alterações
     saveUninitialized: true, // Salva sessões não inicializadas
     cookie: {

@@ -193,7 +193,7 @@ const UserSidebar = ({
         </div>
 
         {/* Interesses */}
-        <div className="card interests">
+        {/* <div className="card interests">
           <div className="header">
             <h2>Seus Interesses</h2>
             <button>Ver todos</button>
@@ -203,7 +203,7 @@ const UserSidebar = ({
               <span key={interesse}>{interesse}</span>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </Wrapper>
   );

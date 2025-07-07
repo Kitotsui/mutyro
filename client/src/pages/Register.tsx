@@ -125,21 +125,29 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
           //defaultValue="88888888"
         />
         <div className="termos">
-          <label htmlFor="terms">
+          <label className="side-checkbox">
             <input type="checkbox" required />
-            Eu li e concordo com os{" "}
-            <a href="/termosdeuso" target="_blank" rel="noopener noreferrer">
-              Termos de Uso
-            </a>{" "}
-            e a{" "}
-            <a
-              href="/politicaprivacidade"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Política de Privacidade
-            </a>
-            .
+            <span>
+              Eu li e concordo com os{" "}
+              <a
+                href="/termosdeuso"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-esqueci"
+              >
+                Termos de Uso
+              </a> {" "}
+              e a {" "}
+              <a
+                href="/politicaprivacidade"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-esqueci"
+              >
+                Política de Privacidade
+              </a>
+              .
+            </span>
           </label>
         </div>
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>

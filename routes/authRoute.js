@@ -1,6 +1,8 @@
 import {Router} from 'express';
-import {login, cadastro, logout, googleCallback} from '../controllers/authController.js';
+import {login, cadastro, logout, googleCallback, enviarLinkRedefinicao, redefinirSenha} from '../controllers/authController.js';
 import { validateCadastroInput, validateLoginInput } from '../middleware/validationMiddleware.js';
+import { redefinirSenhaUsuario } from "../controllers/userController.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
 import passport from "passport";
 const router = Router();
 
@@ -138,5 +140,103 @@ router.get('/google', passport.authenticate("google", { scope: ["profile", "emai
  */
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/" }), googleCallback);
 
+// Rota para enviar o link de redefinição de senha
+/**
+ * @swagger
+ * /auth/redefinir-senha:
+ *   post:
+ *     summary: Envia um link de redefinição de senha para o e-mail do usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *             example:
+ *               email: "joaosilva@gmail.com"
+ *     responses:
+ *       200:
+ *         description: Link de redefinição enviado com sucesso
+ *       404:
+ *         description: Usuário não encontrado
+ *       500:
+ *         description: Erro ao enviar o link de redefinição
+ */
+router.post("/redefinir-senha", enviarLinkRedefinicao);
+
+// Rota para redefinir a senha
+/**
+ * @swagger
+ * /auth/redefinir-senha/confirmar:
+ *   post:
+ *     summary: Redefine a senha do usuário usando o token enviado por e-mail
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - novaSenha
+ *             properties:
+ *               token:
+ *                 type: string
+ *               novaSenha:
+ *                 type: string
+ *             example:
+ *               token: "abc123xyz"
+ *               novaSenha: "novaSenha123"
+ *     responses:
+ *       200:
+ *         description: Senha redefinida com sucesso
+ *       400:
+ *         description: Token inválido ou expirado
+ *       500:
+ *         description: Erro ao redefinir a senha
+ */
+router.post("/redefinir-senha/confirmar", redefinirSenha);
+
+/**
+ * @swagger
+ * /auth/recuperar-senha:
+ *   post:
+ *     summary: Redefine a senha do usuário autenticado
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - senhaAtual
+ *               - novaSenha
+ *             properties:
+ *               senhaAtual:
+ *                 type: string
+ *               novaSenha:
+ *                 type: string
+ *             example:
+ *               senhaAtual: "senhaAtual123"
+ *               novaSenha: "novaSenha123"
+ *     responses:
+ *       200:
+ *         description: Senha redefinida com sucesso
+ *       400:
+ *         description: Senha atual incorreta
+ *       404:
+ *         description: Usuário não encontrado
+ *       500:
+ *         description: Erro ao redefinir a senha
+ */
+router.post("/recuperar-senha", authenticateUser, redefinirSenhaUsuario);
 
 export default router;
