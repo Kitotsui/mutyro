@@ -92,7 +92,7 @@ const Login = ({ switchToRegister, closeModal }: Props) => {
         <button type="submit" className="btn btn-block">
           Login
         </button>
-        <a href="#" className="link-esqueci">
+        <a href="/redefinir-senha" className="link-esqueci">
           Esqueceu sua senha?
         </a>
         <div className="divider">

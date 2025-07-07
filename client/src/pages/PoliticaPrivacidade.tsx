@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Wrapper from "../assets/wrappers/PoliticaPrivacidade";
 
 const PrivacyPolicy = () => {
@@ -85,7 +86,13 @@ const PrivacyPolicy = () => {
           recursos que você usa em nosso site.
         </p>
 
-        <p>Esta política é efetiva a partir de 2 de julho de 2025.</p>
+        <p>Esta política é efetiva a partir de 2 de julho de 2025.</p> 
+
+        <div className="cta-section">
+          <Link to="/" className="btn cta-btn">
+            Voltar para página inicial
+          </Link>
+        </div>                 
       </div>
     </Wrapper>
   );

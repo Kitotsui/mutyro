@@ -16,6 +16,8 @@ import FAQ from "./pages/FAQ";
 import Configuracoes from "./pages/Configuracoes";
 import PoliticaPrivacidade from "./pages/PoliticaPrivacidade";
 import TermosUso from "./pages/TermosUso";
+import SolicitarRedefinicao from "./pages/SolicitarRedefinicao";
+import RedefinirSenha from "./pages/RedefinirSenha";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
       {
         path: "sobre",
         element: <Sobre />,
+      },
+      {
+        path: "redefinir-senha",
+        element: <SolicitarRedefinicao />,
+      },
+      {
+        path: "redefinir-senha/:token",
+        element: <RedefinirSenha />,
       },
     ],
   },

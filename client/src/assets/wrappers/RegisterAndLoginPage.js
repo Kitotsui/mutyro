@@ -77,12 +77,12 @@ const Wrapper = styled.section`
     color: var(--grey-400);
     font-weight: 400;
     font-size: 0.875rem;
-    display: block;
+    display: inline;
     text-align: center;
     text-decoration: none;
     transition: color 0.2s;
     &:hover {
-      color: var(--primary-600);
+      color: var(--primary-color);
     }
   }
 
@@ -149,12 +149,32 @@ const Wrapper = styled.section`
     }
 
     a {
-      color: var(--primary-100);
+      color: var(--primary-color);
       text-decoration: underline;
       transition: color 0.3s ease;
 
       &:hover {
-        color: var(--primary-300);
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .termos {
+
+    .side-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+      input[type="checkbox"] {
+        width: 1.1rem;
+        height: 1.1rem;
+        accent-color: var(--grey-300);
+      }
+      span {
+        font-size: 0.95rem;
+        color: var(--grey-700);
+        width: 100%;
       }
     }
   }
