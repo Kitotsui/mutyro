@@ -152,7 +152,11 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
         </div>
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
           <span>Já é membro? </span>
-          <button type="button" onClick={switchToLogin} className="switch-btn">
+          <button
+            type="button"
+            onClick={switchToLogin}
+            className="btn switch-btn"
+          >
             Login
           </button>
         </div>

@@ -3,7 +3,7 @@ import {
   validateMutiraoInput,
   validateIdParam,
 } from "../middleware/validationMiddleware.js";
-import upload from "../utils/multer.js";
+import { uploadMutiraoImage } from "../utils/multer.js";
 import {
   authenticateUser,
   populateUserIfLoggedIn,
@@ -24,6 +24,7 @@ import {
   deletarAvaliacao,
   finalizarMutirao,
   getInscritos,
+  getMutiroesAvaliados,
 } from "../controllers/mutiraoController.js";
 
 const router = Router();
@@ -34,6 +35,18 @@ const router = Router();
  *   name: Mutiroes
  *   description: Gerenciamento de mutirões comunitários
  */
+
+/**
+ * @swagger
+ * /mutiroes/historiasDeSucesso:
+ *   get:
+ *     summary: Retorna uma lista de mutirões finalizados com comentários de usuários para o carrossel
+ *     tags: [Mutiroes]
+ *     responses:
+ *       '200':
+ *         description: Histórias de sucesso retornadas com sucesso
+ */
+router.route("/historiasDeSucesso").get(getMutiroesAvaliados);
 
 /**
  * @swagger
@@ -115,7 +128,7 @@ router
   .get(authenticateUser, getMutiroes)
   .post(
     authenticateUser,
-    upload.single("imagemCapa"),
+    uploadMutiraoImage.single("imagemCapa"),
     validateMutiraoInput,
     createMutirao
   );
@@ -173,7 +186,7 @@ router
   .get(populateUserIfLoggedIn, validateIdParam, getMutirao)
   .patch(
     authenticateUser,
-    upload.single("imagemCapa"),
+    uploadMutiraoImage.single("imagemCapa"),
     validateMutiraoInput,
     validateIdParam,
     updateMutirao
@@ -337,7 +350,8 @@ router.route("/:id/inscritos").get(validateIdParam, getInscritos);
  *       404:
  *         description: Mutirão não encontrado
  */
-router.route("/:id/avaliacoes")
+router
+  .route("/:id/avaliacoes")
   .get(getAvaliacoes)
   .post(authenticateUser, criarAvaliacao);
 
@@ -411,7 +425,7 @@ router.route("/:id/avaliacoes")
  *         description: Não autorizado
  *       404:
  *         description: Mutirão ou avaliação não encontrado
- */  
+ */
 router
   .route("/:id/avaliacoes/:avaliacaoId")
   .patch(authenticateUser, atualizarAvaliacao)
@@ -441,9 +455,8 @@ router
  *         description: Não autorizado
  *       404:
  *         description: Mutirão não encontrado
- */  
-router.route("/:id/finalizar")
-  .post(authenticateUser, finalizarMutirao);
+ */
+router.route("/:id/finalizar").post(authenticateUser, finalizarMutirao);
 
 /**
  * @swagger
@@ -479,7 +492,8 @@ router.route("/:id/finalizar")
  */
 router.route("/:id/inscritos").get(validateIdParam, getInscritos);
 
-router.route("/:id/avaliacoes")
+router
+  .route("/:id/avaliacoes")
   .get(getAvaliacoes)
   .post(authenticateUser, criarAvaliacao);
 
@@ -488,7 +502,6 @@ router
   .patch(authenticateUser, atualizarAvaliacao)
   .delete(authenticateUser, deletarAvaliacao);
 
-router.route("/:id/finalizar")
-  .post(authenticateUser, finalizarMutirao);
+router.route("/:id/finalizar").post(authenticateUser, finalizarMutirao);
 
 export default router;

@@ -25,6 +25,7 @@ import { loader as landingLoader } from "./pages/Landing";
 import { loader as novoMutiraoLoader } from "./pages/NovoMutirao";
 import { loader as calendarioCompletoLoader } from "./pages/CalendarioCompleto";
 import { loader as editarUsuarioLoader } from "./pages/EditarUsuario";
+import { action as editarUsuarioAction } from "./pages/EditarUsuario";
 import EditarUsuario from "./pages/EditarUsuario";
 import { IdiomaProvider } from "./context/IdiomaContext";
 
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
         path: "editarusuario",
         element: <EditarUsuario />,
         loader: editarUsuarioLoader,
+        action: editarUsuarioAction,
       },
       {
         path: "faq",

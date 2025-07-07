@@ -5,6 +5,7 @@ import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
 import logo from "../assets/images/mutyrologo.svg";
 import { useAuth } from "../context/AuthContext";
+import getImageUrl from "@/utils/imageUrlHelper";
 
 interface Usuario {
   _id: string;
@@ -14,17 +15,12 @@ interface Usuario {
   username?: string;
 }
 
-const mockAvatarUrl = "https://i.pravatar.cc/150?img=11";
-
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const { usuario, logout, isLoading } = useAuth();
   const [showRegister, setShowRegister] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { usuario, logout } = useAuth() as {
-    usuario: Usuario | null;
-    logout: () => Promise<void>;
-  };
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -123,6 +119,21 @@ const NavBar = () => {
     }
   }, [location.state, navigate, handleLoginClick, handleRegisterClick]);
 
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <nav className="navbar">
+          <div className="navbar-flex container">
+            {/* Logo e talvez algum placeholder de carregamento */}
+            <Link to="/" aria-label="Logo Home" onClick={handleHomeNavigation}>
+              <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
+            </Link>
+            <div>Carregando usuário...</div>
+          </div>
+        </nav>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       <nav className="navbar">
@@ -179,7 +190,7 @@ const NavBar = () => {
               </li>
               <li>
                 <div className="cta-btns">
-                  {!usuario ? (
+                  {isLoading ? null : !usuario ? (
                     <>
                       <button
                         className="btn register-link"
@@ -215,7 +226,7 @@ const NavBar = () => {
                         </div>
                         <div className="user-avatar-container">
                           <img
-                            src={usuario.avatar || mockAvatarUrl}
+                            src={getImageUrl(usuario?.avatar)}
                             alt={`Avatar de ${usuario.nome}`}
                             className="avatar-img"
                           />
@@ -229,7 +240,7 @@ const NavBar = () => {
                         aria-haspopup="true"
                         aria-expanded={showUserDropdown}
                       >
-                        <i className="fas fa-caret-down caret-icon-fa"></i>{" "}
+                        <i className="fas fa-caret-down caret-icon-fa"></i>
                       </button>
                       {showUserDropdown && (
                         <div className="user-dropdown show-dropdown">

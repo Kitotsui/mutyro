@@ -119,9 +119,9 @@ export const createMutirao = async (req, res) => {
     const horasQueFaltam = diferencaMs / (1000 * 60 * 60);
 
     if (horasQueFaltam < 48) {
-     return res.status(StatusCodes.BAD_REQUEST).json({
-       msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
-     });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "Não é possível criar um mutirão com menos de 48 horas de antecedência",
+      });
     }
 
     // Validação dos dados de localização
@@ -268,9 +268,9 @@ export const updateMutirao = async (req, res) => {
   const diferencaMs = dataMutirao - agora;
 
   if (diferencaMs < 48 * 60 * 60 * 1000) {
-   return res.status(400).json({
-     msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
-   });
+    return res.status(400).json({
+      msg: "Não é possível editar o mutirão faltando menos de 48 horas para o início",
+    });
   }
 
   // Atualiza a imagem se uma nova foi enviada
@@ -604,6 +604,85 @@ export const finalizarMutirao = async () => {
     total: mutiroesNaoFinalizados.length,
     marcados: marcados,
   };
+};
+
+export const getMutiroesAvaliados = async (req, res) => {
+  try {
+    const mutiroesComAvaliacao = await Mutirao.aggregate([
+      {
+        $match: {
+          finalizado: true,
+          "avaliacoes.comentario": { $exists: true, $ne: "" },
+        },
+      },
+      { $sort: { data: -1 } },
+      { $limit: 15 },
+      {
+        $addFields: {
+          averageRating: { $avg: "$avaliacoes.nota" },
+        },
+      },
+      {
+        $addFields: {
+          totalReviews: { $size: "$avaliacoes" },
+        },
+      },
+    ]);
+
+    // const mutiroesComComentarios = await Mutirao.find({
+    //   finalizado: true,
+    //   "avaliacoes.comentario": { $exists: true, $ne: "" }, // Busca mutirões com pelo menos um comentário
+    // })
+    //   .sort({ data: -1 }) // Ordenação de mais recentemente finalizados primeiro
+    //   .limit(15) // Número de resultados
+    //   .populate("avaliacoes.usuario", "nome");
+
+    // if (!mutiroesComComentarios || mutiroesComComentarios.length === 0) {
+    //   return res.status(StatusCodes.OK).json({ avaliados: [] });
+    // }
+
+    const populatedMutiroes = await Mutirao.populate(mutiroesComAvaliacao, {
+      path: "avaliacoes.usuario",
+      select: "nome",
+    });
+
+    if (!populatedMutiroes || populatedMutiroes.length === 0) {
+      return res.status(StatusCodes.OK).json({ avaliados: [] });
+    }
+
+    const avaliados = populatedMutiroes
+      .map((mutirao) => {
+        const avaliacoesValidas = mutirao.avaliacoes.filter(
+          (a) => a.comentario && a.comentario.trim() !== ""
+        );
+
+        if (avaliacoesValidas.length === 0) return null;
+
+        const randomAvaliacao =
+          avaliacoesValidas[
+            Math.floor(Math.random() * avaliacoesValidas.length)
+          ];
+
+        return {
+          mutiraoId: mutirao._id,
+          mutiraoTitulo: mutirao.titulo,
+          mutiraoImagemCapa: mutirao.imagemCapa,
+          comentario: randomAvaliacao.comentario,
+          autorComentario: randomAvaliacao.usuario?.nome || "Anônimo",
+          mutiraoTipo: mutirao.mutiraoTipo,
+          averageRating: mutirao.averageRating,
+          totalReviews: mutirao.totalReviews,
+        };
+      })
+      .filter(Boolean);
+
+    res.status(StatusCodes.OK).json({ avaliados });
+  } catch (error) {
+    console.error("Erro ao buscar histórias de sucesso: ", error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Erro no servidor ao buscar histórias de sucesso." });
+  }
 };
 
 // Helper Functions

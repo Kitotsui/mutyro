@@ -12,6 +12,7 @@ import customFetch from "../utils/customFetch";
 type Usuario = {
   _id: string;
   nome: string;
+  avatar: string;
   //username: string;
 };
 
@@ -79,12 +80,15 @@ const User = () => {
       })
     : [];
 
-  const displayedMutiroes = filtro === "meus" ? meusMutiroes : allMutiroes.filter((mutirao) => {
-    if (tipoSelecionado === "ENCERRADOS") {
-      return mutirao.finalizado === true; // Mostra apenas finalizados
-    }
-    return mutirao.finalizado === false; // Exclui finalizados para outros filtros
-  });
+  const displayedMutiroes =
+    filtro === "meus"
+      ? meusMutiroes
+      : allMutiroes.filter((mutirao) => {
+          if (tipoSelecionado === "ENCERRADOS") {
+            return mutirao.finalizado === true; // Mostra apenas finalizados
+          }
+          return mutirao.finalizado === false; // Exclui finalizados para outros filtros
+        });
 
   // Novo filtro por tipo
   const mutiroesFiltradosPorTipo = displayedMutiroes.filter((mutirao) => {

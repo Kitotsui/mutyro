@@ -10,6 +10,7 @@ const Wrapper = styled.article`
   padding: 20px 24px;
   background-color: white;
   font-weight: 600;
+  border-radius: 24px;
   width: 400px;
   height: fit-content;
   position: relative;

@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const storage = new CloudinaryStorage({
+export const mutiraoStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "mutyro", // The name of the folder in Cloudinary to store images
@@ -26,6 +26,23 @@ export const storage = new CloudinaryStorage({
         quality: "auto:good",
 
         // Converte para o formato de imagem mais eficiente que o browser do usuário suportar (ex: WebP, AVIF)
+        fetch_format: "auto",
+      },
+    ],
+  },
+});
+
+export const avatarStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "mutyro/user",
+    transformation: [
+      {
+        width: 500,
+        height: 500,
+        crop: "fill",
+        gravity: "face",
+        quality: "auto:good",
         fetch_format: "auto",
       },
     ],

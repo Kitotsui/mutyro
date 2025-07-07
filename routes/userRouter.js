@@ -1,8 +1,14 @@
-import {Router} from 'express';
-import { getCurrentUser, updateUser, getApplicationStats } from '../controllers/userController.js';
+import { Router } from "express";
+import {
+  getCurrentUser,
+  updateUser,
+  getApplicationStats,
+} from "../controllers/userController.js";
 import { validateUpdateUserInput } from "../middleware/validationMiddleware.js";
-import { authorizePermissions } from '../middleware/authMiddleware.js';
+import { authorizePermissions } from "../middleware/authMiddleware.js";
 const router = Router();
+
+import { uploadAvatar } from "../utils/multer.js";
 
 /**
  * @swagger
@@ -41,7 +47,7 @@ const router = Router();
  *       401:
  *         description: Não autenticado
  */
-router.get('/atual-usuario', getCurrentUser);
+router.get("/atual-usuario", getCurrentUser);
 
 /**
  * @swagger
@@ -68,7 +74,11 @@ router.get('/atual-usuario', getCurrentUser);
  *       401:
  *         description: Não autenticado
  */
-router.get('/admin/app-estatistica',authorizePermissions(), getApplicationStats);
+router.get(
+  "/admin/app-estatistica",
+  authorizePermissions(),
+  getApplicationStats
+);
 
 /**
  * @swagger
@@ -100,7 +110,11 @@ router.get('/admin/app-estatistica',authorizePermissions(), getApplicationStats)
  *       401:
  *         description: Não autenticado
  */
-router.patch('/atualizar-usuario', validateUpdateUserInput, updateUser);
-
+router.patch(
+  "/atualizar-usuario",
+  uploadAvatar.single("avatar"),
+  validateUpdateUserInput,
+  updateUser
+);
 
 export default router;

@@ -26,7 +26,11 @@ const HomeLayout = () => {
           display: "flex",
         }}
       >
-        {shouldShowSidebar && <Sidebar />}
+        {shouldShowSidebar && (
+          <div className="sidebar-wrapper">
+            <Sidebar />
+          </div>
+        )}
         <div style={{ flex: 1 }}>
           <Outlet />
         </div>

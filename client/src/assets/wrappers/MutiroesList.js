@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   .mutiroes-container {
@@ -80,4 +80,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default Wrapper; 
+export default Wrapper;

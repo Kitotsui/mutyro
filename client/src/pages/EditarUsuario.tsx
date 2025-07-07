@@ -1,10 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Wrapper from "../assets/wrappers/EditarUsuario";
-import { useNavigate, redirect } from "react-router-dom";
+import { useNavigate, redirect, useFetcher } from "react-router-dom";
 import customFetch from "@/utils/customFetch";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 
+import getImageUrl from "../utils/imageUrlHelper";
+
+import { ActionFunctionArgs } from "react-router-dom";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+
+  try {
+    const { data } = await customFetch.patch(
+      "/usuarios/atualizar-usuario",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    toast.success("Perfil atualizado com sucesso!");
+    return data;
+  } catch (error: any) {
+    toast.error(error?.response?.data?.msg || "Erro ao atualizar o perfil.");
+    return error;
+  }
+};
 export const loader = async () => {
   try {
     await customFetch.get("/usuarios/atual-usuario");
@@ -18,128 +42,82 @@ export const loader = async () => {
 const EditarUsuario = () => {
   const { usuario, setUsuario } = useAuth();
 
-  console.log(usuario);
-
-  const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    endereco: "",
-    cpf: "",
-    dataNascimento: "",
-  });
-
-  useEffect(() => {
-    if (usuario) {
-      setFormData({
-        nome: usuario.nome,
-        email: usuario.email,
-        endereco: usuario.endereco,
-        cpf: usuario.cpf,
-        dataNascimento: usuario.dataNascimento,
-      });
-    }
-  }, [usuario]);
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const isSubmitting = fetcher.state !== "idle";
 
   const [foto, setFoto] = useState<File | null>(null);
-  const navigate = useNavigate();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFoto(e.target.files[0]);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const previewUrl = foto
+    ? URL.createObjectURL(foto)
+    : getImageUrl(usuario?.avatar);
 
-    try {
-      let response;
-      if (foto) {
-        const dadosParaEnviar = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-          dadosParaEnviar.append(key, value);
-        });
-        dadosParaEnviar.append("foto", foto);
-
-        response = await customFetch.patch(
-          "/usuarios/atualizar-usuario",
-          dadosParaEnviar,
-          {
-            withCredentials: true,
-          }
-        );
-      } else {
-        response = await customFetch.patch(
-          "/usuarios/atualizar-usuario",
-          formData,
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data) {
+      if (fetcher.data.usuario) {
+        setUsuario(fetcher.data.usuario);
+        toast.success(fetcher.data.msg || "Perfil atualizado!");
+        setFoto(null);
+      } else if (fetcher.data.msg) {
+        toast.error(fetcher.data.msg);
       }
-
-      if (response.data?.error) {
-        throw new Error(response.data.error);
-      }
-
-      toast.success("Usuário atualizado com sucesso!");
-      navigate("/user");
-    } catch (err: unknown) {
-      const error = err as {
-        response?: { data?: { msg?: string } };
-        message?: string;
-      };
-      const errorMsg =
-        error.response?.data?.msg || error.message || "Erro ao editar usuário";
-      toast.error(errorMsg);
     }
-  };
+  }, [fetcher.state, fetcher.data, setUsuario]);
+
+  if (!usuario) {
+    return (
+      <Wrapper>
+        <div>Carregando perfil...</div>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
       <div className="container">
-        <div className="form-header">
+        <div
+          className="form-header"
+          data-bg={
+            "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
+          }
+          style={{
+            "--bg-url": `url(${"https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"})`,
+          }}
+        >
           <h2>Editar Usuário</h2>
+          <p className="form-subtitle">
+            Atualize seus dados pessoais e mantenha seu perfil completo.
+          </p>
         </div>
         <div className="form-container">
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <fetcher.Form method="patch" encType="multipart/form-data">
             <div className="image-section">
               <h3>Foto de Perfil</h3>
               <div className="image-upload">
-                {foto ? (
-                  <img
-                    src={URL.createObjectURL(foto)}
-                    alt="Preview"
-                    className="preview-image"
-                  />
-                ) : (
-                  <div className="upload-placeholder">Foto</div>
-                )}
+                <img src={previewUrl} alt="Preview" className="preview-image" />
+                {/* <div className="upload-placeholder">Foto</div> */}
                 <button
                   type="button"
-                  className="upload-btn"
-                  onClick={() => document.getElementById("foto-input")?.click()}
+                  className="btn upload-btn"
+                  onClick={() => fileInputRef.current?.click()}
                 >
-                  Enviar Foto
+                  <i className="fa-solid fa-upload"></i> Trocar Foto
                 </button>
                 <input
                   type="file"
+                  ref={fileInputRef}
                   id="foto-input"
-                  name="foto"
+                  name="avatar"
                   accept="image/*"
-                  onChange={handleFotoChange}
+                  onChange={handleAvatarChange}
                   style={{ display: "none" }}
                 />
               </div>
@@ -150,8 +128,7 @@ const EditarUsuario = () => {
               <input
                 type="text"
                 name="nome"
-                value={formData.nome}
-                onChange={handleChange}
+                defaultValue={usuario.nome}
                 placeholder="Nome completo"
               />
             </div>
@@ -161,8 +138,7 @@ const EditarUsuario = () => {
               <input
                 type="text"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
+                defaultValue={usuario.email}
                 placeholder="Email"
               />
             </div>
@@ -172,8 +148,7 @@ const EditarUsuario = () => {
               <input
                 type="text"
                 name="endereco"
-                value={formData.endereco}
-                onChange={handleChange}
+                defaultValue={usuario.endereco}
                 placeholder="Rua, número, bairro..."
               />
             </div>
@@ -183,8 +158,7 @@ const EditarUsuario = () => {
               <input
                 type="text"
                 name="cpf"
-                value={formData.cpf}
-                onChange={handleChange}
+                defaultValue={usuario.cpf}
                 placeholder="000.000.000-00"
               />
             </div>
@@ -194,24 +168,48 @@ const EditarUsuario = () => {
               <input
                 type="date"
                 name="dataNascimento"
-                value={formData.dataNascimento}
-                onChange={handleChange}
+                defaultValue={usuario.dataNascimento}
               />
             </div>
 
             <div className="button-group">
               <button
                 type="button"
-                className="cancel-btn"
+                className="btn cancel-btn"
                 onClick={() => navigate(-1)}
+                disabled={isSubmitting}
               >
+                <i
+                  className="fa-solid fa-xmark"
+                  style={{ marginRight: "0.5rem" }}
+                ></i>
                 Cancelar
               </button>
-              <button type="submit" className="submit-btn">
-                Salvar
+              <button
+                type="submit"
+                className="btn submit-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <i
+                      className="fa-solid fa-spinner fa-spin"
+                      style={{ marginRight: "0.5rem" }}
+                    ></i>
+                    Salvando...
+                  </>
+                ) : (
+                  <>
+                    <i
+                      className="fa-solid fa-floppy-disk"
+                      style={{ marginRight: "0.5rem" }}
+                    ></i>
+                    Salvar Alterações
+                  </>
+                )}
               </button>
             </div>
-          </form>
+          </fetcher.Form>
         </div>
       </div>
     </Wrapper>

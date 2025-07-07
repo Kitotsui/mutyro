@@ -16,11 +16,13 @@ type Usuario = {
   cpf: string;
   endereco: string;
   dataNascimento: string;
+  avatar?: string;
 };
 
 type AuthContextType = {
   usuario: Usuario | null;
   setUsuario: (usuario: Usuario | null) => void;
+  isLoading: boolean;
   logout: () => Promise<void>;
 };
 
@@ -28,6 +30,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Verifica se há um usuário logado ao iniciar
   useEffect(() => {
@@ -37,13 +40,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.log("Usuário atual verificado:", response.data);
         if (response.data && response.data.usuario) {
           setUsuario(response.data.usuario);
+        } else {
+          setUsuario(null);
         }
-      } catch (error) {
-        console.log("Nenhum usuário logado:", error);
-        setUsuario(null);
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          setUsuario(null);
+        } else {
+          console.error("Erro ao verificar usuário:", error);
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
-
     verificarUsuario();
   }, []);
 
@@ -64,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [usuario]);
 
   return (
-    <AuthContext.Provider value={{ usuario, setUsuario, logout }}>
+    <AuthContext.Provider value={{ usuario, setUsuario, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

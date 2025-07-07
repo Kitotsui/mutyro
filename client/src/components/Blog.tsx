@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import getImageUrl from "@/utils/imageUrlHelper";
+import CarouselAvaliados from "./CarouselAvaliados";
 
 interface Mutirao {
   _id: string;
@@ -142,7 +143,23 @@ const Blog = ({ mutiroes }: BlogProps) => {
 
   return (
     <Wrapper>
-      <FilterBar />
+      {/* <FilterBar /> */}
+      <div className="carousel-sucesso-wrapper">
+        <div className="carousel-header">
+          {/* <img src={logo} alt="Blog Heading Logo" draggable={false} /> */}
+          <i
+            className="fas fa-star"
+            aria-hidden="true"
+            style={{
+              fontSize: "30px",
+              color: "var(--secondary-color)",
+              marginRight: "0.6rem",
+            }}
+          ></i>
+          <h2>Histórias de Sucesso</h2>
+        </div>
+        <CarouselAvaliados />
+      </div>
       {/* BLOG CARDS */}
       <div className="blog-heading">
         <img src={logo} alt="Blog Heading Logo" draggable={false} />

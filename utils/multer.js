@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-import { storage as cloudinaryStorage } from "./cloudinary.js";
+import { mutiraoStorage, avatarStorage } from "./cloudinary.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,7 +26,8 @@ const storage = multer.diskStorage({
 });
 
 // ARMAZENAMENTO CLOUDINARY
-const upload = multer({ storage: cloudinaryStorage });
+export const uploadMutiraoImage = multer({ storage: mutiraoStorage });
+export const uploadAvatar = multer({ storage: avatarStorage });
 
 // ARMAZENAMENTO LOCAL
 // const upload = multer({
@@ -37,5 +38,3 @@ const upload = multer({ storage: cloudinaryStorage });
 //     cb(null, true);
 //   },
 // });
-
-export default upload;

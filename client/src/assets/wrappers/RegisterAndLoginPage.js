@@ -57,7 +57,6 @@ const Wrapper = styled.section`
     border: none;
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s;
     &:hover {
@@ -126,16 +125,14 @@ const Wrapper = styled.section`
 
   .switch-btn {
     background: transparent;
-    border: none;
-    color: var(--primary-100);
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 0;
+    color: var(--dark-color);
+    border: 1px solid var(--grey-300);
+    padding: 12px 16px;
     cursor: pointer;
     transition: all 0.2s;
     &:hover {
-      color: var(--primary-50);
-      text-decoration: underline;
+      background-color: var(--grey-100);
+      color: var(--dark-color);
     }
   }
 
@@ -160,6 +157,21 @@ const Wrapper = styled.section`
         color: var(--primary-300);
       }
     }
+  }
+  .termos {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .termos input {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .termos a {
+    white-space: nowrap;
   }
 `;
 
