@@ -1,7 +1,7 @@
 import logo from "../assets/images/mutyroinnerlogotextless.png";
 import Wrapper from "../assets/wrappers/Blog";
 
-import { FilterBar, Carousel, Card } from ".";
+import { Carousel, Card } from ".";
 import { useState, useEffect, useRef, useMemo } from "react";
 
 import Calendar from "react-calendar";

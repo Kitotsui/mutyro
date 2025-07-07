@@ -230,7 +230,11 @@ const Sobre = () => {
               required
             ></textarea>
           </div>
-          <button type="submit" className="btn submit-btn" dir={isSubmitting}>
+          <button
+            type="submit"
+            className="btn submit-btn"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
           </button>
         </form>

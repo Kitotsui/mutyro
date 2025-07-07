@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Wrapper from "../assets/wrappers/Notificacoes.js";
 import {
   FaStar,
@@ -9,10 +9,14 @@ import {
   FaEnvelopeOpenText,
   FaTrash,
 } from "react-icons/fa";
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { getNotificacoes, marcarTodasComoLidas, excluirNotificacao } from "../services/notificacaoService";
-import { toast } from 'react-toastify';
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import {
+  getNotificacoes,
+  marcarTodasComoLidas,
+  excluirNotificacao,
+} from "../services/notificacaoService";
+import { toast } from "react-toastify";
 
 type Notificacao = {
   _id: string;
@@ -64,9 +68,7 @@ const Notificacoes = () => {
 
   const handleMarcarComoLida = (id: string) => {
     setNotificacoes((prev) =>
-      prev.map((notif) =>
-        notif._id === id ? { ...notif, lida: true } : notif
-      )
+      prev.map((notif) => (notif._id === id ? { ...notif, lida: true } : notif))
     );
   };
 
@@ -83,9 +85,9 @@ const Notificacoes = () => {
     try {
       await excluirNotificacao(id);
       setNotificacoes((prev) => prev.filter((n) => n._id !== id));
-      toast.success('Notificação excluída com sucesso!');
+      toast.success("Notificação excluída com sucesso!");
     } catch (error) {
-      toast.error('Erro ao excluir notificação');
+      toast.error("Erro ao excluir notificação");
     }
   };
 
@@ -98,7 +100,9 @@ const Notificacoes = () => {
             {categorias.map((cat) => (
               <button
                 key={cat.key}
-                className={`notificacoes-sidebar-btn ${categoria === cat.key ? "ativo" : ""}`}
+                className={`notificacoes-sidebar-btn ${
+                  categoria === cat.key ? "ativo" : ""
+                }`}
                 onClick={() => setCategoria(cat.key)}
               >
                 <span className="notificacoes-sidebar-icon">{cat.icon}</span>
@@ -121,10 +125,17 @@ const Notificacoes = () => {
           <div className="notificacoes-header">
             <div>
               <h1 className="notificacoes-title">Notificações</h1>
-              <p className="notificacoes-subtitle">Suas mensagens e atualizações</p>
+              <p className="notificacoes-subtitle">
+                Suas mensagens e atualizações
+              </p>
             </div>
             <div className="notificacoes-header-actions">
-              <button className="notificacoes-btn-link" onClick={handleMarcarTodasComoLidas}>Marcar todas como lidas</button>
+              <button
+                className="notificacoes-btn-link"
+                onClick={handleMarcarTodasComoLidas}
+              >
+                Marcar todas como lidas
+              </button>
               <button className="notificacoes-btn-orange">
                 <span style={{ marginRight: 8 }}>⚙️</span> Configurações
               </button>
@@ -136,57 +147,75 @@ const Notificacoes = () => {
             {loading && <div className="notificacoes-vazio">Carregando...</div>}
             {erro && <div className="notificacoes-vazio">{erro}</div>}
             {!loading && !erro && filtrarNotificacoes().length === 0 && (
-              <div className="notificacoes-vazio">Nenhuma notificação encontrada.</div>
+              <div className="notificacoes-vazio">
+                Nenhuma notificação encontrada.
+              </div>
             )}
-            {!loading && !erro && filtrarNotificacoes().map((notif) => (
-              <div
-                key={notif._id}
-                className={`notificacoes-card ${!notif.lida ? "nao-lida" : ""}`}
-                onClick={() => !notif.lida && handleMarcarComoLida(notif._id)}
-                style={{ cursor: !notif.lida ? 'pointer' : 'default' }}
-              >
-                <div className="notificacoes-card-icone">
-                  {/* Ícone por tipo */}
-                  <span className="notificacoes-card-icone-inner">🔔</span>
-                </div>
-                <div className="notificacoes-card-content">
-                  <div className="notificacoes-card-header">
-                    <h3 className="notificacoes-card-title">{notif.titulo}</h3>
-                    <div className="notificacoes-card-meta">
-                      <span className="notificacoes-card-data">
-                        {notif.data ? format(new Date(notif.data), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR }) : ""}
-                      </span>
-                      {!notif.lida && <div className="notificacoes-card-dot" />}
+            {!loading &&
+              !erro &&
+              filtrarNotificacoes().map((notif) => (
+                <div
+                  key={notif._id}
+                  className={`notificacoes-card ${
+                    !notif.lida ? "nao-lida" : ""
+                  }`}
+                  onClick={() => !notif.lida && handleMarcarComoLida(notif._id)}
+                  style={{ cursor: !notif.lida ? "pointer" : "default" }}
+                >
+                  <div className="notificacoes-card-icone">
+                    {/* Ícone por tipo */}
+                    <span className="notificacoes-card-icone-inner">🔔</span>
+                  </div>
+                  <div className="notificacoes-card-content">
+                    <div className="notificacoes-card-header">
+                      <h3 className="notificacoes-card-title">
+                        {notif.titulo}
+                      </h3>
+                      <div className="notificacoes-card-meta">
+                        <span className="notificacoes-card-data">
+                          {notif.data
+                            ? format(
+                                new Date(notif.data),
+                                "dd 'de' MMMM 'às' HH:mm",
+                                { locale: ptBR }
+                              )
+                            : ""}
+                        </span>
+                        {!notif.lida && (
+                          <div className="notificacoes-card-dot" />
+                        )}
+                      </div>
+                    </div>
+                    <p className="notificacoes-card-msg">{notif.mensagem}</p>
+                    <div className="notificacoes-card-actions">
+                      {/* Exemplo: botão de ação */}
+                      {notif.tipo === "sucesso" && (
+                        <button className="notificacoes-btn-orange">
+                          Baixar Certificado
+                        </button>
+                      )}
+                      <button
+                        className="notificacoes-btn-fav"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Lógica para favoritar
+                        }}
+                      >
+                        <FaStar />
+                      </button>
+                      <button
+                        className="notificacoes-btn-delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExcluirNotificacao(notif._id);
+                        }}
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
                   </div>
-                  <p className="notificacoes-card-msg">{notif.mensagem}</p>
-                  <div className="notificacoes-card-actions">
-                    {/* Exemplo: botão de ação */}
-                    {notif.tipo === "sucesso" && (
-                      <button className="notificacoes-btn-orange">Baixar Certificado</button>
-                    )}
-                    <button 
-                      className="notificacoes-btn-fav"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Lógica para favoritar
-                      }}
-                    >
-                      <FaStar />
-                    </button>
-                    <button 
-                      className="notificacoes-btn-delete"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExcluirNotificacao(notif._id);
-                      }}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </main>
       </div>
@@ -194,4 +223,4 @@ const Notificacoes = () => {
   );
 };
 
-export default Notificacoes; 
+export default Notificacoes;

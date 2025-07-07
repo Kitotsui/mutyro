@@ -105,7 +105,7 @@ const EditarMutirao = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [currentImage, setCurrentImage] = useState(mutirao.imagemCapa);
+  const currentImage = mutirao.imagemCapa;
 
   // States para o endereço
   const [numeroEComplemento, setNumeroEComplemento] = useState(
@@ -196,9 +196,11 @@ const EditarMutirao = () => {
               data-bg={
                 "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
               }
-              style={{
-                ["--bg-url" as any]: `url(${"https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"})`,
-              }}
+              style={
+                {
+                  "--bg-url": `url(https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png)`,
+                } as React.CSSProperties
+              }
             >
               <h2>Editando seu mutirão</h2>
               <p className="form-subtitle">

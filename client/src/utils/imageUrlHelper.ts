@@ -1,8 +1,3 @@
-interface ImageObject {
-  url?: string | null;
-  public_id?: string;
-}
-
 const getImageUrl = (avatar?: { url: string } | string | null): string => {
   const defaultImage =
     "https://res.cloudinary.com/dunfagpl8/image/upload/v1751840306/mutyrouser_mjap7e.png";

@@ -88,9 +88,11 @@ const EditarUsuario = () => {
           data-bg={
             "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
           }
-          style={{
-            "--bg-url": `url(${"https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"})`,
-          }}
+          style={
+            {
+              ["--bg-url"]: `url(https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png)`,
+            } as React.CSSProperties
+          }
         >
           <h2>Editar Usuário</h2>
           <p className="form-subtitle">

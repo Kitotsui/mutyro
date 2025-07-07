@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactElement } from "react";
 import Wrapper from "../assets/wrappers/StarRating";
 
 interface StarRatingProps {
@@ -7,7 +7,7 @@ interface StarRatingProps {
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ rating, maxRating = 5 }) => {
-  const stars: JSX.Element[] = [];
+  const stars: ReactElement[] = [];
 
   const roundedRating = Math.round(rating * 2) / 2;
 

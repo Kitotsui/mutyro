@@ -44,7 +44,7 @@ export const ACTIVE_GEOCODING_PROVIDER: GeocodingProviderChoice =
 
 const MINHA_REGIAO_VIEWBOX = "-48.5,-18.5,-47.5,-20.0";
 
-export const NOMINATIM_CONFIG = {
+export const NOMINATIM_CONFIG: NominatimConfig = {
   USER_AGENT:
     import.meta.env.VITE_NOMINATIM_USER_AGENT ||
     "MutyroApp/1.0 (contact@example.com)",
@@ -66,7 +66,7 @@ export const NOMINATIM_CONFIG = {
 
 const MAPBOX_BBOX_MINHA_REGIAO = "-48.5,-20.0,-47.5,-18.5";
 
-export const MAPBOX_CONFIG = {
+export const MAPBOX_CONFIG: MapboxConfig = {
   ACCESS_TOKEN:
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "YOUR_FALLBACK_MAPBOX_TOKEN",
   ENDPOINT: "https://api.mapbox.com/geocoding/v5/mapbox.places", // This is for forward geocoding

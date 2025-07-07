@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 import {
   useLoaderData,
@@ -6,7 +6,6 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import publicFetch from "../utils/publicFetch";
 import customFetch from "../utils/customFetch";
 import { SearchBar, Card } from "../components";
 import Wrapper from "../assets/wrappers/CalendarioCompleto";

@@ -1,9 +1,5 @@
 import { NOMINATIM_CONFIG } from "../config";
-import {
-  GeocodingService,
-  GeocodingSuggestion,
-  AddressComponents,
-} from "./geocodingService.types";
+import { GeocodingService, AddressComponents } from "./geocodingService.types";
 
 interface NominatimApiResponseItem {
   place_id: number;

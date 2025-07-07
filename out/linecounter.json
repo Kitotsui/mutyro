@@ -1,0 +1,1232 @@
+{
+    "extension": "linecounter",
+    "version": "0.2.7",
+    "workspace": "k:\\labesof\\mutyro",
+    "linecount": [
+        {
+            "version": "0.2.7",
+            "counttime": "2025-07-07 20:41:15",
+            "filesum": 188,
+            "codesum": 29237,
+            "commentsum": 1554,
+            "blanksum": 2704,
+            "statistics": {
+                ".js": {
+                    "code": 7048,
+                    "comment": 1163,
+                    "blank": 931
+                },
+                ".yml": {
+                    "code": 47,
+                    "comment": 3,
+                    "blank": 5
+                },
+                ".md": {
+                    "code": 4594,
+                    "comment": 67,
+                    "blank": 1017
+                },
+                ".json": {
+                    "code": 9721,
+                    "comment": 4,
+                    "blank": 21
+                },
+                ".backend": {
+                    "code": 7,
+                    "comment": 0,
+                    "blank": 6
+                },
+                "": {
+                    "code": 35,
+                    "comment": 13,
+                    "blank": 11
+                },
+                ".html": {
+                    "code": 26,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".ts": {
+                    "code": 469,
+                    "comment": 68,
+                    "blank": 59
+                },
+                ".tsx": {
+                    "code": 5734,
+                    "comment": 191,
+                    "blank": 524
+                },
+                ".css": {
+                    "code": 605,
+                    "comment": 37,
+                    "blank": 88
+                },
+                ".svg": {
+                    "code": 550,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".jsx": {
+                    "code": 401,
+                    "comment": 8,
+                    "blank": 42
+                }
+            },
+            "filelist": [
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": ".dockerignore"
+                },
+                {
+                    "blank": 3,
+                    "code": 12,
+                    "comment": 1,
+                    "filename": ".env"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 12,
+                    "filename": ".gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "client\\.env"
+                },
+                {
+                    "blank": 6,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "client\\Dockerfile"
+                },
+                {
+                    "blank": 1,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "client\\eslint.config.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "client\\index.html"
+                },
+                {
+                    "blank": 5,
+                    "code": 6454,
+                    "comment": 0,
+                    "filename": "client\\package-lock.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 59,
+                    "comment": 0,
+                    "filename": "client\\package.json"
+                },
+                {
+                    "filename": "client\\public\\favicon.ico",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\public\\vite.svg"
+                },
+                {
+                    "blank": 4,
+                    "code": 124,
+                    "comment": 0,
+                    "filename": "client\\src\\App.tsx"
+                },
+                {
+                    "blank": 29,
+                    "code": 72,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\css\\index.css"
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\avatar-1.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\avatar-2.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\community.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\images\\logo.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\images\\main-alternative.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\images\\main.svg"
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao1.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao2.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao3.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao4.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao5.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutirao6.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutyroinnerlogo.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "client\\src\\assets\\images\\mutyroinnerlogotextless.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 544,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\images\\mutyrologo.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\images\\not-found.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\react.svg"
+                },
+                {
+                    "blank": 1004,
+                    "code": 4517,
+                    "comment": 63,
+                    "filename": "client\\src\\assets\\README.md"
+                },
+                {
+                    "blank": 10,
+                    "code": 56,
+                    "comment": 2,
+                    "filename": "client\\src\\assets\\wrappers\\AddressAutocomplete.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\BigSidebar.js"
+                },
+                {
+                    "blank": 58,
+                    "code": 391,
+                    "comment": 45,
+                    "filename": "client\\src\\assets\\wrappers\\Blog.js"
+                },
+                {
+                    "blank": 19,
+                    "code": 102,
+                    "comment": 30,
+                    "filename": "client\\src\\assets\\wrappers\\Calendar.js"
+                },
+                {
+                    "blank": 32,
+                    "code": 176,
+                    "comment": 5,
+                    "filename": "client\\src\\assets\\wrappers\\CalendarioCompleto.js"
+                },
+                {
+                    "blank": 8,
+                    "code": 79,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\Card.js"
+                },
+                {
+                    "blank": 11,
+                    "code": 59,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\Carousel.js"
+                },
+                {
+                    "blank": 15,
+                    "code": 148,
+                    "comment": 2,
+                    "filename": "client\\src\\assets\\wrappers\\CarouselAvaliados.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\ChartsContainer.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 21,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Dashboard.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 44,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\DashboardFormPage.js"
+                },
+                {
+                    "blank": 27,
+                    "code": 202,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\EditarUsuario.js"
+                },
+                {
+                    "blank": 8,
+                    "code": 53,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Error404.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 29,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\ErrorPage.js"
+                },
+                {
+                    "blank": 20,
+                    "code": 138,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\FAQ.js"
+                },
+                {
+                    "blank": 10,
+                    "code": 56,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\FilterBar.js"
+                },
+                {
+                    "blank": 11,
+                    "code": 59,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Footer.js"
+                },
+                {
+                    "blank": 21,
+                    "code": 204,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Hero.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 41,
+                    "comment": 2,
+                    "filename": "client\\src\\assets\\wrappers\\LandingPage.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 42,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\LogoutContainer.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 216,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\MensagensPage.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Modal.js"
+                },
+                {
+                    "blank": 13,
+                    "code": 69,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\MutiroesList.js"
+                },
+                {
+                    "blank": 37,
+                    "code": 276,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\Navbar.js"
+                },
+                {
+                    "blank": 9,
+                    "code": 235,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Notificacoes.js"
+                },
+                {
+                    "blank": 46,
+                    "code": 310,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\NovoMutirao.js"
+                },
+                {
+                    "blank": 29,
+                    "code": 165,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\NovoMutiraoPage.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 56,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\PageBtnContainer.js"
+                },
+                {
+                    "blank": 14,
+                    "code": 83,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\PoliticaPrivacidade.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Quote.js"
+                },
+                {
+                    "blank": 16,
+                    "code": 182,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\RegisterAndLoginPage.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 37,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\SearchBar.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 70,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\SmallSidebar.js"
+                },
+                {
+                    "blank": 43,
+                    "code": 254,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\Sobre.js"
+                },
+                {
+                    "blank": 12,
+                    "code": 76,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\SolicitarRedefinicao.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\StarRating.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 41,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\StatItem.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\StatsContainer.js"
+                },
+                {
+                    "blank": 15,
+                    "code": 90,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\TermosUso.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 39,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\Testing.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\ThemeToggle.js"
+                },
+                {
+                    "blank": 53,
+                    "code": 317,
+                    "comment": 0,
+                    "filename": "client\\src\\assets\\wrappers\\UserPage.js"
+                },
+                {
+                    "blank": 23,
+                    "code": 141,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\UserSidebar.js"
+                },
+                {
+                    "blank": 18,
+                    "code": 559,
+                    "comment": 1,
+                    "filename": "client\\src\\assets\\wrappers\\VisualizarMutirao.js"
+                },
+                {
+                    "blank": 24,
+                    "code": 188,
+                    "comment": 29,
+                    "filename": "client\\src\\components\\AddressAutocomplete.tsx"
+                },
+                {
+                    "blank": 28,
+                    "code": 282,
+                    "comment": 13,
+                    "filename": "client\\src\\components\\Blog.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Calendar.tsx"
+                },
+                {
+                    "blank": 3,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Card.jsx"
+                },
+                {
+                    "blank": 27,
+                    "code": 151,
+                    "comment": 8,
+                    "filename": "client\\src\\components\\Carousel.jsx"
+                },
+                {
+                    "blank": 11,
+                    "code": 100,
+                    "comment": 2,
+                    "filename": "client\\src\\components\\CarouselAvaliados.tsx"
+                },
+                {
+                    "blank": 0,
+                    "code": 60,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\CustomDropdown.css"
+                },
+                {
+                    "blank": 7,
+                    "code": 47,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\CustomDropdown.tsx"
+                },
+                {
+                    "blank": 1,
+                    "code": 45,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\FilterBar.jsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Footer.jsx"
+                },
+                {
+                    "blank": 1,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\FormRow.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 92,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Hero.jsx"
+                },
+                {
+                    "blank": 0,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\index.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Logo.tsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 31,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\LogoutContainer.jsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 64,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Modal.tsx"
+                },
+                {
+                    "blank": 1,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\MutiraoItem.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\MutiroesList.tsx"
+                },
+                {
+                    "blank": 20,
+                    "code": 260,
+                    "comment": 4,
+                    "filename": "client\\src\\components\\NavBar.tsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Quote.jsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\SearchBar.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 123,
+                    "comment": 4,
+                    "filename": "client\\src\\components\\ShareMutirao.tsx"
+                },
+                {
+                    "blank": 22,
+                    "code": 150,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\Sidebar.css"
+                },
+                {
+                    "blank": 7,
+                    "code": 70,
+                    "comment": 1,
+                    "filename": "client\\src\\components\\Sidebar.tsx"
+                },
+                {
+                    "blank": 0,
+                    "code": 38,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\SmoothToggle.css"
+                },
+                {
+                    "blank": 3,
+                    "code": 25,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\SmoothToggle.tsx"
+                },
+                {
+                    "blank": 6,
+                    "code": 35,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\StarRating.tsx"
+                },
+                {
+                    "blank": 1,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "client\\src\\components\\UserCard.tsx"
+                },
+                {
+                    "blank": 3,
+                    "code": 64,
+                    "comment": 1,
+                    "filename": "client\\src\\components\\UserProfile.tsx"
+                },
+                {
+                    "blank": 26,
+                    "code": 175,
+                    "comment": 11,
+                    "filename": "client\\src\\components\\UserSidebar.tsx"
+                },
+                {
+                    "blank": 11,
+                    "code": 67,
+                    "comment": 10,
+                    "filename": "client\\src\\config.ts"
+                },
+                {
+                    "blank": 9,
+                    "code": 77,
+                    "comment": 2,
+                    "filename": "client\\src\\context\\AuthContext.tsx"
+                },
+                {
+                    "blank": 7,
+                    "code": 32,
+                    "comment": 0,
+                    "filename": "client\\src\\context\\IdiomaContext.tsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 51,
+                    "comment": 0,
+                    "filename": "client\\src\\data\\mutiroes.js"
+                },
+                {
+                    "blank": 10,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "client\\src\\data\\quotes.json"
+                },
+                {
+                    "blank": 37,
+                    "code": 285,
+                    "comment": 37,
+                    "filename": "client\\src\\index.css"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "client\\src\\lib\\utils.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "client\\src\\main.tsx"
+                },
+                {
+                    "blank": 35,
+                    "code": 262,
+                    "comment": 5,
+                    "filename": "client\\src\\pages\\CalendarioCompleto.tsx"
+                },
+                {
+                    "blank": 10,
+                    "code": 231,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\Configuracoes.tsx"
+                },
+                {
+                    "blank": 38,
+                    "code": 490,
+                    "comment": 8,
+                    "filename": "client\\src\\pages\\EditarMutirao.tsx"
+                },
+                {
+                    "blank": 21,
+                    "code": 200,
+                    "comment": 3,
+                    "filename": "client\\src\\pages\\EditarUsuario.tsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\Error.tsx"
+                },
+                {
+                    "blank": 3,
+                    "code": 75,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\FAQ.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 35,
+                    "comment": 2,
+                    "filename": "client\\src\\pages\\HomeLayout.tsx"
+                },
+                {
+                    "blank": 0,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\index.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\Landing.tsx"
+                },
+                {
+                    "blank": 12,
+                    "code": 132,
+                    "comment": 3,
+                    "filename": "client\\src\\pages\\Login.tsx"
+                },
+                {
+                    "blank": 12,
+                    "code": 212,
+                    "comment": 2,
+                    "filename": "client\\src\\pages\\Notificacoes.tsx"
+                },
+                {
+                    "blank": 44,
+                    "code": 459,
+                    "comment": 21,
+                    "filename": "client\\src\\pages\\NovoMutirao.tsx"
+                },
+                {
+                    "blank": 12,
+                    "code": 89,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\PoliticaPrivacidade.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 62,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\RedefinirSenha.tsx"
+                },
+                {
+                    "blank": 15,
+                    "code": 152,
+                    "comment": 10,
+                    "filename": "client\\src\\pages\\Register.tsx"
+                },
+                {
+                    "blank": 16,
+                    "code": 229,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\Sobre.tsx"
+                },
+                {
+                    "blank": 5,
+                    "code": 60,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\SolicitarRedefinicao.tsx"
+                },
+                {
+                    "blank": 12,
+                    "code": 128,
+                    "comment": 0,
+                    "filename": "client\\src\\pages\\TermosUso.tsx"
+                },
+                {
+                    "blank": 16,
+                    "code": 134,
+                    "comment": 10,
+                    "filename": "client\\src\\pages\\User.tsx"
+                },
+                {
+                    "blank": 66,
+                    "code": 870,
+                    "comment": 60,
+                    "filename": "client\\src\\pages\\VisualizarMutirao.tsx"
+                },
+                {
+                    "blank": 2,
+                    "code": 24,
+                    "comment": 1,
+                    "filename": "client\\src\\services\\geocodingService.types.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 12,
+                    "comment": 2,
+                    "filename": "client\\src\\services\\geocodingServiceFactory.ts"
+                },
+                {
+                    "blank": 15,
+                    "code": 147,
+                    "comment": 29,
+                    "filename": "client\\src\\services\\mapbox.service.ts"
+                },
+                {
+                    "blank": 12,
+                    "code": 96,
+                    "comment": 10,
+                    "filename": "client\\src\\services\\nominatim.service.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 32,
+                    "comment": 0,
+                    "filename": "client\\src\\services\\notificacaoService.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 22,
+                    "comment": 8,
+                    "filename": "client\\src\\utils\\customFetch.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 21,
+                    "comment": 5,
+                    "filename": "client\\src\\utils\\imageUrlHelper.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "client\\src\\utils\\publicFetch.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 1,
+                    "filename": "client\\src\\vite-env.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 2,
+                    "filename": "client\\tsconfig.app.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "client\\tsconfig.json"
+                },
+                {
+                    "blank": 2,
+                    "code": 20,
+                    "comment": 2,
+                    "filename": "client\\tsconfig.node.json"
+                },
+                {
+                    "blank": 1,
+                    "code": 28,
+                    "comment": 2,
+                    "filename": "client\\vite.config.ts"
+                },
+                {
+                    "filename": "close",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 34,
+                    "code": 163,
+                    "comment": 23,
+                    "filename": "controllers\\authController.js"
+                },
+                {
+                    "blank": 105,
+                    "code": 563,
+                    "comment": 57,
+                    "filename": "controllers\\mutiraoController.js"
+                },
+                {
+                    "blank": 23,
+                    "code": 79,
+                    "comment": 7,
+                    "filename": "controllers\\notificacaoController.js"
+                },
+                {
+                    "blank": 15,
+                    "code": 78,
+                    "comment": 6,
+                    "filename": "controllers\\userController.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 47,
+                    "comment": 3,
+                    "filename": "docker-compose.yml"
+                },
+                {
+                    "blank": 6,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "Dockerfile.backend"
+                },
+                {
+                    "blank": 1,
+                    "code": 29,
+                    "comment": 4,
+                    "filename": "errors\\customErrors.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "errors\\index.js"
+                },
+                {
+                    "blank": 10,
+                    "code": 52,
+                    "comment": 8,
+                    "filename": "middleware\\authMiddleware.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 8,
+                    "comment": 2,
+                    "filename": "middleware\\errorHandlerMiddleware.js"
+                },
+                {
+                    "blank": 10,
+                    "code": 127,
+                    "comment": 6,
+                    "filename": "middleware\\validationMiddleware.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 8,
+                    "comment": 12,
+                    "filename": "models\\loginModel.js"
+                },
+                {
+                    "blank": 13,
+                    "code": 84,
+                    "comment": 1,
+                    "filename": "models\\mutiraoModel.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 39,
+                    "comment": 1,
+                    "filename": "models\\Notificacao.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 32,
+                    "comment": 7,
+                    "filename": "models\\usuarioModel.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 3083,
+                    "comment": 0,
+                    "filename": "package-lock.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 60,
+                    "comment": 0,
+                    "filename": "package.json"
+                },
+                {
+                    "blank": 13,
+                    "code": 77,
+                    "comment": 4,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 11,
+                    "code": 18,
+                    "comment": 213,
+                    "filename": "routes\\authRoute.js"
+                },
+                {
+                    "blank": 18,
+                    "code": 79,
+                    "comment": 410,
+                    "filename": "routes\\mutiraoRoute.js"
+                },
+                {
+                    "blank": 9,
+                    "code": 18,
+                    "comment": 181,
+                    "filename": "routes\\notificacaoRoutes.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 23,
+                    "comment": 91,
+                    "filename": "routes\\userRouter.js"
+                },
+                {
+                    "blank": 25,
+                    "code": 102,
+                    "comment": 25,
+                    "filename": "server.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 28,
+                    "comment": 0,
+                    "filename": "swaggerConfig.js"
+                },
+                {
+                    "filename": "uploads\\default.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1746563781541-19215213.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1746563942210-615822869.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1746564105413-935005362.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747181228923-288526971.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747738294850-943834564.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747749488021-795881995.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747757007512-508299135.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747768830413-87598174.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1747769914057-808113245.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1748818878065-287914321.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "uploads\\imagemCapa-1748984823878-431296690.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 5,
+                    "code": 41,
+                    "comment": 5,
+                    "filename": "utils\\cloudinary.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "utils\\constantes.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 23,
+                    "comment": 11,
+                    "filename": "utils\\multer.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "utils\\senhaUtils.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "utils\\tokenUtils.js"
+                }
+            ]
+        }
+    ]
+}

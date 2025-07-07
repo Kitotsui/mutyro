@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface IdiomaContextType {
   idioma: string;
@@ -30,4 +36,4 @@ export const IdiomaProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </IdiomaContext.Provider>
   );
-}; 
+};

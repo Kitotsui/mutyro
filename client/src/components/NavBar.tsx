@@ -7,14 +7,6 @@ import logo from "../assets/images/mutyrologo.svg";
 import { useAuth } from "../context/AuthContext";
 import getImageUrl from "@/utils/imageUrlHelper";
 
-interface Usuario {
-  _id: string;
-  nome: string;
-  email?: string;
-  avatar?: string;
-  username?: string;
-}
-
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const { usuario, logout, isLoading } = useAuth();

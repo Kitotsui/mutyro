@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import CustomCalendar from "./Calendar";
 
 import React, { useMemo, useState } from "react";
 
@@ -17,7 +16,6 @@ interface UserSidebarProps {
 const UserSidebar = ({
   date,
   onDateChange,
-  interesses,
   proximosMutiroes = [],
 }: UserSidebarProps) => {
   const [popupDate, setPopupDate] = React.useState<Date | null>(null);

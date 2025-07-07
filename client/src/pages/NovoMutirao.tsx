@@ -37,17 +37,6 @@ export const action = async ({ request }: { request: Request }) => {
     formData.append("tarefas", tarefa);
   });
 
-  const mutirao = {
-    titulo: formData.get("titulo"),
-    data: formData.get("data"),
-    horario: formData.get("horario"),
-    descricao: formData.get("descricao"),
-    local: formData.get("local"),
-    materiais: formData.get("materiais") || "",
-    tarefas: tarefas.filter(Boolean),
-    mutiraoTipo: formData.get("mutiraoTipo"),
-  };
-
   const local = formData.get("local") as string;
   const latitude = formData.get("latitude") as string;
   const longitude = formData.get("longitude") as string;
@@ -223,9 +212,11 @@ const NovoMutirao = () => {
               data-bg={
                 "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
               }
-              style={{
-                ["--bg-url" as any]: `url(${"https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"})`,
-              }}
+              style={
+                {
+                  "--bg-url": `url(https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png)`,
+                } as React.CSSProperties
+              }
             >
               <h2>Seu mutirão está quase pronto!</h2>
               <p className="form-subtitle">

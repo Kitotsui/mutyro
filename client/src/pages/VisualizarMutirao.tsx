@@ -23,13 +23,7 @@ interface Avaliacao {
   criadoEm: string;
 }
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  MapContainerProps,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
@@ -85,11 +79,6 @@ interface Mutirao {
 interface CriadoPorInfo {
   _id: string;
   nome: string;
-}
-
-interface Habilidade {
-  nome: string;
-  checked: boolean;
 }
 
 interface VisualizarMutiraoLoaderData {
@@ -294,9 +283,9 @@ const VisualizarMutirao = () => {
 
   const [isInscrito, setIsInscrito] = useState(initialIsInscrito);
   const [aceitouTermo, setAceitouTermo] = useState(false);
-  const [habilidades, setHabilidades] = useState<Habilidade[]>([
-    { nome: "NÃO IMPLEMENTADO", checked: false },
-  ]);
+  // const [habilidades, setHabilidades] = useState<Habilidade[]>([
+  //   { nome: "NÃO IMPLEMENTADO", checked: false },
+  // ]);
 
   const [materiaisSelecionados, setMateriaisSelecionados] = useState<{
     [key: string]: boolean;
@@ -383,11 +372,11 @@ const VisualizarMutirao = () => {
     }
   }, [mutirao?.materiais]);
 
-  const handleHabilidadeChange = (index: number) => {
-    const novasHabilidades = [...habilidades];
-    novasHabilidades[index].checked = !novasHabilidades[index].checked;
-    setHabilidades(novasHabilidades);
-  };
+  // const handleHabilidadeChange = (index: number) => {
+  //   const novasHabilidades = [...habilidades];
+  //   novasHabilidades[index].checked = !novasHabilidades[index].checked;
+  //   setHabilidades(novasHabilidades);
+  // };
 
   const handleMaterialChange = (nomeMaterial: string) => {
     setMateriaisSelecionados((estadoAnterior) => ({
@@ -903,8 +892,7 @@ const VisualizarMutirao = () => {
                 <>
                   <div className="side-card">
                     {authContextUsuario &&
-                      authContextUsuario._id !== mutirao.criadoPor._id &&
-                      (
+                      authContextUsuario._id !== mutirao.criadoPor._id && (
                         <>
                           <h3>Termo de Aceitação</h3>
                           <div className="side-termo">

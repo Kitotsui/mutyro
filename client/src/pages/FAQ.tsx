@@ -1,4 +1,3 @@
-import React from "react";
 import Wrapper from "../assets/wrappers/FAQ";
 
 const perguntasRespostas = [
@@ -34,8 +33,7 @@ const perguntasRespostas = [
   },
   {
     pergunta: "Preciso pagar para participar?",
-    resposta:
-      "Não, todos os mutirões são gratuitos para os voluntários.",
+    resposta: "Não, todos os mutirões são gratuitos para os voluntários.",
   },
   {
     pergunta: "Quem pode organizar um mutirão?",
@@ -77,4 +75,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ; 
+export default FAQ;

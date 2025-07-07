@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import {
@@ -136,8 +135,8 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
                 className="link-esqueci"
               >
                 Termos de Uso
-              </a> {" "}
-              e a {" "}
+              </a>{" "}
+              e a{" "}
               <a
                 href="/politicaprivacidade"
                 target="_blank"
