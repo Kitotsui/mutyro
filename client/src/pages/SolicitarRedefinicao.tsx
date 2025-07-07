@@ -2,18 +2,23 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import Wrapper from "../assets/wrappers/SolicitarRedefinicao";
+import { useNavigate } from "react-router-dom";
 
 const SolicitarRedefinicao = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const response = await customFetch.post("/auth/redefinir-senha", { email });
+      const response = await customFetch.post("/auth/redefinir-senha", {
+        email,
+      });
       toast.success(response.data.msg);
+      navigate("/");
     } catch (error) {
       toast.error("Erro ao solicitar redefinição de senha.");
     } finally {

@@ -90,6 +90,10 @@ const Configuracoes = () => {
         novaSenha,
       });
       toast.success(response.data.msg);
+
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarNovaSenha("");
     } catch (error: any) {
       toast.error(
         error.response?.data?.msg || "Erro ao redefinir senha. Tente novamente."

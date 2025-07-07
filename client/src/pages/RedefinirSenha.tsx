@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import Wrapper from "../assets/wrappers/SolicitarRedefinicao";
@@ -8,6 +8,7 @@ const RedefinirSenha = () => {
   const { token } = useParams();
   const [novaSenha, setNovaSenha] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ const RedefinirSenha = () => {
         }
       );
       toast.success(response.data.msg);
+      navigate("/");
     } catch (error) {
       toast.error("Erro ao redefinir senha.");
     } finally {
