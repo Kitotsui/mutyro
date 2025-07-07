@@ -51,6 +51,7 @@ export const login = async (req, res) => {
     nome: usuario.nome,
     email: usuario.email,
     isAdmin: usuario.isAdmin,
+    avatar: usuario.avatar,
   };
 
   res.status(StatusCodes.OK).json({

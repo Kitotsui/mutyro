@@ -3,31 +3,28 @@ interface ImageObject {
   public_id?: string;
 }
 
-const getImageUrl = (imageSource?: ImageObject | string | null): string => {
+const getImageUrl = (avatar?: { url: string } | string | null): string => {
   const defaultImage =
-    "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png";
+    "https://res.cloudinary.com/dunfagpl8/image/upload/v1751840306/mutyrouser_mjap7e.png";
 
-  if (!imageSource) {
-    return defaultImage;
+  // Handle null/undefined
+  if (!avatar) return defaultImage;
+
+  // Handle Mongoose avatar object
+  if (typeof avatar === "object" && avatar.url) {
+    return avatar.url.startsWith("http")
+      ? avatar.url
+      : `http://localhost:5100${avatar.url}`;
   }
 
-  let imagePath: string | undefined | null = "";
-
-  if (typeof imageSource === "object" && imageSource !== null) {
-    imagePath = imageSource.url;
-  } else if (typeof imageSource === "string") {
-    imagePath = imageSource;
+  // Handle string path (legacy support)
+  if (typeof avatar === "string") {
+    return avatar.startsWith("http")
+      ? avatar
+      : `http://localhost:5100${avatar}`;
   }
 
-  if (!imagePath || imagePath.trim() === "") {
-    return defaultImage;
-  }
-
-  if (imagePath.startsWith("http")) {
-    return imagePath;
-  }
-
-  return `http://localhost:5100${imagePath}`;
+  return defaultImage;
 };
 
 export default getImageUrl;

@@ -524,7 +524,7 @@ const VisualizarMutirao = () => {
               defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
             }
             style={{
-              "--bg-url": `url(${
+              ["--bg-url" as any]: `url(${
                 defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
               })`,
             }}
@@ -537,7 +537,11 @@ const VisualizarMutirao = () => {
               />
               <div className="org-info">
                 <span className="org-label">Organizado por</span>
-                <span className="org-name">{mutirao.criadoPor.nome}</span>
+                <span className="org-name">
+                  {typeof mutirao.criadoPor === "string"
+                    ? mutirao.criadoPor
+                    : mutirao.criadoPor?.nome ?? "Organizador desconhecido"}
+                </span>
                 <span className="org-extra">
                   <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
                 </span>
@@ -565,13 +569,29 @@ const VisualizarMutirao = () => {
                 </span>
                 <span className="info-item">
                   <button
-                    className={`back-btn ${currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) ? "clickable" : ""}`}
+                    className={`back-btn ${
+                      currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin)
+                        ? "clickable"
+                        : ""
+                    }`}
                     onClick={() => {
-                      if (currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)) {
+                      if (
+                        currentUser &&
+                        (currentUser._id === mutirao.criadoPor._id ||
+                          currentUser.isAdmin)
+                      ) {
                         setShowModal(true); // Abre o modal apenas para o criador ou admin
                       }
                     }}
-                    disabled={!currentUser || !(currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)}
+                    disabled={
+                      !currentUser ||
+                      !(
+                        currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin
+                      )
+                    }
                   >
                     <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
                   </button>
@@ -756,14 +776,19 @@ const VisualizarMutirao = () => {
                                 className="avaliacao-item"
                               >
                                 <div className="avaliacao-header">
-                                  <h4>{avaliacao.usuario.nome}</h4>
+                                  <h4>
+                                    {avaliacao.usuario?.nome ??
+                                      "Usuário desconhecido"}
+                                  </h4>
+
                                   <div className="rating">
                                     {/* Nota: {avaliacao.nota}/5 */}
                                     {Array(avaliacao.nota).fill("★").join("")}
                                   </div>
 
                                   {currentUser?.isAdmin ||
-                                  currentUser?._id === avaliacao.usuario._id ? (
+                                  currentUser?._id ===
+                                    avaliacao.usuario?._id ? (
                                     <div className="avaliacao-actions">
                                       <button
                                         type="button"
