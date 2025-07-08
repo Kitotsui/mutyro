@@ -23,7 +23,7 @@ interface Avaliacao {
   criadoEm: string;
 }
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
@@ -41,6 +41,8 @@ import {
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+import { MapContainer, type MapContainerProps } from "react-leaflet";
 
 import getImageUrl from "@/utils/imageUrlHelper";
 
@@ -177,9 +179,11 @@ function MapWrapper({ mutirao, mapPosition }: MapWrapperProps) {
       }}
     >
       <MapContainer
-        center={mapPosition}
-        zoom={15}
-        style={{ height: "100%", width: "100%" }}
+        {...({
+          center: mapPosition,
+          zoom: 15,
+          style: { height: "100%", width: "100%" },
+        } as MapContainerProps)}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={mapPosition}>

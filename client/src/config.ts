@@ -21,10 +21,10 @@ interface MapboxConfig {
   DEFAULT_PARAMS: {
     country_code?: string;
     limit?: number;
-    layers?: string;
+    types?: string;
     bbox?: string;
+    proximity?: string;
     language?: string;
-    routing?: boolean;
   };
   QUERY_ADDRESS_SUFFIX: string;
 }
@@ -69,13 +69,13 @@ const MAPBOX_BBOX_MINHA_REGIAO = "-48.5,-20.0,-47.5,-18.5";
 export const MAPBOX_CONFIG: MapboxConfig = {
   ACCESS_TOKEN:
     import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "YOUR_FALLBACK_MAPBOX_TOKEN",
-  ENDPOINT: "https://api.mapbox.com/geocoding/v5/mapbox.places", // This is for forward geocoding
+  ENDPOINT: "https://api.mapbox.com/geocoding/v5/mapbox.places",
   DEFAULT_PARAMS: {
-    country: "BR",
+    country_code: "BR", // Alterado de 'country' para 'country_code'
     limit: 2,
     types: "poi,address,place,locality,neighborhood,postcode",
     bbox: MAPBOX_BBOX_MINHA_REGIAO,
-    proximity: "-47.9292,-19.7486", // Coordenadas de Uberaba
+    proximity: "-47.9292,-19.7486",
     language: "pt",
   },
   QUERY_ADDRESS_SUFFIX: ", Uberaba, Minas Gerais, Brazil",

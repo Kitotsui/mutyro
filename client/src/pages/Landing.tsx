@@ -1,5 +1,5 @@
 import Wrapper from "../assets/wrappers/LandingPage";
-import { Hero, Blog, Footer } from "../components";
+import { Hero, Blog } from "../components";
 
 import { useLoaderData } from "react-router-dom";
 import publicFetch from "../utils/publicFetch";
