@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Wrapper from "../assets/wrappers/NovoMutirao";
-import { Form, useNavigate, redirect } from "react-router-dom";
+import { Form, useNavigate, redirect, useNavigation } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import AddressAutocomplete from "../components/AddressAutocomplete";
@@ -38,8 +38,6 @@ export const action = async ({ request }: { request: Request }) => {
     formData.append("tarefas", tarefa);
   });
 
-
-
   const local = formData.get("local") as string;
   const latitude = formData.get("latitude") as string;
   const longitude = formData.get("longitude") as string;
@@ -76,7 +74,10 @@ export const action = async ({ request }: { request: Request }) => {
     toast.success("Mutirão criado com sucesso!");
     return redirect("/user");
   } catch (err: unknown) {
-    const error = err as { response?: { data?: { msg?: string } }; message?: string };
+    const error = err as {
+      response?: { data?: { msg?: string } };
+      message?: string;
+    };
     const errorMsg =
       error.response?.data?.msg || error.message || "Erro ao criar mutirão";
     toast.error(errorMsg);
@@ -96,6 +97,11 @@ interface FormData {
 }
 
 const NovoMutirao = () => {
+  const [termosAceitos, setTermosAceitos] = useState(false);
+
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
@@ -203,11 +209,26 @@ const NovoMutirao = () => {
         {/*<NavBar />*/}
         <div className="container">
           <main>
-            <h2>{t('novoMutirao.titulo')}</h2>
+            <div
+              className="form-header"
+              data-bg={
+                "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
+              }
+              style={
+                {
+                  "--bg-url": `url(https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png)`,
+                } as React.CSSProperties
+              }
+            >
+              <h2>Seu mutirão está quase pronto!</h2>
+              <p className="form-subtitle">
+                Preencha as informações abaixo para finalizar a criação do seu
+                mutirão.
+              </p>
+            </div>
             <div className="form-container">
               <Form method="post" encType="multipart/form-data">
                 <div className="image-section">
-                  <h3>{t('novoMutirao.capaTitulo')}</h3>
                   <div className="image-upload">
                     {selectedImage ? (
                       <img
@@ -217,17 +238,17 @@ const NovoMutirao = () => {
                       />
                     ) : (
                       <div className="upload-placeholder">
-                        <span>{t('novoMutirao.foto')}</span>
+                        <span>Capa do Mutirão</span>
                       </div>
                     )}
                     <button
                       type="button"
-                      className="upload-btn"
+                      className="btn upload-btn"
                       onClick={() =>
                         document.getElementById("foto-input")?.click()
                       }
                     >
-                      {t('novoMutirao.enviarFoto')}
+                      <i className="fa-solid fa-upload"></i>Enviar capa
                     </button>
                     <input
                       type="file"
@@ -347,20 +368,28 @@ const NovoMutirao = () => {
                         {formData.tarefas.length > 1 && (
                           <button
                             type="button"
-                            className="remove-btn"
+                            className="btn remove-btn"
                             onClick={() => removerTarefa(index)}
                           >
-                            {t('novoMutirao.remover')}
+                            <i
+                              className="fa-solid fa-trash"
+                              style={{ marginRight: "0.5rem" }}
+                            ></i>
+                            Remover
                           </button>
                         )}
                       </div>
                     ))}
                     <button
                       type="button"
-                      className="add-btn"
+                      className="btn add-btn"
                       onClick={adicionarTarefa}
                     >
-                      {t('novoMutirao.adicionarTarefa')}
+                      <i
+                        className="fa-solid fa-plus"
+                        style={{ marginRight: "0.5rem" }}
+                      ></i>
+                      Adicionar Tarefa
                     </button>
                   </div>
 
@@ -430,8 +459,16 @@ const NovoMutirao = () => {
 
                   <div className="terms">
                     <label>
-                      <input type="checkbox" required />
-                      {t('novoMutirao.termos')}
+                      <input
+                        type="checkbox"
+                        checked={termosAceitos}
+                        onChange={(e) => setTermosAceitos(e.target.checked)}
+                        required
+                      />
+                      Eu concordo em organizar este mutirão de forma
+                      responsável, respeitando as diretrizes da comunidade e
+                      garantindo um ambiente seguro e inclusivo para todos os
+                      participantes.
                     </label>
                   </div>
                 </div>
@@ -439,13 +476,38 @@ const NovoMutirao = () => {
                 <div className="button-group">
                   <button
                     type="button"
-                    className="cancel-btn"
+                    className="btn cancel-btn"
                     onClick={() => navigate(-1)}
                   >
-                    {t('novoMutirao.cancelar')}
+                    <i
+                      className="fa-solid fa-xmark"
+                      style={{ marginRight: "0.5rem" }}
+                    ></i>
+                    Cancelar
                   </button>
-                  <button type="submit" className="submit-btn">
-                    {t('novoMutirao.criarMutirao')}
+                  <button
+                    type="submit"
+                    className="btn submit-btn"
+                    disabled={!termosAceitos || isSubmitting}
+                    aria-disabled={!termosAceitos || isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <i
+                          className="fa-solid fa-spinner fa-spin"
+                          style={{ marginRight: "0.5rem" }}
+                        ></i>
+                        Criando Mutirão...
+                      </>
+                    ) : (
+                      <>
+                        <i
+                          className="fa-solid fa-check-circle"
+                          style={{ marginRight: "0.5rem" }}
+                        ></i>
+                        Criar Mutirão
+                      </>
+                    )}
                   </button>
                 </div>
               </Form>

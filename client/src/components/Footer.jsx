@@ -18,13 +18,13 @@ const Footer = () => {
               <a href="/">{t('navbar.home')}</a>
             </li>
             <li>
-              <a href="#">{t('footer.termos')}</a>
+              <a href="/termosdeuso">{t('footer.termos')}</a>
             </li>
             <li>
-              <a href="#">{t('footer.privacidade')}</a>
+              <a href="/politicaprivacidade">{t('footer.privacidade')}</a>
             </li>
             <li>
-              <a href="mailto:">{t('footer.contato')}</a>
+              <a href="/sobre">{t('navbar.sobre')}</a>
             </li>
           </ul>
         </div>

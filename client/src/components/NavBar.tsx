@@ -1,31 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
 import logo from "../assets/images/mutyrologo.svg";
 import { useAuth } from "../context/AuthContext";
-import { useTranslation } from "react-i18next";
-
-interface Usuario {
-  _id: string;
-  nome: string;
-  email?: string;
-  avatar?: string;
-  username?: string;
-}
-
-const mockAvatarUrl = "https://i.pravatar.cc/150?img=11";
+import getImageUrl from "@/utils/imageUrlHelper";
 
 const NavBar = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const { usuario, logout, isLoading } = useAuth();
   const [showRegister, setShowRegister] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { usuario, logout } = useAuth() as {
-    usuario: Usuario | null;
-    logout: () => Promise<void>;
-  };
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -125,11 +113,26 @@ const NavBar = () => {
     }
   }, [location.state, navigate, handleLoginClick, handleRegisterClick]);
 
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <nav className="navbar">
+          <div className="navbar-flex container">
+            {/* Logo e talvez algum placeholder de carregamento */}
+            <Link to="/" aria-label={t('geral.logoHome')} onClick={handleHomeNavigation}>
+              <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
+            </Link>
+            <div>{t('geral.carregando')}</div>
+          </div>
+        </nav>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       <nav className="navbar">
         <div className="navbar-flex container">
-          <Link to="/" aria-label="Logo Home" onClick={handleHomeNavigation}>
+          <Link to="/" aria-label={t('geral.logoHome')} onClick={handleHomeNavigation}>
             <img id="navbar-logo" src={logo} alt="Mutyro Logo" />
           </Link>
 
@@ -139,7 +142,7 @@ const NavBar = () => {
               setIsOpen(!isOpen);
               setShowUserDropdown(false);
             }}
-            aria-label="Toggle Menu"
+            aria-label={t('geral.alternarMenu')}
           >
             ☰
           </button>
@@ -181,7 +184,7 @@ const NavBar = () => {
               </li>
               <li>
                 <div className="cta-btns">
-                  {!usuario ? (
+                  {isLoading ? null : !usuario ? (
                     <>
                       <button
                         className="btn register-link"
@@ -217,8 +220,8 @@ const NavBar = () => {
                         </div>
                         <div className="user-avatar-container">
                           <img
-                            src={usuario.avatar || mockAvatarUrl}
-                            alt={`Avatar de ${usuario.nome}`}
+                            src={getImageUrl(usuario?.avatar)}
+                            alt={t('geral.avatarDe', { nome: usuario.nome })}
                             className="avatar-img"
                           />
                         </div>
@@ -227,11 +230,11 @@ const NavBar = () => {
                         type="button"
                         className="profile-dropdown-toggle"
                         onClick={toggleUserDropdown}
-                        aria-label="Abrir menu do usuário"
+                        aria-label={t('geral.abrirMenuUsuario')}
                         aria-haspopup="true"
                         aria-expanded={showUserDropdown}
                       >
-                        <i className="fas fa-caret-down caret-icon-fa"></i>{" "}
+                        <i className="fas fa-caret-down caret-icon-fa"></i>
                       </button>
                       {showUserDropdown && (
                         <div className="user-dropdown show-dropdown">

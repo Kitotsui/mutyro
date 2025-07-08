@@ -1,8 +1,9 @@
 import logo from "../assets/images/mutyroinnerlogotextless.png";
 import Wrapper from "../assets/wrappers/Blog";
 
-import { FilterBar, Carousel, Card } from ".";
+import { Carousel, Card } from ".";
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -12,9 +13,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import getImageUrl from "@/utils/imageUrlHelper";
-import { useTranslation } from "react-i18next";
-
-
+import CarouselAvaliados from "./CarouselAvaliados";
 
 interface Mutirao {
   _id: string;
@@ -30,6 +29,7 @@ interface BlogProps {
 }
 
 const Blog = ({ mutiroes }: BlogProps) => {
+  const { t } = useTranslation();
   const wasDragging = useRef(false);
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -121,31 +121,47 @@ const Blog = ({ mutiroes }: BlogProps) => {
 
   const socialCards = [
     {
-      label: "#Bem-Estar",
-      text: "Ajudar faz bem pro outro e pra você.",
+      label: t('geral.bemEstar'),
+      text: t('geral.ajudarFazBem'),
     },
     {
-      label: "#Crescimento",
-      text: "Você aprende e evolui",
+      label: t('geral.crescimento'),
+      text: t('geral.voceAprende'),
     },
     {
-      label: "#Conexão",
-      text: "Conheça gente incrível",
+      label: t('geral.conexao'),
+      text: t('geral.conhecaGente'),
     },
     {
-      label: "#Propósito",
-      text: "Faça suas horas valerem mais.",
+      label: t('geral.proposito'),
+      text: t('geral.facaSuasHoras'),
     },
   ];
 
-     // Filtra os mutirões que não estão finalizados
-  const mutiroesAtivos = mutiroes.filter((mutirao) => mutirao.finalizado === false);
-
-  const { t } = useTranslation();
+  // Filtra os mutirões que não estão finalizados
+  const mutiroesAtivos = mutiroes.filter(
+    (mutirao) => mutirao.finalizado === false
+  );
 
   return (
     <Wrapper>
-      <FilterBar />
+      {/* <FilterBar /> */}
+      <div className="carousel-sucesso-wrapper">
+        <div className="carousel-header">
+          {/* <img src={logo} alt="Blog Heading Logo" draggable={false} /> */}
+          <i
+            className="fas fa-star"
+            aria-hidden="true"
+            style={{
+              fontSize: "30px",
+              color: "var(--secondary-color)",
+              marginRight: "0.6rem",
+            }}
+          ></i>
+          <h2>{t('geral.historiasSucesso')}</h2>
+        </div>
+        <CarouselAvaliados />
+      </div>
       {/* BLOG CARDS */}
       <div className="blog-heading">
         <img src={logo} alt="Blog Heading Logo" draggable={false} />
@@ -153,7 +169,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
       </div>
       <div className="carousel-container">
         <div className="carousel-label-wrapper">
-          <span className="carousel-label">Novidades</span>
+          <span className="carousel-label">{t('geral.novidades')}</span>
         </div>
         <Carousel>
           {mutiroesAtivos.map((mutirao) => {
@@ -250,7 +266,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
               </>
             ) : (
               <li>
-                <p>Nenhum mutirão nesta data.</p>
+                <p>{t('geral.nenhumMutiraoData')}</p>
               </li>
             )}
           </ul>

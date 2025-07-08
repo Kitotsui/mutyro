@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import lodashDebounce from "lodash.debounce";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import Wrapper from "../assets/wrappers/AddressAutocomplete";
 import { RATE_LIMIT_DELAY } from "../config";
 import { getActiveGeocodingService } from "../services/geocodingServiceFactory";
@@ -24,9 +25,10 @@ interface AddressAutocompleteProps {
 const AddressAutocomplete = ({
   onLocationSelect,
   initialValue = "",
-  label = "Local - Endereço",
-  placeholder = "Digite o endereço e selecione a opção correta",
+  label,
+  placeholder,
 }: AddressAutocompleteProps) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState<string>(initialValue);
   const [suggestions, setSuggestions] = useState<GeocodingSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
@@ -57,7 +59,7 @@ const AddressAutocomplete = ({
       console.error("Error fetching suggestions:", error);
       setSuggestions([]);
       setShowSuggestions(false);
-      toast.error("Falha ao buscar endereços."); // More generic error
+      toast.error(t('geral.erroBuscarEnderecos'));
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +69,7 @@ const AddressAutocomplete = ({
   // useCallback ensures this debounced function is memorized and not recreated on every render
   const debouncedFetchSuggestions = useCallback(
     lodashDebounce(fetchSuggestionsFromAPI, RATE_LIMIT_DELAY),
-    [activeService] // Dependency on activeService ensures debounce is recreated if service changes
+    [activeService, t] // Dependency on activeService ensures debounce is recreated if service changes
   );
 
   // --- Event Handlers ---
@@ -188,7 +190,7 @@ const AddressAutocomplete = ({
         id="address-search-input"
         value={query}
         onChange={handleInputChange}
-        placeholder={placeholder}
+        placeholder={placeholder || t('geral.placeholderEndereco')}
         autoComplete="off" // Important to prevent browser's default autocomplete
         onFocus={() => {
           // Optionally show suggestions on focus if query is already populated
@@ -198,7 +200,7 @@ const AddressAutocomplete = ({
         }}
       />
       {isLoading && (
-        <div className="loading-indicator">Buscando endereços...</div>
+        <div className="loading-indicator">{t('geral.buscandoEnderecos')}</div>
       )}
       {showSuggestions && suggestions.length > 0 && (
         <ul className="suggestions-list">

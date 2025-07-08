@@ -31,7 +31,17 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
+      lookupLocalStorage: 'idioma',
+    },
+    react: {
+      useSuspense: false,
     },
   });
+
+// Garante que o idioma seja definido corretamente na inicialização
+const storedIdioma = localStorage.getItem('idioma');
+if (storedIdioma && i18n.languages.includes(storedIdioma)) {
+  i18n.changeLanguage(storedIdioma);
+}
 
 export default i18n; 

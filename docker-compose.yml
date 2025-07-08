@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
@@ -26,6 +26,7 @@ services:
       - "5174:5173"
     environment:
       - VITE_API_URL=http://localhost:5100
+      # - VITE_API_URL=http://backend:5100
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -48,4 +49,4 @@ volumes:
 
 networks:
   mutyro-network:
-    driver: bridge 
+    driver: bridge

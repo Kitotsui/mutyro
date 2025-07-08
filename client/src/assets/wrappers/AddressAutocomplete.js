@@ -6,6 +6,7 @@ const Wrapper = styled.div`
 
   /* Styles for the input field within this component */
   input[type="text"] {
+    margin-top: 1rem;
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--grey-200, #ccc); /* Use your theme variables */

@@ -1,8 +1,14 @@
-import {Router} from 'express';
-import { getCurrentUser, updateUser, getApplicationStats } from '../controllers/userController.js';
+import { Router } from "express";
+import {
+  getCurrentUser,
+  updateUser,
+  getApplicationStats,
+} from "../controllers/userController.js";
 import { validateUpdateUserInput } from "../middleware/validationMiddleware.js";
-import { authorizePermissions } from '../middleware/authMiddleware.js';
+import { authorizePermissions } from "../middleware/authMiddleware.js";
 const router = Router();
+
+import { uploadAvatar } from "../utils/multer.js";
 
 /**
  * @swagger
@@ -17,11 +23,31 @@ const router = Router();
  *   get:
  *     summary: Retorna os dados do usuário logado
  *     tags: [Usuarios]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Dados do usuário retornados com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 usuario:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     nome:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     isAdmin:
+ *                       type: boolean
+ *       401:
+ *         description: Não autenticado
  */
-router.get('/atual-usuario', getCurrentUser);
+router.get("/atual-usuario", getCurrentUser);
 
 /**
  * @swagger
@@ -29,13 +55,30 @@ router.get('/atual-usuario', getCurrentUser);
  *   get:
  *     summary: Retorna estatísticas da aplicação (somente para admins)
  *     tags: [Usuarios]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Estatísticas da aplicação retornadas com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 usuarios:
+ *                   type: integer
+ *                 mutiroes:
+ *                   type: integer
  *       403:
  *         description: Acesso negado (sem permissão de admin)
+ *       401:
+ *         description: Não autenticado
  */
-router.get('/admin/app-estatistica',authorizePermissions(), getApplicationStats);
+router.get(
+  "/admin/app-estatistica",
+  authorizePermissions(),
+  getApplicationStats
+);
 
 /**
  * @swagger
@@ -43,6 +86,8 @@ router.get('/admin/app-estatistica',authorizePermissions(), getApplicationStats)
  *   patch:
  *     summary: Atualiza dados do usuário autenticado
  *     tags: [Usuarios]
+ *     security:
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -54,11 +99,22 @@ router.get('/admin/app-estatistica',authorizePermissions(), getApplicationStats)
  *                 type: string
  *               email:
  *                 type: string
+ *             example:
+ *               nome: "João Silva"
+ *               email: "joaosilva@gmail.com"
  *     responses:
  *       200:
  *         description: Usuário atualizado com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Não autenticado
  */
-router.patch('/atualizar-usuario', validateUpdateUserInput, updateUser);
-
+router.patch(
+  "/atualizar-usuario",
+  uploadAvatar.single("avatar"),
+  validateUpdateUserInput,
+  updateUser
+);
 
 export default router;

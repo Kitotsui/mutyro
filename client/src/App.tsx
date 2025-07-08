@@ -6,13 +6,19 @@ import {
   NovoMutirao,
   VisualizarMutirao,
   Notificacoes,
+  Sobre,
+  User,
 } from "./pages";
 import { AuthProvider } from "./context/AuthContext";
+import { IdiomaProvider } from "./context/IdiomaContext";
 import EditarMutirao from "./pages/EditarMutirao";
 import CalendarioCompleto from "./pages/CalendarioCompleto";
 import FAQ from "./pages/FAQ";
 import Configuracoes from "./pages/Configuracoes";
-import User from "./pages/User";
+import PoliticaPrivacidade from "./pages/PoliticaPrivacidade";
+import TermosUso from "./pages/TermosUso";
+import SolicitarRedefinicao from "./pages/SolicitarRedefinicao";
+import RedefinirSenha from "./pages/RedefinirSenha";
 
 import { action as novoMutiraoAction } from "./pages/NovoMutirao";
 import { loader as userLoader } from "./pages/User";
@@ -21,6 +27,8 @@ import { action as editarMutiraoAction } from "./pages/EditarMutirao";
 import { loader as landingLoader } from "./pages/Landing";
 import { loader as novoMutiraoLoader } from "./pages/NovoMutirao";
 import { loader as calendarioCompletoLoader } from "./pages/CalendarioCompleto";
+import { loader as editarUsuarioLoader } from "./pages/EditarUsuario";
+import { action as editarUsuarioAction } from "./pages/EditarUsuario";
 import EditarUsuario from "./pages/EditarUsuario";
 
 const router = createBrowserRouter([
@@ -68,6 +76,8 @@ const router = createBrowserRouter([
       {
         path: "editarusuario",
         element: <EditarUsuario />,
+        loader: editarUsuarioLoader,
+        action: editarUsuarioAction,
       },
       {
         path: "faq",
@@ -76,6 +86,26 @@ const router = createBrowserRouter([
       {
         path: "configuracoes",
         element: <Configuracoes />,
+      },
+      {
+        path: "politicaprivacidade",
+        element: <PoliticaPrivacidade />,
+      },
+      {
+        path: "termosdeuso",
+        element: <TermosUso />,
+      },
+      {
+        path: "sobre",
+        element: <Sobre />,
+      },
+      {
+        path: "redefinir-senha",
+        element: <SolicitarRedefinicao />,
+      },
+      {
+        path: "redefinir-senha/:token",
+        element: <RedefinirSenha />,
       },
     ],
   },
@@ -87,9 +117,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <IdiomaProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </IdiomaProvider>
   );
 };
 

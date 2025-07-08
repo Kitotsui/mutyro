@@ -5,6 +5,7 @@ import UserSidebar from "../components/UserSidebar";
 import MutiroesList from "../components/MutiroesList";
 import SmoothToggle from "../components/SmoothToggle";
 import CustomDropdown from "../components/CustomDropdown";
+import { useTranslation } from "react-i18next";
 
 import { redirect, useLoaderData } from "react-router-dom";
 import customFetch from "../utils/customFetch";
@@ -12,26 +13,21 @@ import customFetch from "../utils/customFetch";
 type Usuario = {
   _id: string;
   nome: string;
-  email: string;
-  avatar?: string;
-  isAdmin?: boolean;
+  avatar: string;
+  //username: string;
 };
 
-type Mutirao = {
+interface Mutirao {
   _id: string;
   titulo: string;
-  descricao: string;
   data: string;
-  horario: string;
-  local: string;
-  criadoPor: {
-    _id: string;
-    nome: string;
-  };
+  descricao: string;
+  imagemCapa: string;
+  criadoPor: { _id: string; nome: string };
   inscritos: string[];
-  finalizado: boolean;
-  imagemCapa?: string;
-};
+  mutiraoTipo: string;
+  finalizado?: boolean;
+}
 
 //loader pega as informacoes antes renderizar o componente
 export const loader = async () => {
@@ -55,8 +51,9 @@ const User = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [filtro, setFiltro] = useState<"meus" | "todos">("meus");
   const [tipoSelecionado, setTipoSelecionado] = useState("");
+  const { t } = useTranslation();
 
-  // Filtra os mutirões criados pelo usuário ou que ele está inscrito
+  // Filtra os mutirões baseado no filtro selecionado
   const mutiroesFiltrados = mutiroes.filter((mutirao) => {
     if (filtro === "meus") {
       return mutirao.criadoPor._id === user._id || mutirao.inscritos.includes(user._id);
@@ -64,35 +61,51 @@ const User = () => {
     return true;
   });
 
-  const interesses = ["Voluntariado", "Meio Ambiente", "Educação", "Saúde"];
+  // Filtra por tipo e status
+  const mutiroesFiltradosPorTipo = mutiroesFiltrados.filter((mutirao) => {
+    if (tipoSelecionado === "ENCERRADOS") {
+      return mutirao.finalizado === true; // Mostra apenas finalizados
+    }
+    if (tipoSelecionado === "") {
+      return mutirao.finalizado === false; // Exclui finalizados para outros filtros
+    }
+    return mutirao.mutiraoTipo === tipoSelecionado && mutirao.finalizado === false;
+  });
 
-  // Todos os mutirões futuros para o calendário
-  const proximosMutiroesParaCalendario = mutiroesFiltrados
-    .filter((mutirao) => !mutirao.finalizado)
-    .map((mutirao) => ({
-      titulo: mutirao.titulo,
-      data: mutirao.data.split('T')[0],
-    }));
+  // Próximos mutirões: data futura e usuário inscrito ou criador
+  const hoje = new Date();
+  const proximosMutiroes = mutiroes
+    .filter((mutirao) => {
+      const dataMutirao = new Date(mutirao.data);
+      const isFuturo = dataMutirao >= hoje;
+      const criadoPorMim = mutirao.criadoPor._id === user._id;
+      const estouInscrito =
+        Array.isArray(mutirao.inscritos) &&
+        mutirao.inscritos.includes(user._id);
+      return isFuturo && (criadoPorMim || estouInscrito);
+    })
+    .map((mutirao) => ({ titulo: mutirao.titulo, data: mutirao.data }));
 
+  // Elemento de filtros para passar para MutiroesList
   const filtrosElement = (
     <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
       <SmoothToggle
         options={[
-          { value: "meus", label: "Meus Mutirões" },
-          { value: "todos", label: "Todos os Mutirões" },
+          { value: "meus", label: t('user.filtroMeusMutiroes') },
+          { value: "todos", label: t('user.filtroTodosMutiroes') },
         ]}
         value={filtro}
         onChange={(value) => setFiltro(value as "meus" | "todos")}
       />
       <CustomDropdown
         options={[
-          { value: "", label: "Todos os tipos" },
-          { value: "SOCIAL", label: "Social" },
-          { value: "SAUDE", label: "Saúde" },
-          { value: "CONSTRUCAO_REFORMA", label: "Construção/Reforma" },
-          { value: "AMBIENTAL_AGRICOLA", label: "Ambiental/Agrícola" },
-          { value: "CULTURA_EDUCACAO", label: "Cultura/Educação" },
-          { value: "TECNOLOGIA", label: "Tecnologia" },
+          { value: "", label: t('user.filtroTodosTipos') },
+          { value: "SOCIAL", label: t('user.tipoSocial') },
+          { value: "SAUDE", label: t('user.tipoSaude') },
+          { value: "CONSTRUCAO_REFORMA", label: t('user.tipoConstrucaoReforma') },
+          { value: "AMBIENTAL_AGRICOLA", label: t('user.tipoAmbientalAgricola') },
+          { value: "CULTURA_EDUCACAO", label: t('user.tipoCulturaEducacao') },
+          { value: "TECNOLOGIA", label: t('user.tipoTecnologia') },
         ]}
         value={tipoSelecionado}
         onChange={setTipoSelecionado}
@@ -109,10 +122,10 @@ const User = () => {
             <UserSidebar
               date={selectedDate}
               onDateChange={setSelectedDate}
-              interesses={interesses}
-              proximosMutiroes={proximosMutiroesParaCalendario}
+              interesses={[]}
+              proximosMutiroes={proximosMutiroes}
             />
-            <MutiroesList mutiroes={mutiroesFiltrados} filtrosElement={filtrosElement} />
+            <MutiroesList mutiroes={mutiroesFiltradosPorTipo} filtrosElement={filtrosElement} />
           </div>
         </main>
       </div>

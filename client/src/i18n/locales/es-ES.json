@@ -20,6 +20,8 @@
   },
   "configuracoes": {
     "titulo": "Configuración",
+    "abaGerais": "Generales",
+    "abaSeguranca": "Seguridad",
     "tema": "Tema del sitio",
     "claro": "Claro",
     "escuro": "Oscuro",
@@ -27,7 +29,15 @@
     "receberNotificacoes": "Recibir notificaciones por correo electrónico",
     "idioma": "Idioma",
     "salvar": "¡Preferencias guardadas!",
-    "botaoSalvar": "Guardar configuración"
+    "botaoSalvar": "Guardar configuración",
+    "alterarSenha": "Cambiar contraseña",
+    "senhaAtual": "Contraseña actual",
+    "novaSenha": "Nueva contraseña",
+    "confirmarNovaSenha": "Confirmar nueva contraseña",
+    "erroRedefinirSenha": "Error al restablecer la contraseña. Inténtalo de nuevo.",
+    "inserirNovaSenha": "Ingresa tu nueva contraseña a continuación para restablecerla.",
+    "novaSenhaPlaceholder": "Ingresa tu nueva contraseña",
+    "redefinindo": "Restableciendo..."
   },
   "faq": {
     "titulo": "Preguntas Frecuentes (FAQ)",
@@ -106,6 +116,11 @@
     "privacidade": "Privacidad",
     "contato": "Contacto"
   },
+  "idiomas": {
+    "portugues": "Portugués (Brasil)",
+    "ingles": "Inglés (English)",
+    "espanhol": "Español"
+  },
   "geral": {
     "voltar": "Volver",
     "salvar": "Guardar",
@@ -121,7 +136,38 @@
     "loginSucesso": "¡Inicio de sesión exitoso!",
     "cadastroSucesso": "¡Registro exitoso!",
     "loginAutomaticoErro": "Registro completado, pero hubo un problema al iniciar sesión automáticamente. Por favor, inicia sesión.",
-    "loginAutomaticoFalhou": "Registro completado, pero el inicio de sesión automático falló. Por favor, intenta iniciar sesión manualmente."
+    "loginAutomaticoFalhou": "Registro completado, pero el inicio de sesión automático falló. Por favor, intenta iniciar sesión manualmente.",
+    "historiasSucesso": "Historias de Éxito",
+    "novidades": "Novedades",
+    "nenhumMutiraoData": "No hay mutirão en esta fecha.",
+    "por": "por",
+    "data": "Fecha",
+    "status": "Estado",
+    "ocultarSenha": "Ocultar contraseña",
+    "mostrarSenha": "Mostrar contraseña",
+    "logoAlt": "Logo de Mutyro",
+    "compartilhar": "Compartir",
+    "avatarDe": "Avatar de {{nome}}",
+    "abrirMenuUsuario": "Abrir menú del usuario",
+    "alternarMenu": "Alternar Menú",
+    "avaliacao": "Calificación: {{rating}} de {{maxRating}} estrellas.",
+    "informacoesUsuario": "Información del Usuario",
+    "erroBuscarEnderecos": "Error al buscar direcciones.",
+    "placeholderEndereco": "Escribe la dirección y selecciona la opción correcta",
+    "buscandoEnderecos": "Buscando direcciones...",
+    "inscritosMutirao": "Inscritos en el mutirão: {{titulo}}",
+    "imprimir": "Imprimir",
+    "fechar": "Cerrar",
+    "carregandoHistorias": "Cargando historias...",
+    "noMutirao": "en el mutirão",
+    "bemEstar": "#Bienestar",
+    "ajudarFazBem": "Ayudar es bueno para los demás y para ti.",
+    "crescimento": "#Crecimiento",
+    "voceAprende": "Aprendes y evolucionas",
+    "conexao": "#Conexión",
+    "conhecaGente": "Conoce gente increíble",
+    "proposito": "#Propósito",
+    "facaSuasHoras": "Haz que tus horas valgan más."
   },
   "novoMutirao": {
     "titulo": "¡Tu mutirão está casi listo!",
@@ -262,5 +308,28 @@
   },
   "search": {
     "placeholder": "Buscar mutirão por título..."
+  },
+  "quotes": {
+    "quote1": "Nadie es tan pequeño que no pueda ayudar, ni tan grande que no necesite ayuda.",
+    "quote2": "La verdadera grandeza está en servir a los demás sin esperar nada a cambio.",
+    "quote3": "Un pequeño acto de bondad puede transformar un día, una vida e incluso el mundo.",
+    "quote4": "Sé el cambio que quieres ver en el mundo.",
+    "quote5": "El voluntariado es el arte de dar sin perder, de recibir sin pedir.",
+    "quote6": "Al extender la mano para ayudar a alguien, también te levantas a ti mismo.",
+    "quote7": "La solidaridad es el idioma del corazón.",
+    "quote8": "Ningún acto de bondad, por pequeño que sea, se desperdicia.",
+    "quote9": "Cuando ayudamos a otros, descubrimos el verdadero propósito de nuestra existencia.",
+    "quote10": "Hacer el bien al prójimo es la forma más hermosa de enriquecer el alma."
+  },
+  "user": {
+    "filtroMeusMutiroes": "Mis Mutirões",
+    "filtroTodosMutiroes": "Todos los Mutirões",
+    "filtroTodosTipos": "Todos los tipos",
+    "tipoSocial": "Social",
+    "tipoSaude": "Salud",
+    "tipoConstrucaoReforma": "Construcción/Reforma",
+    "tipoAmbientalAgricola": "Ambiental/Agrícola",
+    "tipoCulturaEducacao": "Cultura/Educación",
+    "tipoTecnologia": "Tecnología"
   }
 } 

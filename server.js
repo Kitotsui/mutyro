@@ -7,6 +7,8 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import session from "express-session";
+import passport from "passport";
 
 //Swagger
 import swaggerUi from "swagger-ui-express";
@@ -31,6 +33,23 @@ import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Configuração do express-session
+app.use(
+  session({
+    secret: process.env.JWT_SECRET, 
+    resave: false, // Não salva a sessão novamente se não houver alterações
+    saveUninitialized: true, // Salva sessões não inicializadas
+    cookie: {
+      secure: false, 
+      maxAge: 1000 * 60 * 60 * 24, // 1 dia
+    },
+  })
+);
+
+// Inicialização do Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // verifica se o mutirao está finalizado e atualiza o status a cada 24 horas
 async function iniciarVerificacaoPeriodica() {

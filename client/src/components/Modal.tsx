@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Wrapper from "../assets/wrappers/Modal";
 
 interface ModalProps {
@@ -9,6 +10,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }) => {
+  const { t } = useTranslation();
+  
   if (!isOpen) return null;
 
   const handlePrint = () => {
@@ -31,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }) => {
               </style>
             </head>
             <body>
-              <h3>Inscritos no mutirão: ${title}</h3>
+              <h3>${t('geral.inscritosMutirao', { titulo: title })}</h3>
               <ul>
                 ${printContent.innerHTML}
               </ul>
@@ -54,10 +57,10 @@ const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children }) => {
           </div>
           <div className="modal-footer">
             <button className="print-btn" onClick={handlePrint}>
-              Imprimir
+              {t('geral.imprimir')}
             </button>
             <button className="close-btn" onClick={onClose}>
-              Fechar
+              {t('geral.fechar')}
             </button>
           </div>
         </div>

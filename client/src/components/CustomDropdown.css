@@ -2,6 +2,7 @@
   position: relative;
   display: inline-block;
   min-width: 180px;
+  overflow: visible; /* Garante que o menu não seja cortado */
 }
 .dropdown-btn {
   width: 100%;
@@ -43,9 +44,11 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.13);
-  z-index: 10;
+  z-index: 9999; /* Garante que fique acima de outros elementos */
   padding: 8px 0;
   margin-top: 4px;
+  overflow-y: auto;
+  max-height: 300px; /* Permite scroll se o menu for muito grande */
 }
 .dropdown-item {
   padding: 12px 18px;

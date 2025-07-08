@@ -91,6 +91,7 @@ const EditarMutirao = () => {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const [termosAceitos, setTermosAceitos] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     titulo: mutirao.titulo,
@@ -104,7 +105,7 @@ const EditarMutirao = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [currentImage, setCurrentImage] = useState(mutirao.imagemCapa);
+  const currentImage = mutirao.imagemCapa;
 
   // States para o endereço
   const [numeroEComplemento, setNumeroEComplemento] = useState(
@@ -190,7 +191,23 @@ const EditarMutirao = () => {
       <div className="min-h-screen">
         <div className="container">
           <main>
-            <h2>Editando seu mutirão</h2>
+            <div
+              className="form-header"
+              data-bg={
+                "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png"
+              }
+              style={
+                {
+                  "--bg-url": `url(https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png)`,
+                } as React.CSSProperties
+              }
+            >
+              <h2>Editando seu mutirão</h2>
+              <p className="form-subtitle">
+                Atualize as informações abaixo para manter seu mutirão sempre
+                organizado.
+              </p>
+            </div>
             <div className="form-container">
               <Form method="post" encType="multipart/form-data">
                 <div className="image-section">
@@ -215,12 +232,12 @@ const EditarMutirao = () => {
                     )}
                     <button
                       type="button"
-                      className="upload-btn"
+                      className="btn upload-btn"
                       onClick={() =>
                         document.getElementById("foto-input")?.click()
                       }
                     >
-                      Alterar foto
+                      <i className="fa-solid fa-upload"></i>Alterar capa
                     </button>
                     <input
                       type="file"
@@ -286,9 +303,9 @@ const EditarMutirao = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="address-search-input">
+                    {/* <label htmlFor="address-search-input">
                       Endereço Principal (Rua, Bairro, Cidade)
-                    </label>
+                    </label> */}
                     <AddressAutocomplete
                       onLocationSelect={handleLocationSelected}
                       initialValue={removeNumeroFromLocal(
@@ -352,6 +369,10 @@ const EditarMutirao = () => {
                             className="remove-btn"
                             onClick={() => removerTarefa(index)}
                           >
+                            <i
+                              className="fa-solid fa-trash"
+                              style={{ marginRight: "0.5rem" }}
+                            ></i>
                             Remover
                           </button>
                         )}
@@ -362,6 +383,10 @@ const EditarMutirao = () => {
                       className="add-btn"
                       onClick={adicionarTarefa}
                     >
+                      <i
+                        className="fa-solid fa-plus"
+                        style={{ marginRight: "0.5rem" }}
+                      ></i>
                       Adicionar Tarefa
                     </button>
                   </div>
@@ -433,7 +458,12 @@ const EditarMutirao = () => {
 
                   <div className="terms">
                     <label>
-                      <input type="checkbox" required />
+                      <input
+                        type="checkbox"
+                        checked={termosAceitos}
+                        onChange={(e) => setTermosAceitos(e.target.checked)}
+                        required
+                      />
                       Eu concordo em organizar este mutirão de forma
                       responsável, respeitando as diretrizes da comunidade e
                       garantindo um ambiente seguro e inclusivo para todos os
@@ -445,18 +475,38 @@ const EditarMutirao = () => {
                 <div className="button-group">
                   <button
                     type="button"
-                    className="cancel-btn"
+                    className="btn cancel-btn"
                     onClick={() => navigate(-1)}
                     disabled={isSubmitting}
                   >
+                    <i
+                      className="fa-solid fa-xmark"
+                      style={{ marginRight: "0.5rem" }}
+                    ></i>
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="submit-btn"
-                    disabled={isSubmitting}
+                    className="btn submit-btn"
+                    disabled={!termosAceitos || isSubmitting}
                   >
-                    {isSubmitting ? "Atualizando..." : "Atualizar Mutirão"}
+                    {isSubmitting ? (
+                      <>
+                        <i
+                          className="fa-solid fa-spinner fa-spin"
+                          style={{ marginRight: "0.5rem" }}
+                        ></i>
+                        Atualizando...
+                      </>
+                    ) : (
+                      <>
+                        <i
+                          className="fa-solid fa-save"
+                          style={{ marginRight: "0.5rem" }}
+                        ></i>
+                        Atualizar Mutirão
+                      </>
+                    )}
                   </button>
                 </div>
               </Form>

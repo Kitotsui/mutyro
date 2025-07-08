@@ -9,6 +9,19 @@ const Wrapper = styled.div`
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 1rem 3rem 1rem;
+    padding-left: 80px;
+    
+    @media (max-width: 768px) {
+      padding-left: 70px;
+    }
+    
+    @media (max-width: 480px) {
+      padding-left: 60px;
+    }
+    
+    @media (max-width: 320px) {
+      padding-left: 1rem;
+    }
   }
 
   .mutirao-card {
@@ -27,6 +40,17 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 2rem 2.5rem;
     color: var(--grey-50);
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--bg-url);
+      background-size: auto;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 1;
+      pointer-events: none;
+    }
     .header-content {
       position: relative;
       z-index: 2;

@@ -24,13 +24,7 @@ interface Avaliacao {
   criadoEm: string;
 }
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  MapContainerProps,
-} from "react-leaflet";
+import { TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
@@ -48,6 +42,8 @@ import {
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+import { MapContainer, type MapContainerProps } from "react-leaflet";
 
 import getImageUrl from "@/utils/imageUrlHelper";
 
@@ -86,11 +82,6 @@ interface Mutirao {
 interface CriadoPorInfo {
   _id: string;
   nome: string;
-}
-
-interface Habilidade {
-  nome: string;
-  checked: boolean;
 }
 
 interface VisualizarMutiraoLoaderData {
@@ -172,7 +163,7 @@ export const loader = async ({
 import ShareMutirao from "@/components/ShareMutirao";
 
 type MapWrapperProps = {
-  mutirao: any;
+  mutirao: Mutirao;
   mapPosition: [number, number];
 };
 
@@ -189,9 +180,11 @@ function MapWrapper({ mutirao, mapPosition }: MapWrapperProps) {
       }}
     >
       <MapContainer
-        center={mapPosition}
-        zoom={15}
-        style={{ height: "100%", width: "100%" }}
+        {...({
+          center: mapPosition,
+          zoom: 15,
+          style: { height: "100%", width: "100%" },
+        } as MapContainerProps)}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={mapPosition}>
@@ -238,7 +231,7 @@ const VisualizarMutirao = () => {
         `/mutiroes/${mutirao._id}/inscritos`
       );
       setInscritos(response.data.inscritos || []);
-    } catch (error) {
+    } catch {
       toast.error("Erro ao buscar inscritos.");
     }
   };
@@ -252,7 +245,7 @@ const VisualizarMutirao = () => {
           _id: response.data.usuario._id,
           isAdmin: response.data.usuario.isAdmin,
         });
-      } catch (error) {
+      } catch {
         console.log("Usuário não autenticado");
       }
     };
@@ -295,9 +288,9 @@ const VisualizarMutirao = () => {
 
   const [isInscrito, setIsInscrito] = useState(initialIsInscrito);
   const [aceitouTermo, setAceitouTermo] = useState(false);
-  const [habilidades, setHabilidades] = useState<Habilidade[]>([
-    { nome: "NÃO IMPLEMENTADO", checked: false },
-  ]);
+  // const [habilidades, setHabilidades] = useState<Habilidade[]>([
+  //   { nome: "NÃO IMPLEMENTADO", checked: false },
+  // ]);
 
   const [materiaisSelecionados, setMateriaisSelecionados] = useState<{
     [key: string]: boolean;
@@ -318,8 +311,9 @@ const VisualizarMutirao = () => {
       setAvaliacoes([...avaliacoes, response.data.avaliacao]);
       setMinhaAvaliacao({ nota: 5, comentario: "" });
       toast.success("Avaliação enviada com sucesso!");
-    } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Erro ao enviar avaliação");
+    } catch (error: unknown) {
+      const apiError = error as { response?: { data?: { msg?: string } } };
+      toast.error(apiError.response?.data?.msg || "Erro ao enviar avaliação");
     }
   };
 
@@ -341,8 +335,9 @@ const VisualizarMutirao = () => {
       setEditandoAvaliacao(null);
       setMinhaAvaliacao({ nota: 3, comentario: "" });
       toast.success("Avaliação atualizada com sucesso!");
-    } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Erro ao atualizar avaliação");
+    } catch (error: unknown) {
+      const apiError = error as { response?: { data?: { msg?: string } } };
+      toast.error(apiError.response?.data?.msg || "Erro ao atualizar avaliação");
     }
   };
 
@@ -353,8 +348,9 @@ const VisualizarMutirao = () => {
       );
       setAvaliacoes(avaliacoes.filter((av) => av._id !== avaliacaoId));
       toast.success("Avaliação removida com sucesso!");
-    } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Erro ao remover avaliação");
+    } catch (error: unknown) {
+      const apiError = error as { response?: { data?: { msg?: string } } };
+      toast.error(apiError.response?.data?.msg || "Erro ao remover avaliação");
     }
   };
 
@@ -384,11 +380,11 @@ const VisualizarMutirao = () => {
     }
   }, [mutirao?.materiais]);
 
-  const handleHabilidadeChange = (index: number) => {
-    const novasHabilidades = [...habilidades];
-    novasHabilidades[index].checked = !novasHabilidades[index].checked;
-    setHabilidades(novasHabilidades);
-  };
+  // const handleHabilidadeChange = (index: number) => {
+  //   const novasHabilidades = [...habilidades];
+  //   novasHabilidades[index].checked = !novasHabilidades[index].checked;
+  //   setHabilidades(novasHabilidades);
+  // };
 
   const handleMaterialChange = (nomeMaterial: string) => {
     setMateriaisSelecionados((estadoAnterior) => ({
@@ -496,155 +492,202 @@ const VisualizarMutirao = () => {
     mutirao.location.coordinates &&
     mutirao.location.coordinates.length === 2;
 
+  const defaultImages = {
+    SOCIAL:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/social_w337yo.jpg",
+    SAUDE:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/saude_jxyour.jpg",
+    CONSTRUCAO_REFORMA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/construcao_llhyii.avif",
+    AMBIENTAL_AGRICOLA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/ambiental_upuyed.avif",
+    CULTURA_EDUCACAO:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/educacao_zs4ywz.avif",
+    TECNOLOGIA:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033683/tecnologia_o5ui0u.avif",
+    FALLBACK:
+      "https://res.cloudinary.com/dunfagpl8/image/upload/v1750033758/mutyrologo_bz2kon.png",
+  };
+
+  // --- NOVO LAYOUT ---
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar />
-      <Wrapper style={{ flex: 1 }}>
-        <div className="main-container">
-          <div className="mutirao-card">
-            {/* TOPO DESTACADO */}
-            <div className="mutirao-header">
-              <div className="header-content">
-                <img
-                  src={getImageUrl(mutirao.imagemCapa)}
-                  alt={`Imagem do mutirão: ${mutirao.titulo}`}
-                  className="mutirao-img"
-                />
-                <div className="org-info">
-                  <span className="org-label">Organizado por</span>
-                  <span className="org-name">{mutirao.criadoPor.nome}</span>
-                  <span className="org-extra">
-                    <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
-                  </span>
-                </div>
+    <Wrapper>
+      <div className="main-container">
+        <Sidebar />
+        <div className="mutirao-card">
+          {/* TOPO DESTACADO */}
+          <div
+            className="mutirao-header"
+            data-bg={
+              defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
+            }
+            style={{
+              ["--bg-url" as string]: `url(${
+                defaultImages[mutirao.mutiraoTipo] || defaultImages.FALLBACK
+              })`,
+            }}
+          >
+            <div className="header-content">
+              <img
+                src={getImageUrl(mutirao.imagemCapa)}
+                alt={`Imagem do mutirão: ${mutirao.titulo}`}
+                className="mutirao-img"
+              />
+              <div className="org-info">
+                <span className="org-label">Organizado por</span>
+                <span className="org-name">
+                  {typeof mutirao.criadoPor === "string"
+                    ? mutirao.criadoPor
+                    : mutirao.criadoPor?.nome ?? "Organizador desconhecido"}
+                </span>
+                <span className="org-extra">
+                  <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
+                </span>
               </div>
             </div>
+          </div>
 
-            {/* CONTEÚDO PRINCIPAL */}
-            <div className="mutirao-content">
-              {/* COLUNA PRINCIPAL */}
-              <div className="mutirao-main">
-                <div className="mutirao-title-row">
-                  <h1>{mutirao.titulo}</h1>
-                  <div className="badges">
-                    <span className="badge ativo">Ativo</span>
-                    <span className="badge restante">15 dias restantes</span>
-                  </div>
+          {/* CONTEÚDO PRINCIPAL */}
+          <div className="mutirao-content">
+            {/* COLUNA PRINCIPAL */}
+            <div className="mutirao-main">
+              <div className="mutirao-title-row">
+                <h1>{mutirao.titulo}</h1>
+                <div className="badges">
+                  <span className="badge ativo">Ativo</span>
+                  <span className="badge restante">15 dias restantes</span>
                 </div>
-                <div className="mutirao-info-row">
-                  <span className="info-item">
-                    <FaCalendarAlt /> {dataFormatada}
-                  </span>
-                  <span className="info-item">
-                    <FaClock /> {mutirao.horario}
-                  </span>
-                  <span className="info-item">
-                    <button
-                      className={`back-btn ${currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin) ? "clickable" : ""}`}
-                      onClick={() => {
-                        if (currentUser && (currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)) {
-                          setShowModal(true); // Abre o modal apenas para o criador ou admin
-                        }
-                      }}
-                      disabled={!currentUser || !(currentUser._id === mutirao.criadoPor._id || currentUser.isAdmin)}
-                    >
-                      <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
-                    </button>
-                  </span>
-                </div>
-                <div className="card-section">
-                  <h3>
-                    <FaTasks /> Descrição
-                  </h3>
-                  <p>{mutirao.descricao}</p>
-                </div>
-                <div className="card-section">
-                  <h3>
-                    <FaMapMarkerAlt /> Local
-                  </h3>
-                  <p className="section-description">{mutirao.local}</p>
-                  {canDisplayMap && mapPosition ? (
-                    <MapWrapper mutirao={mutirao} mapPosition={mapPosition} />
-                  ) : (
-                    <p style={{ color: "#aaa", marginTop: 8 }}>
-                      Localização não disponível no mapa.
-                    </p>
-                  )}
-                </div>
-                <div className="card-section">
-                  <h3>
-                    <FaTasks /> Tarefas
-                  </h3>
-                  <p className="section-description">
-                    Atividades que serão desenvolvidas no evento
+              </div>
+              <div className="mutirao-info-row">
+                <span className="info-item">
+                  <FaCalendarAlt /> {dataFormatada}
+                </span>
+                <span className="info-item">
+                  <FaClock /> {mutirao.horario}
+                </span>
+                <span className="info-item">
+                  <button
+                    className={`back-btn ${
+                      currentUser &&
+                      (currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin)
+                        ? "clickable"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (
+                        currentUser &&
+                        (currentUser._id === mutirao.criadoPor._id ||
+                          currentUser.isAdmin)
+                      ) {
+                        setShowModal(true); // Abre o modal apenas para o criador ou admin
+                      }
+                    }}
+                    disabled={
+                      !currentUser ||
+                      !(
+                        currentUser._id === mutirao.criadoPor._id ||
+                        currentUser.isAdmin
+                      )
+                    }
+                  >
+                    <FaUsers /> {mutirao.inscritos?.length || 0} voluntários
+                  </button>
+                </span>
+              </div>
+              <div className="card-section">
+                <h3>
+                  <FaTasks /> Descrição
+                </h3>
+                <p>{mutirao.descricao}</p>
+              </div>
+              <div className="card-section">
+                <h3>
+                  <FaMapMarkerAlt /> Local
+                </h3>
+                <p className="section-description">{mutirao.local}</p>
+                {canDisplayMap && mapPosition ? (
+                  <MapWrapper mutirao={mutirao} mapPosition={mapPosition} />
+                ) : (
+                  <p style={{ color: "#aaa", marginTop: 8 }}>
+                    Localização não disponível no mapa.
                   </p>
-                  <div className="task-list">
-                    {mutirao.tarefas.map((tarefa, index) => (
-                      <div key={index} className="task-item">
-                        {tarefa}
-                      </div>
-                    ))}
-                  </div>
+                )}
+              </div>
+              <div className="card-section">
+                <h3>
+                  <FaTasks /> Tarefas
+                </h3>
+                <p className="section-description">
+                  Atividades que serão desenvolvidas no evento
+                </p>
+                <div className="task-list">
+                  {mutirao.tarefas.map((tarefa, index) => (
+                    <div key={index} className="task-item">
+                      {tarefa}
+                    </div>
+                  ))}
                 </div>
-                <div className="card-section">
-                  <h3>
-                    <FaTools /> Habilidades
-                  </h3>
-                  <p className="section-description">
-                    Selecione pelo menos uma habilidade
-                  </p>
-                  <div className="checkbox-list">
-                    {habilidades.map((habilidade, index) => (
-                      <label key={index} className="checkbox-item">
-                        <span>{habilidade.nome}</span>
+              </div>
+              {/* <div className="card-section">
+                <h3>
+                  <FaTools /> Habilidades
+                </h3>
+                <p className="section-description">
+                  Selecione pelo menos uma habilidade
+                </p>
+                <div className="checkbox-list">
+                  {habilidades.map((habilidade, index) => (
+                    <label key={index} className="checkbox-item">
+                      <span>{habilidade.nome}</span>
+                      <input
+                        type="checkbox"
+                        checked={habilidade.checked}
+                        disabled={true} // Remover quando implementar
+                        onChange={() => handleHabilidadeChange(index)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div> */}
+              <div className="card-section">
+                <h3>
+                  <FaTools /> Materiais e Ferramentas
+                </h3>
+                <p className="section-description">
+                  Selecione caso possa trazer os seguintes itens
+                </p>
+                <div className="checkbox-list">
+                  {/* Verifica se é array e não está vazio */}
+                  {mutirao.materiais &&
+                  Array.isArray(mutirao.materiais) &&
+                  mutirao.materiais.length > 0 ? (
+                    mutirao.materiais.map((nomeMaterial) => (
+                      <label key={nomeMaterial} className="checkbox-item">
+                        <span>{nomeMaterial}</span>
                         <input
                           type="checkbox"
-                          checked={habilidade.checked}
-                          disabled={true} // Remover quando implementar
-                          onChange={() => handleHabilidadeChange(index)}
+                          checked={materiaisSelecionados[nomeMaterial] || false}
+                          onChange={() => handleMaterialChange(nomeMaterial)}
                         />
                       </label>
-                    ))}
-                  </div>
+                    ))
+                  ) : (
+                    <p>Nenhum material específico listado para este mutirão.</p>
+                  )}
                 </div>
-                <div className="card-section">
-                  <h3>
-                    <FaTools /> Materiais e Ferramentas
-                  </h3>
-                  <p className="section-description">
-                    Selecione caso possa trazer os seguintes itens
-                  </p>
-                  <div className="checkbox-list">
-                    {/* Verifica se é array e não está vazio */}
-                    {mutirao.materiais &&
-                    Array.isArray(mutirao.materiais) &&
-                    mutirao.materiais.length > 0 ? (
-                      mutirao.materiais.map((nomeMaterial) => (
-                        <label key={nomeMaterial} className="checkbox-item">
-                          <span>{nomeMaterial}</span>
-                          <input
-                            type="checkbox"
-                            checked={materiaisSelecionados[nomeMaterial] || false}
-                            onChange={() => handleMaterialChange(nomeMaterial)}
-                          />
-                        </label>
-                      ))
-                    ) : (
-                      <p>Nenhum material específico listado para este mutirão.</p>
-                    )}
-                  </div>
-                </div>
-                <div className="card-section">
-                  <h3>
-                    <FaCommentDots /> Comentários
-                  </h3>
-                  <div className="section">
-                    <div className="form-section">
-                      {mutirao.finalizado ? (
-                        <>
-                          {currentUser && isInscrito && (
-                            <div className="avaliar-container">
-                              <h3>Sua avaliação</h3>
+              </div>
+              <div className="card-section">
+                <h3>
+                  <FaCommentDots /> Comentários
+                </h3>
+                <div className="section">
+                  <div className="form-section">
+                    {mutirao.finalizado ? (
+                      <>
+                        {currentUser && isInscrito && (
+                          <div className="avaliar-container">
+                            <h3>Sua avaliação</h3>
 
                               <div className="form-group">
                                 <label htmlFor="nota-avaliacao">Nota (1-5)</label>
@@ -723,48 +766,53 @@ const VisualizarMutirao = () => {
                             </div>
                           )}
 
-                          <div className="avaliacoes-list">
-                            {avaliacoes.length > 0 ? (
-                              avaliacoes.map((avaliacao) => (
-                                <div
-                                  key={avaliacao._id}
-                                  className="avaliacao-item"
-                                >
-                                  <div className="avaliacao-header">
-                                    <h4>{avaliacao.usuario.nome}</h4>
-                                    <div className="rating">
-                                      {/* Nota: {avaliacao.nota}/5 */}
-                                      {Array(avaliacao.nota).fill("★").join("")}
-                                    </div>
+                        <div className="avaliacoes-list">
+                          {avaliacoes.length > 0 ? (
+                            avaliacoes.map((avaliacao) => (
+                              <div
+                                key={avaliacao._id}
+                                className="avaliacao-item"
+                              >
+                                <div className="avaliacao-header">
+                                  <h4>
+                                    {avaliacao.usuario?.nome ??
+                                      "Usuário desconhecido"}
+                                  </h4>
 
-                                    {currentUser?.isAdmin ||
-                                    currentUser?._id === avaliacao.usuario._id ? (
-                                      <div className="avaliacao-actions">
-                                        <button
-                                          type="button"
-                                          className="edit-btn"
-                                          onClick={() => {
-                                            setEditandoAvaliacao(avaliacao._id);
-                                            setMinhaAvaliacao({
-                                              nota: avaliacao.nota,
-                                              comentario: avaliacao.comentario,
-                                            });
-                                          }}
-                                        >
-                                          Editar
-                                        </button>
-                                        <button
-                                          type="button"
-                                          className="delete-btn"
-                                          onClick={() =>
-                                            handleDeletarAvaliacao(avaliacao._id)
-                                          }
-                                        >
-                                          Excluir
-                                        </button>
-                                      </div>
-                                    ) : null}
+                                  <div className="rating">
+                                    {/* Nota: {avaliacao.nota}/5 */}
+                                    {Array(avaliacao.nota).fill("★").join("")}
                                   </div>
+
+                                  {currentUser?.isAdmin ||
+                                  currentUser?._id ===
+                                    avaliacao.usuario?._id ? (
+                                    <div className="avaliacao-actions">
+                                      <button
+                                        type="button"
+                                        className="edit-btn"
+                                        onClick={() => {
+                                          setEditandoAvaliacao(avaliacao._id);
+                                          setMinhaAvaliacao({
+                                            nota: avaliacao.nota,
+                                            comentario: avaliacao.comentario,
+                                          });
+                                        }}
+                                      >
+                                        Editar
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="delete-btn"
+                                        onClick={() =>
+                                          handleDeletarAvaliacao(avaliacao._id)
+                                        }
+                                      >
+                                        Excluir
+                                      </button>
+                                    </div>
+                                  ) : null}
+                                </div>
 
                                   {avaliacao.comentario && (
                                     <p className="comentario">
@@ -772,177 +820,184 @@ const VisualizarMutirao = () => {
                                     </p>
                                   )}
 
-                                  <small className="avaliacao-date">
-                                    {new Date(
-                                      avaliacao.criadoEm
-                                    ).toLocaleDateString("pt-BR", {
-                                      day: "2-digit",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </small>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="no-avaliacoes">
-                                Nenhuma avaliação ainda.
-                              </p>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <p className="avaliacoes-disabled">
-                          As avaliações estarão disponíveis após a conclusão do
-                          mutirão.
-                        </p>
-                      )}
-                    </div>
+                                <small className="avaliacao-date">
+                                  {new Date(
+                                    avaliacao.criadoEm
+                                  ).toLocaleDateString("pt-BR", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                  })}
+                                </small>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="no-avaliacoes">
+                              Nenhuma avaliação ainda.
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="avaliacoes-disabled">
+                        As avaliações estarão disponíveis após a conclusão do
+                        mutirão.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-              {/* COLUNA LATERAL */}
-              <div className="mutirao-side">
-                <div className="side-card">
-                  <h3>Progresso de Participação</h3>
-                  <div className="side-progress">
-                    <div className="progress-label">
-                      <span>Voluntários</span>
-                      <span>{mutirao.inscritos?.length || 0}/60</span>
-                    </div>
-                    <div className="progress-bar-bg">
-                      <div
-                        className="progress-bar"
-                        style={{
-                          width: `${Math.min(
-                            100,
-                            ((mutirao.inscritos?.length || 0) / 60) * 100
-                          )}%`,
-                        }}
-                      />
-                    </div>
+            </div>
+            {/* COLUNA LATERAL */}
+            <div className="mutirao-side">
+              <div className="side-card">
+                <h3>Progresso de Participação</h3>
+                <div className="side-progress">
+                  <div className="progress-label">
+                    <span>Voluntários</span>
+                    <span>{mutirao.inscritos?.length || 0}/60</span>
                   </div>
-                </div>
-                {/* Se não estiver logado, exibe só os botões de cadastro e voltar */}
-                {!authContextUsuario ? (
-                  <div
-                    className="side-card"
-                    style={{ display: "flex", flexDirection: "column", gap: 12 }}
-                  >
-                    <button
-                      className="submit-btn"
-                      onClick={() =>
-                        navigate(location.pathname, {
-                          state: {
-                            showRegisterModal: true,
-                            from: location.pathname,
-                          },
-                          replace: true,
-                        })
-                      }
-                    >
-                      Cadastre-se para poder participar
-                    </button>
-                    <button
-                      className="back-btn"
-                      onClick={() => navigate("/user")}
-                    >
-                      Voltar
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="side-card">
-                      <h3>Termo de Aceitação</h3>
-                      <div className="side-termo">
-                        Eu concordo em participar deste mutirão de forma
-                        voluntária, contribuindo com minhas habilidades e seguindo
-                        as orientações dos organizadores. Entendo que o objetivo é
-                        desenvolver melhorias para a comunidade e, se necessário,
-                        trarei meus próprios equipamentos para colaborar.
-                        Comprometo-me a agir com respeito, responsabilidade e
-                        colaboração, garantindo um ambiente seguro e inclusivo
-                        para todos os participantes.
-                      </div>
-                      <label className="side-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={aceitouTermo}
-                          onChange={(e) => setAceitouTermo(e.target.checked)}
-                        />
-                        <span>Aceito os termos e condições</span>
-                      </label>
-                      <div className="side-btns">
-                        {podeParticipar && (
-                          <button
-                            className={`submit-btn${
-                              !aceitouTermo || isSubmitting ? " disabled" : ""
-                            }`}
-                            onClick={handleInscricao}
-                            disabled={!aceitouTermo || isSubmitting}
-                          >
-                            {isSubmitting
-                              ? "Processando..."
-                              : isInscrito
-                              ? "Cancelar Participação"
-                              : "Quero Ser Voluntário"}
-                          </button>
-                        )}
-                        {podeEditar && (
-                          <button
-                            className="submit-btn"
-                            style={{ background: "var(--primary-300)" }}
-                            onClick={() =>
-                              navigate(`/mutirao/${mutirao._id}/editar`)
-                            }
-                            disabled={isSubmitting}
-                          >
-                            Editar
-                          </button>
-                        )}
-                        {authContextUsuario &&
-                          (authContextUsuario._id === mutirao.criadoPor._id ||
-                            authContextUsuario.isAdmin) && (
-                            <button
-                              className="back-btn"
-                              onClick={handleExcluirMutirao}
-                              disabled={isSubmitting}
-                            >
-                              {isSubmitting ? "Processando..." : "Excluir"}
-                            </button>
-                          )}
-                        <button
-                          className="back-btn"
-                          onClick={() => navigate("/user")}
-                        >
-                          Voltar
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-                <div className="side-card share-card">
-                  <div className="share-row">
-                    <ShareMutirao
-                      url={`${window.location.origin}/mutirao/${mutirao._id}`}
-                      titulo={mutirao.titulo}
+                  <div className="progress-bar-bg">
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          ((mutirao.inscritos?.length || 0) / 60) * 100
+                        )}%`,
+                      }}
                     />
                   </div>
                 </div>
-                <div className="side-card side-dica">
-                  <FaLightbulb className="dica-icon" />
-                  <div className="dica-content">
-                    <h4>Dica</h4>
-                    <p>
-                      Traga uma garrafa d'água e use roupas confortáveis para o
-                      trabalho voluntário.
-                    </p>
+              </div>
+              {/* Se não estiver logado, exibe só os botões de cadastro e voltar */}
+              {!authContextUsuario ? (
+                <div
+                  className="side-card"
+                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
+                >
+                  <button
+                    className="submit-btn"
+                    onClick={() =>
+                      navigate(location.pathname, {
+                        state: {
+                          showRegisterModal: true,
+                          from: location.pathname,
+                        },
+                        replace: true,
+                      })
+                    }
+                  >
+                    Cadastre-se para poder participar
+                  </button>
+                  <button
+                    className="back-btn"
+                    onClick={() => navigate("/user")}
+                  >
+                    Voltar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="side-card">
+                    {authContextUsuario &&
+                      authContextUsuario._id !== mutirao.criadoPor._id && (
+                        <>
+                          <h3>Termo de Aceitação</h3>
+                          <div className="side-termo">
+                            Eu concordo em participar deste mutirão de forma
+                            voluntária, contribuindo com minhas habilidades e
+                            seguindo as orientações dos organizadores. Entendo
+                            que o objetivo é desenvolver melhorias para a
+                            comunidade e, se necessário, trarei meus próprios
+                            equipamentos para colaborar. Comprometo-me a agir
+                            com respeito, responsabilidade e colaboração,
+                            garantindo um ambiente seguro e inclusivo para todos
+                            os participantes.
+                          </div>
+                          <label className="side-checkbox">
+                            <input
+                              type="checkbox"
+                              checked={aceitouTermo}
+                              onChange={(e) =>
+                                setAceitouTermo(e.target.checked)
+                              }
+                            />
+                            <span>Aceito os termos e condições</span>
+                          </label>
+                        </>
+                      )}
+                    <div className="side-btns">
+                      {podeParticipar && (
+                        <button
+                          className={`submit-btn${
+                            !aceitouTermo || isSubmitting ? " disabled" : ""
+                          }`}
+                          onClick={handleInscricao}
+                          disabled={!aceitouTermo || isSubmitting}
+                        >
+                          {isSubmitting
+                            ? "Processando..."
+                            : isInscrito
+                            ? "Cancelar Participação"
+                            : "Quero Ser Voluntário"}
+                        </button>
+                      )}
+                      {podeEditar && (
+                        <button
+                          className="submit-btn"
+                          style={{ background: "var(--primary-300)" }}
+                          onClick={() =>
+                            navigate(`/mutirao/${mutirao._id}/editar`)
+                          }
+                          disabled={isSubmitting}
+                        >
+                          Editar
+                        </button>
+                      )}
+                      {authContextUsuario &&
+                        (authContextUsuario._id === mutirao.criadoPor._id ||
+                          authContextUsuario.isAdmin) && (
+                          <button
+                            className="back-btn"
+                            onClick={handleExcluirMutirao}
+                            disabled={isSubmitting}
+                          >
+                            {isSubmitting ? "Processando..." : "Excluir"}
+                          </button>
+                        )}
+                      <button
+                        className="back-btn"
+                        onClick={() => navigate("/user")}
+                      >
+                        Voltar
+                      </button>
+                    </div>
                   </div>
+                </>
+              )}
+              <div className="side-card share-card">
+                <div className="share-row">
+                  <ShareMutirao
+                    url={`${window.location.origin}/mutirao/${mutirao._id}`}
+                    titulo={mutirao.titulo}
+                  />
+                </div>
+              </div>
+              <div className="side-card side-dica">
+                <FaLightbulb className="dica-icon" />
+                <div className="dica-content">
+                  <h4>Dica</h4>
+                  <p>
+                    Traga uma garrafa d'água e use roupas confortáveis para o
+                    trabalho voluntário.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </Wrapper>
+      </div>
       <Modal
         title={mutirao.titulo}
         isOpen={showModal}
@@ -962,7 +1017,7 @@ const VisualizarMutirao = () => {
           <p>Nenhum inscrito neste mutirão.</p>
         )}
       </Modal>
-    </div>
+    </Wrapper>
   );
 };
 

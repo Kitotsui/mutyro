@@ -20,6 +20,8 @@
   },
   "configuracoes": {
     "titulo": "Settings",
+    "abaGerais": "General",
+    "abaSeguranca": "Security",
     "tema": "Site theme",
     "claro": "Light",
     "escuro": "Dark",
@@ -27,7 +29,15 @@
     "receberNotificacoes": "Receive email notifications",
     "idioma": "Language",
     "salvar": "Preferences saved!",
-    "botaoSalvar": "Save settings"
+    "botaoSalvar": "Save settings",
+    "alterarSenha": "Change password",
+    "senhaAtual": "Current password",
+    "novaSenha": "New password",
+    "confirmarNovaSenha": "Confirm new password",
+    "erroRedefinirSenha": "Error resetting password. Please try again.",
+    "inserirNovaSenha": "Enter your new password below to reset it.",
+    "novaSenhaPlaceholder": "Enter your new password",
+    "redefinindo": "Resetting..."
   },
   "faq": {
     "titulo": "Frequently Asked Questions (FAQ)",
@@ -106,6 +116,11 @@
     "privacidade": "Privacy",
     "contato": "Contact"
   },
+  "idiomas": {
+    "portugues": "Portuguese (Brazil)",
+    "ingles": "English",
+    "espanhol": "Spanish (Español)"
+  },
   "geral": {
     "voltar": "Back",
     "salvar": "Save",
@@ -121,7 +136,38 @@
     "loginSucesso": "Login successful!",
     "cadastroSucesso": "Registration successful!",
     "loginAutomaticoErro": "Registration completed, but there was a problem logging in automatically. Please log in.",
-    "loginAutomaticoFalhou": "Registration completed, but automatic login failed. Please try logging in manually."
+    "loginAutomaticoFalhou": "Registration completed, but automatic login failed. Please try logging in manually.",
+    "historiasSucesso": "Success Stories",
+    "novidades": "News",
+    "nenhumMutiraoData": "No mutirão on this date.",
+    "por": "by",
+    "data": "Date",
+    "status": "Status",
+    "ocultarSenha": "Hide password",
+    "mostrarSenha": "Show password",
+    "logoAlt": "Mutyro Logo",
+    "compartilhar": "Share",
+    "avatarDe": "Avatar of {{nome}}",
+    "abrirMenuUsuario": "Open user menu",
+    "alternarMenu": "Toggle Menu",
+    "avaliacao": "Rating: {{rating}} out of {{maxRating}} stars.",
+    "informacoesUsuario": "User Information",
+    "erroBuscarEnderecos": "Failed to search addresses.",
+    "placeholderEndereco": "Type the address and select the correct option",
+    "buscandoEnderecos": "Searching addresses...",
+    "inscritosMutirao": "Registered for mutirão: {{titulo}}",
+    "imprimir": "Print",
+    "fechar": "Close",
+    "carregandoHistorias": "Loading stories...",
+    "noMutirao": "in the mutirão",
+    "bemEstar": "#Well-being",
+    "ajudarFazBem": "Helping is good for others and for you.",
+    "crescimento": "#Growth",
+    "voceAprende": "You learn and evolve",
+    "conexao": "#Connection",
+    "conhecaGente": "Meet amazing people",
+    "proposito": "#Purpose",
+    "facaSuasHoras": "Make your hours worth more."
   },
   "novoMutirao": {
     "titulo": "Your mutirão is almost ready!",
@@ -246,5 +292,28 @@
   },
   "search": {
     "placeholder": "Search mutirão by title..."
+  },
+  "quotes": {
+    "quote1": "No one is so small that they cannot help, nor so great that they do not need help.",
+    "quote2": "True greatness lies in serving others without expecting anything in return.",
+    "quote3": "A small act of kindness can transform a day, a life, and even the world.",
+    "quote4": "Be the change you wish to see in the world.",
+    "quote5": "Volunteering is the art of giving without losing, of receiving without asking.",
+    "quote6": "When you reach out to help someone, you also lift yourself up.",
+    "quote7": "Solidarity is the language of the heart.",
+    "quote8": "No act of kindness, no matter how small, is wasted.",
+    "quote9": "When we help others, we discover the true purpose of our existence.",
+    "quote10": "Doing good to others is the most beautiful way to enrich the soul."
+  },
+  "user": {
+    "filtroMeusMutiroes": "My Mutirões",
+    "filtroTodosMutiroes": "All Mutirões",
+    "filtroTodosTipos": "All types",
+    "tipoSocial": "Social",
+    "tipoSaude": "Health",
+    "tipoConstrucaoReforma": "Construction/Renovation",
+    "tipoAmbientalAgricola": "Environmental/Agricultural",
+    "tipoCulturaEducacao": "Culture/Education",
+    "tipoTecnologia": "Technology"
   }
 } 

@@ -14,3 +14,5 @@ export { default as MutiraoItem } from "./MutiraoItem";
 export { default as SearchBar } from "./SearchBar";
 export { default as Calendar } from "./Calendar";
 export { default as ShareMutirao } from "./ShareMutirao";
+export { default as CarouselAvaliados } from "./CarouselAvaliados";
+export { default as StarRating } from "./StarRating";

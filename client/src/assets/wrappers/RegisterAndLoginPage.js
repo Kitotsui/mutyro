@@ -101,7 +101,6 @@ const Wrapper = styled.section`
     border: none;
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s;
     &:hover {
@@ -131,12 +130,12 @@ const Wrapper = styled.section`
     color: var(--grey-400);
     font-weight: 400;
     font-size: 0.875rem;
-    display: block;
+    display: inline;
     text-align: center;
     text-decoration: none;
     transition: color 0.2s;
     &:hover {
-      color: var(--primary-600);
+      color: var(--primary-color);
     }
   }
 
@@ -163,12 +162,14 @@ const Wrapper = styled.section`
     border: 1px solid var(--grey-200);
     border-radius: 8px;
     padding: 12px 16px;
+    margin-top: 5px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     transition: all 0.2s;
+    cursor: pointer;
     &:hover {
       background: var(--grey-100);
       border-color: var(--grey-300);
@@ -177,17 +178,73 @@ const Wrapper = styled.section`
 
   .switch-btn {
     background: transparent;
-    border: none;
-    color: var(--primary-100);
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 0;
+    color: var(--dark-color);
+    border: 1px solid var(--grey-300);
+    padding: 12px 16px;
     cursor: pointer;
     transition: all 0.2s;
     &:hover {
-      color: var(--primary-50);
-      text-decoration: underline;
+      background-color: var(--grey-100);
+      color: var(--dark-color);
     }
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--grey-700);
+
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      transform: scale(1.2);
+    }
+
+    a {
+      color: var(--primary-color);
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .termos {
+
+    .side-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1rem;
+      input[type="checkbox"] {
+        width: 1.1rem;
+        height: 1.1rem;
+        accent-color: var(--grey-300);
+      }
+      span {
+        font-size: 0.95rem;
+        color: var(--grey-700);
+        width: 100%;
+      }
+    }
+  }
+  .termos {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .termos input {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .termos a {
+    white-space: nowrap;
   }
 `;
 

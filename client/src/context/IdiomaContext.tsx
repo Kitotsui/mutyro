@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import i18n from '../i18n';
 
 interface IdiomaContextType {
   idioma: string;
@@ -13,16 +20,44 @@ const IdiomaContext = createContext<IdiomaContextType>({
 export const useIdioma = () => useContext(IdiomaContext);
 
 export const IdiomaProvider = ({ children }: { children: ReactNode }) => {
-  const [idioma, setIdiomaState] = useState<string>(
-    localStorage.getItem("idioma") || "pt-BR"
-  );
+  // Inicializa com o idioma do localStorage ou o idioma atual do i18n
+  const [idioma, setIdiomaState] = useState<string>(() => {
+    const storedIdioma = localStorage.getItem("idioma");
+    if (storedIdioma && i18n.languages.includes(storedIdioma)) {
+      return storedIdioma;
+    }
+    return i18n.language || "pt-BR";
+  });
 
+  // Sincroniza o idioma com o i18n na inicialização
   useEffect(() => {
-    localStorage.setItem("idioma", idioma);
+    if (i18n.language !== idioma) {
+      i18n.changeLanguage(idioma);
+    }
+  }, []);
+
+  // Escuta mudanças no i18n
+  useEffect(() => {
+    const handleLanguageChanged = (lng: string) => {
+      if (lng !== idioma) {
+        setIdiomaState(lng);
+        localStorage.setItem("idioma", lng);
+      }
+    };
+
+    i18n.on('languageChanged', handleLanguageChanged);
+
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
   }, [idioma]);
 
   const setIdioma = (novoIdioma: string) => {
-    setIdiomaState(novoIdioma);
+    if (novoIdioma !== idioma) {
+      setIdiomaState(novoIdioma);
+      localStorage.setItem("idioma", novoIdioma);
+      i18n.changeLanguage(novoIdioma);
+    }
   };
 
   return (
@@ -30,4 +65,4 @@ export const IdiomaProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </IdiomaContext.Provider>
   );
-}; 
+};

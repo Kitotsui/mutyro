@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface FormRowProps {
   type: string;
@@ -20,6 +21,7 @@ const FormRow = ({
   value,
   handleChange
 }: FormRowProps) => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
   const inputType = isPassword && showPassword ? "text" : type;
@@ -46,7 +48,7 @@ const FormRow = ({
             type="button"
             className="password-toggle"
             onClick={() => setShowPassword(!showPassword)}
-            aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            aria-label={showPassword ? t('geral.ocultarSenha') : t('geral.mostrarSenha')}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>

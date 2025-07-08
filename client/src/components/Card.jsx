@@ -1,9 +1,25 @@
 import Wrapper from "../assets/wrappers/Card";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
+import { ptBR, enUS, es } from "date-fns/locale";
 
 import getImageUrl from "@/utils/imageUrlHelper";
 
 const Card = ({ id, image, title, date, user, wasDraggingRef, finalizado }) => {
+  const { t, i18n } = useTranslation();
+  
+  const getLocale = () => {
+    switch (i18n.language) {
+      case 'en-US':
+        return enUS;
+      case 'es-ES':
+        return es;
+      default:
+        return ptBR;
+    }
+  };
+
   const handleClickCapture = (e) => {
     if (wasDraggingRef?.current) {
       e.preventDefault();
@@ -22,14 +38,10 @@ const Card = ({ id, image, title, date, user, wasDraggingRef, finalizado }) => {
         <div className="card-content">
           <h4>{title}</h4>
           <time dateTime={date}>
-            {new Date(date).toLocaleDateString("pt-BR", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            })}
+            {format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: getLocale() })}
           </time>
           <p>
-            por <span>{user}</span>
+            {t('geral.por')} <span>{user}</span>
           </p>
         </div>
       </Link>

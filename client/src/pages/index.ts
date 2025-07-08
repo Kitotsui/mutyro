@@ -10,3 +10,6 @@ export { default as VisualizarMutirao } from "./VisualizarMutirao";
 export { default as CalendarioCompleto } from "./CalendarioCompleto";
 export { default as FAQ } from "./FAQ";
 export { default as Configuracoes } from "./Configuracoes";
+export { default as PoliticaPrivacidade } from "./PoliticaPrivacidade";
+export { default as TermosUso } from "./TermosUso";
+export { default as Sobre } from "./Sobre";

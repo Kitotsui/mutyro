@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-
 import React, { useMemo, useState } from "react";
 
 import Calendar from "react-calendar";
@@ -19,7 +18,6 @@ interface UserSidebarProps {
 const UserSidebar = ({
   date,
   onDateChange,
-  interesses,
   proximosMutiroes = [],
 }: UserSidebarProps) => {
   const [popupDate, setPopupDate] = React.useState<Date | null>(null);
@@ -195,7 +193,7 @@ const UserSidebar = ({
         </div>
 
         {/* Interesses */}
-        <div className="card interests">
+        {/* <div className="card interests">
           <div className="header">
             <h2>Seus Interesses</h2>
             <button>Ver todos</button>
@@ -204,8 +202,8 @@ const UserSidebar = ({
             {interesses.map((interesse, idx) => (
               <li key={idx}>{interesse}</li>
             ))}
-          </ul>
-        </div>
+          </div>
+        </div> */}
       </div>
     </Wrapper>
   );

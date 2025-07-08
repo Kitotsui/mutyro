@@ -19,8 +19,16 @@ const UsuarioSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    avatar: {
+      url: {
+        type: String,
+        default:
+          "https://res.cloudinary.com/dunfagpl8/image/upload/v1751840306/mutyrouser_mjap7e.png",
+      },
+      public_id: { type: String },
+    },
   },
-  {timestamps: true}
+  { timestamps: true }
 );
 
 UsuarioSchema.methods.toJSON = function () {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { NavBar, Footer } from "../components";
 import Sidebar from "../components/Sidebar";
@@ -26,7 +25,11 @@ const HomeLayout = () => {
           display: "flex",
         }}
       >
-        {shouldShowSidebar && <Sidebar />}
+        {shouldShowSidebar && (
+          <div className="sidebar-wrapper">
+            <Sidebar />
+          </div>
+        )}
         <div style={{ flex: 1 }}>
           <Outlet />
         </div>

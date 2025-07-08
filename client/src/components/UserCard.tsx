@@ -1,13 +1,17 @@
+import { useTranslation } from "react-i18next";
+
 const UserCard = ({ nome, email, cpf }: { nome: string, email: string, cpf: string }) => {
-    return (
-      <div className="user-card">
-        <h2>Informações do Usuário</h2>
-        <p><strong>Nome:</strong> {nome}</p>
-        <p><strong>Email:</strong> {email}</p>
-        <p><strong>CPF:</strong> {cpf}</p>
-      </div>
-    );
-  };
+  const { t } = useTranslation();
   
-  export default UserCard;
+  return (
+    <div className="user-card">
+      <h2>{t('geral.informacoesUsuario')}</h2>
+      <p><strong>{t('usuario.nome')}:</strong> {nome}</p>
+      <p><strong>{t('usuario.email')}:</strong> {email}</p>
+      <p><strong>{t('usuario.cpf')}:</strong> {cpf}</p>
+    </div>
+  );
+};
+
+export default UserCard;
   

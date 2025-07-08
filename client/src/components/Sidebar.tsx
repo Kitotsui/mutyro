@@ -1,6 +1,6 @@
 import { FaUser, FaCog, FaEnvelope, FaComments, FaCalendarAlt } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import { contarNotificacoesNaoLidas } from "../services/notificacaoService";
 import { useTranslation } from "react-i18next";
@@ -13,6 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   menuItems,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const [naoLidas, setNaoLidas] = useState<number>(0);
 
@@ -34,10 +35,15 @@ const Sidebar: React.FC<SidebarProps> = ({
     {
       icon: <FaUser />,
       label: t('sidebar.perfil'),
-      active: true,
+      active: location.pathname === "/editarusuario",
       onClick: () => navigate("/editarusuario"),
     },
-    { icon: <FaCalendarAlt />, label: t('sidebar.mutiroes'), onClick: () => navigate('/mutiroes') },
+    { 
+      icon: <FaCalendarAlt />, 
+      label: t('sidebar.mutiroes'), 
+      active: location.pathname === "/mutiroes",
+      onClick: () => navigate('/mutiroes') 
+    },
     {
       icon: (
         <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32 }}>
@@ -48,30 +54,45 @@ const Sidebar: React.FC<SidebarProps> = ({
         </span>
       ),
       label: t('sidebar.notificacoes'),
+      active: location.pathname === "/notificacoes",
       onClick: () => navigate('/notificacoes'),
     },
-    { icon: <FaComments />, label: t('sidebar.faq'), onClick: () => navigate('/faq') },
-    { icon: <FaCog />, label: t('sidebar.configuracoes'), onClick: () => navigate('/configuracoes') },
+    { 
+      icon: <FaComments />, 
+      label: t('sidebar.faq'), 
+      active: location.pathname === "/faq",
+      onClick: () => navigate('/faq') 
+    },
+    { 
+      icon: <FaCog />, 
+      label: t('sidebar.configuracoes'), 
+      active: location.pathname === "/configuracoes",
+      onClick: () => navigate('/configuracoes') 
+    },
   ];
 
   const menuItemsToUse = menuItems || defaultMenu;
 
   return (
-    <div className="main-sidebar">
-      <nav>
-        <ul>
-          {menuItemsToUse.map((item) => (
-            <li
-              key={item.label}
-              onClick={item.onClick}
-              style={{ cursor: item.onClick ? "pointer" : "default" }}
-            >
-              {item.icon}
-              <span className="sidebar-label">{item.label}</span>
-            </li>
-          ))}
-        </ul>
-      </nav>
+    <div className="sidebar-wrapper">
+      <div className="main-sidebar">
+        <nav>
+          <ul>
+            {menuItemsToUse.map((item) => (
+              <li
+                key={item.label}
+                onClick={item.onClick}
+                className={item.active ? "active" : ""}
+                style={{ cursor: item.onClick ? "pointer" : "default" }}
+                title={item.label}
+              >
+                {item.icon}
+                <span className="sidebar-label">{item.label}</span>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 };

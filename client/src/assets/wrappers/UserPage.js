@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     align-items: center;
     margin-bottom: 2.5rem;
     width: 100%;
-    
+
     @media (min-width: 768px) {
       align-items: center;
       justify-content: center;
@@ -41,6 +41,9 @@ const Wrapper = styled.div`
     border-radius: 9999px;
     object-fit: cover;
     margin-right: 0.5rem;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--grey-300, #ddd);
   }
 
   .welcome-text {
@@ -58,14 +61,21 @@ const Wrapper = styled.div`
   .new-mutirao-btn {
     background-color: var(--primary-100);
     color: white;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1.5rem; /* menos padding horizontal para mobile */
     border-radius: 0.375rem;
-    display: flex;
-    align-self: flex-end;
-    transition: background-color 0.2s;
+    display: inline-flex; /* inline para não forçar largura total */
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    max-width: 100%; /* evitar overflow */
+    box-sizing: border-box;
 
     &:hover {
       background-color: var(--primary-50);
+      color: var(--primary-300);
     }
   }
 
@@ -327,6 +337,14 @@ const Wrapper = styled.div`
           font-size: 0.875rem;
         }
       }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      min-width: auto;
+      max-width: 100%;
+      width: 100%;
     }
   }
 

@@ -7,10 +7,20 @@ import './i18n';
 
 import App from './App.tsx'
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-    <ToastContainer position="top-center" />
+    <ToastContainer 
+      position="top-center" 
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
   </StrictMode>
 );

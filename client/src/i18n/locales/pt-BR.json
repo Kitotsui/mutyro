@@ -20,6 +20,8 @@
   },
   "configuracoes": {
     "titulo": "Configurações",
+    "abaGerais": "Geral",
+    "abaSeguranca": "Segurança",
     "tema": "Tema do site",
     "claro": "Claro",
     "escuro": "Escuro",
@@ -27,7 +29,15 @@
     "receberNotificacoes": "Receber notificações por e-mail",
     "idioma": "Idioma",
     "salvar": "Preferências salvas!",
-    "botaoSalvar": "Salvar configurações"
+    "botaoSalvar": "Salvar configurações",
+    "alterarSenha": "Alterar senha",
+    "senhaAtual": "Senha atual",
+    "novaSenha": "Nova senha",
+    "confirmarNovaSenha": "Confirmar nova senha",
+    "erroRedefinirSenha": "Erro ao redefinir senha. Tente novamente.",
+    "inserirNovaSenha": "Insira sua nova senha abaixo para redefini-la.",
+    "novaSenhaPlaceholder": "Digite sua nova senha",
+    "redefinindo": "Redefinindo..."
   },
   "faq": {
     "titulo": "Perguntas Frequentes (FAQ)",
@@ -90,6 +100,17 @@
     "semMutiroes": "Você não tem nenhum mutirão",
     "semMutiroesDesc": "Os mutirões para os quais se inscreveu e/ou criou aparecerão aqui."
   },
+  "user": {
+    "filtroMeusMutiroes": "Meus Mutirões",
+    "filtroTodosMutiroes": "Todos os Mutirões",
+    "filtroTodosTipos": "Todos os tipos",
+    "tipoSocial": "Social",
+    "tipoSaude": "Saúde",
+    "tipoConstrucaoReforma": "Construção/Reforma",
+    "tipoAmbientalAgricola": "Ambiental/Agrícola",
+    "tipoCulturaEducacao": "Cultura/Educação",
+    "tipoTecnologia": "Tecnologia"
+  },
   "usuario": {
     "nome": "Nome",
     "email": "E-mail",
@@ -106,6 +127,11 @@
     "privacidade": "Privacidade",
     "contato": "Contato"
   },
+  "idiomas": {
+    "portugues": "Português (Brasil)",
+    "ingles": "Inglês (English)",
+    "espanhol": "Espanhol (Español)"
+  },
   "geral": {
     "voltar": "Voltar",
     "salvar": "Salvar",
@@ -121,7 +147,39 @@
     "loginSucesso": "Login realizado com sucesso!",
     "cadastroSucesso": "Cadastro realizado com sucesso!",
     "loginAutomaticoErro": "Cadastro realizado, mas houve um problema ao logar automaticamente. Por favor, faça o login.",
-    "loginAutomaticoFalhou": "Cadastro realizado, mas o login automático falhou. Por favor, tente fazer login manualmente."
+    "loginAutomaticoFalhou": "Cadastro realizado, mas o login automático falhou. Por favor, tente fazer login manualmente.",
+    "historiasSucesso": "Histórias de Sucesso",
+    "novidades": "Novidades",
+    "nenhumMutiraoData": "Nenhum mutirão nesta data.",
+    "por": "por",
+    "data": "Data",
+    "status": "Status",
+    "ocultarSenha": "Ocultar senha",
+    "mostrarSenha": "Mostrar senha",
+    "logoAlt": "Mutyro Logo",
+    "compartilhar": "Compartilhar",
+    "avatarDe": "Avatar de {{nome}}",
+    "abrirMenuUsuario": "Abrir menu do usuário",
+    "alternarMenu": "Alternar Menu",
+    "logoHome": "Logo Home",
+    "avaliacao": "Avaliação: {{rating}} de {{maxRating}} estrelas.",
+    "informacoesUsuario": "Informações do Usuário",
+    "erroBuscarEnderecos": "Falha ao buscar endereços.",
+    "placeholderEndereco": "Digite o endereço e selecione a opção correta",
+    "buscandoEnderecos": "Buscando endereços...",
+    "inscritosMutirao": "Inscritos no mutirão: {{titulo}}",
+    "imprimir": "Imprimir",
+    "fechar": "Fechar",
+    "carregandoHistorias": "Carregando histórias...",
+    "noMutirao": "no mutirão",
+    "bemEstar": "#Bem-Estar",
+    "ajudarFazBem": "Ajudar faz bem pro outro e pra você.",
+    "crescimento": "#Crescimento",
+    "voceAprende": "Você aprende e evolui",
+    "conexao": "#Conexão",
+    "conhecaGente": "Conheça gente incrível",
+    "proposito": "#Propósito",
+    "facaSuasHoras": "Faça suas horas valerem mais."
   },
   "novoMutirao": {
     "titulo": "Seu mutirão está quase pronto!",
@@ -248,5 +306,23 @@
   },
   "search": {
     "placeholder": "Buscar mutirão pelo título..."
+  },
+  "userProfile": {
+    "bemVindo": "Bem-vindo, {{nome}}! 👋",
+    "descricao": "Aqui você pode acompanhar seus mutirões, criar novos eventos e se engajar na comunidade!",
+    "mensagem": "Participe, organize e faça a diferença!",
+    "novoMutirao": "Novo Mutirão"
+  },
+  "quotes": {
+    "quote1": "Ninguém é tão pequeno que não possa ajudar, nem tão grande que não precise de ajuda.",
+    "quote2": "A verdadeira grandeza está em servir aos outros sem esperar nada em troca.",
+    "quote3": "Uma pequena ação de bondade pode transformar um dia, uma vida e até o mundo.",
+    "quote4": "Seja a mudança que você deseja ver no mundo.",
+    "quote5": "O voluntariado é a arte de dar sem perder, de receber sem pedir.",
+    "quote6": "Ao estender a mão para ajudar alguém, você também se levanta.",
+    "quote7": "A solidariedade é o idioma do coração.",
+    "quote8": "Nenhum ato de bondade, por menor que seja, é desperdiçado.",
+    "quote9": "Quando ajudamos os outros, descobrimos o verdadeiro propósito de nossa existência.",
+    "quote10": "Fazer o bem ao próximo é a maneira mais bonita de enriquecer a alma."
   }
 } 

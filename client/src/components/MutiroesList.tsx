@@ -53,7 +53,7 @@ const MutiroesList = ({ mutiroes, filtrosElement }: MutiroesListProps) => {
               <p className="description">{mutirao.descricao}</p>
               {mutirao.criadoPor && (
                 <p className="author">
-                  Por{" "}
+                  {t('geral.por')}{" "}
                   {typeof mutirao.criadoPor === "string"
                     ? mutirao.criadoPor
                     : mutirao.criadoPor.nome}

@@ -1,10 +1,55 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+  }
+
+  .form-header {
+    background: var(--primary-100);
+    position: relative;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem 2.5rem;
+    color: var(--light-color);
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--bg-url);
+      background-size: auto;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 1;
+      pointer-events: none;
+    }
+    background-color: var(--primary-100);
+    width: 100%;
+    padding: 4rem 2rem;
+    border-radius: 16px 16px 0 0;
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--light-color);
+      margin-bottom: 0.2rem;
+      z-index: 100;
+    }
+    .form-subtitle {
+      background: rgba(255, 255, 255, 0.18);
+      padding: 0.25rem 1rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: inline-block;
+      margin-bottom: 0.3rem;
+      z-index: 100;
+    }
   }
 
   h1 {
@@ -15,10 +60,41 @@ const Wrapper = styled.div`
   }
 
   .form-container {
-    background: var(--white);
-    border-radius: 1rem;
+    background: var(--grey-50);
+    padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-1);
+
+    border-radius: 0 0 1rem 1rem;
     padding: 2rem;
     box-shadow: var(--shadow-2);
+    label,
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-900) !important;
+      margin-bottom: 0.7rem;
+      gap: 0.5rem;
+    }
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
+  .image-section {
+    text-align: center;
+    img {
+      width: 12rem;
+      height: 12rem;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: var(--shadow-2);
+      border: 4px solid var(--white);
+      background: var(--grey-100);
+    }
   }
 
   form {
@@ -45,7 +121,7 @@ const Wrapper = styled.div`
       font-size: 0.9rem;
     }
 
-    input[type='date'] {
+    input[type="date"] {
       color: var(--text-color);
     }
 
@@ -115,6 +191,13 @@ const Wrapper = styled.div`
     margin-top: 2rem;
 
     button {
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
       font-size: 0.9rem;

@@ -1,5 +1,6 @@
 import React from "react";
 import { FaTwitter, FaFacebook, FaWhatsapp, FaTelegram } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -81,12 +82,13 @@ interface ShareMutiraoProps {
 }
 
 const ShareMutirao: React.FC<ShareMutiraoProps> = ({ url, titulo }) => {
+  const { t } = useTranslation();
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(titulo);
 
   return (
     <Wrapper>
-      <div className="share-title">Compartilhar:</div>
+      <div className="share-title">{t('geral.compartilhar')}:</div>
       <div className="share-buttons">
         <a
           href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}

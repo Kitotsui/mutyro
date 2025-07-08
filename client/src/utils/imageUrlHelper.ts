@@ -1,18 +1,25 @@
-const getImageUrl = (imagePath?: string): string => {
-  // Use a default image from Cloudinary or a local one
-  const defaultImage = "http://localhost:5100/uploads/default.png"; // Or your Cloudinary default URL
+const getImageUrl = (avatar?: { url: string } | string | null): string => {
+  const defaultImage =
+    "https://res.cloudinary.com/dunfagpl8/image/upload/v1751840306/mutyrouser_mjap7e.png";
 
-  if (!imagePath) {
-    return defaultImage;
+  // Handle null/undefined
+  if (!avatar) return defaultImage;
+
+  // Handle Mongoose avatar object
+  if (typeof avatar === "object" && avatar.url) {
+    return avatar.url.startsWith("http")
+      ? avatar.url
+      : `http://localhost:5100${avatar.url}`;
   }
 
-  // If imagePath is already a full absolute URL (like from Cloudinary), use it directly.
-  if (imagePath.startsWith("http")) {
-    return imagePath;
+  // Handle string path (legacy support)
+  if (typeof avatar === "string") {
+    return avatar.startsWith("http")
+      ? avatar
+      : `http://localhost:5100${avatar}`;
   }
 
-  // Otherwise, assume it's a local path and prepend your backend server's address.
-  return `http://localhost:5100${imagePath}`;
+  return defaultImage;
 };
 
 export default getImageUrl;
