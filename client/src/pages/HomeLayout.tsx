@@ -9,7 +9,7 @@ const HomeLayout = () => {
   const location = useLocation();
 
   // Lista de rotas onde a Sidebar deve aparecer
-  const sidebarRoutes = ["/user", "/chat", "/mutiroes", "/configuracoes"];
+  const sidebarRoutes = ["/user", "/chat", "/mutiroes", "/configuracoes", "/faq", "/editarusuario", "/notificacoes"];
 
   // Verifica se a rota atual está na lista de rotas que devem mostrar a Sidebar
   const shouldShowSidebar =

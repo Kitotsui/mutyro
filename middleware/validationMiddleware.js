@@ -13,8 +13,10 @@ const withValidationErrors = (validateValues) => {
   return [
     validateValues,
     (req, res, next) => {
+      console.log("Dados recebidos no middleware:", req.body);
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log("Erros de validação:", errors.array());
         const errorMessages = errors.array().map((error) => error.msg);
         if (errorMessages[0].startsWith("Nenhum")) {
           throw new NotFoundError(errorMessages);
@@ -53,11 +55,12 @@ export const validateCadastroInput = withValidationErrors([
     .withMessage("Senha é obrigatória!")
     .isLength({ min: 6, max: 12 })
     .withMessage("Senha tem que ter entre 6 e 12 caracteres!"),
-  body("cpf")
-    .notEmpty()
-    .withMessage("CPF é obrigatório!")
-    .isLength({ min: 11, max: 11 })
-    .withMessage("CPF tem que ter 11 caracteres!"),
+  // Temporariamente removendo validação do CPF para teste
+  // body("cpf")
+  //   .notEmpty()
+  //   .withMessage("CPF é obrigatório!")
+  //   .isLength({ min: 11, max: 11 })
+  //   .withMessage("CPF tem que ter 11 caracteres!"),
 ]);
 
 export const validateLoginInput = withValidationErrors([

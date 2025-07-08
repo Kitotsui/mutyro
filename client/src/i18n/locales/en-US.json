@@ -1,0 +1,250 @@
+{
+  "navbar": {
+    "inicio": "Home",
+    "home": "Home",
+    "mutiroes": "Mutirões",
+    "sobre": "About",
+    "login": "Login",
+    "cadastro": "Register",
+    "cadastrar": "Register",
+    "cadastrando": "Registering...",
+    "continuarComGoogle": "Continue with Google",
+    "sair": "Logout"
+  },
+  "sidebar": {
+    "perfil": "Profile",
+    "mutiroes": "Mutirões",
+    "notificacoes": "Notifications",
+    "faq": "FAQ",
+    "configuracoes": "Settings"
+  },
+  "configuracoes": {
+    "titulo": "Settings",
+    "tema": "Site theme",
+    "claro": "Light",
+    "escuro": "Dark",
+    "notificacoes": "Notifications",
+    "receberNotificacoes": "Receive email notifications",
+    "idioma": "Language",
+    "salvar": "Preferences saved!",
+    "botaoSalvar": "Save settings"
+  },
+  "faq": {
+    "titulo": "Frequently Asked Questions (FAQ)",
+    "perguntas": {
+      "mutirao": {
+        "pergunta": "What is a mutirão?",
+        "resposta": "A mutirão is a collective action, usually voluntary, to perform tasks for the benefit of a community or social cause."
+      },
+      "participar": {
+        "pergunta": "How can I participate in a mutirão?",
+        "resposta": "Just go to the 'Mutirões' tab, choose an event of interest and click 'Participate'. You will receive all necessary information by email."
+      },
+      "ajudar": {
+        "pergunta": "How can I help beyond participating in person?",
+        "resposta": "You can help by spreading the word about mutirões, donating materials, inviting friends, or even suggesting new actions for the community."
+      },
+      "objetivo": {
+        "pergunta": "What is the purpose of mutirões?",
+        "resposta": "Our goal is to promote collaboration, strengthen community bonds and generate positive impact through volunteer work."
+      },
+      "cancelar": {
+        "pergunta": "Can I cancel my participation?",
+        "resposta": "Yes, you can cancel your participation at any time on the mutirão page where you registered."
+      },
+      "certificado": {
+        "pergunta": "Do I receive a certificate when participating?",
+        "resposta": "Some mutirões offer participation certificates. Check the event description or contact the organizer."
+      },
+      "gratuito": {
+        "pergunta": "Do I need to pay to participate?",
+        "resposta": "No, all mutirões are free for volunteers."
+      },
+      "organizar": {
+        "pergunta": "Who can organize a mutirão?",
+        "resposta": "Any registered person can suggest and organize a mutirão, subject to approval by the site team."
+      },
+      "aceito": {
+        "pergunta": "How do I know if I was accepted in a mutirão?",
+        "resposta": "You will receive a notification and confirmation email once your registration is approved."
+      },
+      "restricoes": {
+        "pergunta": "I have physical restrictions, can I participate?",
+        "resposta": "Yes! Many mutirões have diverse tasks, including light activities. Check the event description or talk to the organizer."
+      },
+      "contato": {
+        "pergunta": "How do I contact the organizers?",
+        "resposta": "On each mutirão page there is a field for questions and comments, plus the contact of the person responsible for the event."
+      }
+    }
+  },
+  "hero": {
+    "titulo": "Mutyro",
+    "subtitulo": "Together we make a difference"
+  },
+  "mutiroes": {
+    "titulo": "Mutirões",
+    "novoMutirao": "New Mutirão",
+    "participar": "Participate",
+    "verTodos": "View all",
+    "semMutiroes": "You don't have any mutirões",
+    "semMutiroesDesc": "Mutirões you registered for and/or created will appear here."
+  },
+  "usuario": {
+    "nome": "Name",
+    "email": "Email",
+    "cpf": "CPF",
+    "senha": "Password",
+    "confirmarSenha": "Confirm Password",
+    "bemVindo": "Welcome, {{nome}}! 👋",
+    "descricao": "Start by creating a mutirão or find one to volunteer. Together, we can transform the world!",
+    "naoTemConta": "Don't have an account?",
+    "jaTemConta": "Already a member?"
+  },
+  "footer": {
+    "termos": "Terms",
+    "privacidade": "Privacy",
+    "contato": "Contact"
+  },
+  "geral": {
+    "voltar": "Back",
+    "salvar": "Save",
+    "cancelar": "Cancel",
+    "editar": "Edit",
+    "excluir": "Delete",
+    "confirmar": "Confirm",
+    "carregando": "Loading...",
+    "erro": "Error",
+    "sucesso": "Success",
+    "ou": "or",
+    "todosDireitosReservados": "All rights reserved.",
+    "loginSucesso": "Login successful!",
+    "cadastroSucesso": "Registration successful!",
+    "loginAutomaticoErro": "Registration completed, but there was a problem logging in automatically. Please log in.",
+    "loginAutomaticoFalhou": "Registration completed, but automatic login failed. Please try logging in manually."
+  },
+  "novoMutirao": {
+    "titulo": "Your mutirão is almost ready!",
+    "capaTitulo": "Mutirão Cover",
+    "foto": "Photo",
+    "enviarFoto": "Send photo",
+    "tituloLabel": "Title",
+    "tituloPlaceholder": "Enter the mutirão title",
+    "data": "Date",
+    "horario": "Time",
+    "descricao": "Description",
+    "descricaoPlaceholder": "Describe the mutirão objective",
+    "numeroComplemento": "Number and Complement",
+    "numeroComplementoPlaceholder": "Ex: 123, Block A, Near...",
+    "tarefas": "Tasks",
+    "tarefaPlaceholder": "Describe the task",
+    "remover": "Remove",
+    "adicionarTarefa": "Add Task",
+    "necessitaMateriais": "Do you need Tools, Materials and/or Specific Skills?",
+    "sim": "Yes",
+    "nao": "No",
+    "materiaisPlaceholder": "List the required materials",
+    "tipoMutirao": "Mutirão Type",
+    "tipos": {
+      "social": "Social",
+      "construcaoReforma": "Construction / Renovation",
+      "ambientalAgricola": "Environmental / Agricultural",
+      "culturaEducacao": "Culture / Education",
+      "saude": "Health",
+      "tecnologia": "Technology"
+    },
+    "termos": "I agree to organize this mutirão responsibly, respecting community guidelines and ensuring a safe and inclusive environment for all participants.",
+    "cancelar": "Cancel",
+    "criarMutirao": "Create Mutirão",
+    "erroLogin": "You need to be logged in to create a mutirão.",
+    "erroEndereco": "Please fill in the base address by selecting a suggestion.",
+    "erroEnderecoObrigatorio": "Base address required.",
+    "sucesso": "Mutirão created successfully!"
+  },
+  "editarUsuario": {
+    "titulo": "Edit User",
+    "fotoPerfil": "Profile Photo",
+    "foto": "Photo",
+    "enviarFoto": "Send Photo",
+    "nome": "Name",
+    "nomePlaceholder": "Full name",
+    "email": "Email",
+    "emailPlaceholder": "Email",
+    "endereco": "Address",
+    "enderecoPlaceholder": "Street, number, neighborhood...",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "dataNascimento": "Date of Birth",
+    "cancelar": "Cancel",
+    "salvar": "Save",
+    "sucesso": "User updated successfully!",
+    "erro": "Error editing user"
+  },
+  "calendario": {
+    "titulo": "Find a Mutirão",
+    "agenda": "Agenda",
+    "calendario": "Calendar",
+    "grade": "Grid",
+    "resultadosPara": "Results for \"{{searchTerm}}\"",
+    "todosMutiroes": "All Mutirões",
+    "nenhumMutirao": "No mutirões found.",
+    "usuarioDesconhecido": "Unknown user",
+    "diaTodo": "All day",
+    "diaInteiro": "All day",
+    "anterior": "Previous",
+    "proximo": "Next",
+    "hoje": "Today",
+    "mes": "Month",
+    "semana": "Week",
+    "dia": "Day",
+    "data": "Date",
+    "hora": "Time",
+    "evento": "Event",
+    "semEventos": "No events in this period."
+  },
+  "notificacoes": {
+    "categorias": {
+      "todas": "All",
+      "naoLidas": "Unread",
+      "importantes": "Important",
+      "equipe": "Team",
+      "anuncios": "Announcements",
+      "seguranca": "Security"
+    },
+    "titulo": "Notifications",
+    "subtitulo": "Your messages and updates",
+    "marcarTodasComoLidas": "Mark all as read",
+    "configuracoes": "Settings",
+    "carregando": "Loading...",
+    "erro": "Error fetching notifications",
+    "erroMarcarTodas": "Error marking all as read",
+    "erroExcluir": "Error deleting notification",
+    "excluidaSucesso": "Notification deleted successfully!",
+    "favoritar": "Favorite",
+    "excluir": "Delete",
+    "nenhuma": "No notifications found.",
+    "dataFormato": "MMM dd 'at' HH:mm",
+    "baixarCertificado": "Download Certificate",
+    "tipos": {
+      "inscricao_confirmada": {
+        "titulo": "Registration Confirmed",
+        "mensagem": "Your registration for the mutirão \"{{mutirao}}\" was successfully confirmed!"
+      },
+      "inscricao_cancelada": {
+        "titulo": "Registration Cancelled",
+        "mensagem": "Your registration for the mutirão \"{{mutirao}}\" was cancelled. We hope to see you in other events!"
+      },
+      "sucesso": {
+        "titulo": "Success",
+        "mensagem": "Operation completed successfully."
+      },
+      "alerta": {
+        "titulo": "Alert",
+        "mensagem": "Attention: an alert occurred in the system."
+      }
+    }
+  },
+  "search": {
+    "placeholder": "Search mutirão by title..."
+  }
+} 

@@ -8,18 +8,17 @@ const notificacaoSchema = new mongoose.Schema({
   },
   tipo: {
     type: String,
-    enum: ['info', 'alerta', 'sucesso'],
     required: true
   },
-  titulo: {
-    type: String,
-    required: true
-  },
-  mensagem: {
-    type: String,
-    required: true
+  variaveis: {
+    type: Object,
+    default: {}
   },
   lida: {
+    type: Boolean,
+    default: false
+  },
+  favorita: {
     type: Boolean,
     default: false
   },
@@ -37,6 +36,7 @@ const notificacaoSchema = new mongoose.Schema({
 
 // Índices para melhorar a performance das consultas
 notificacaoSchema.index({ usuarioId: 1, lida: 1 });
+notificacaoSchema.index({ usuarioId: 1, favorita: 1 });
 notificacaoSchema.index({ data: -1 });
 
 const Notificacao = mongoose.model('Notificacao', notificacaoSchema);

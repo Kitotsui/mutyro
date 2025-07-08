@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Wrapper from "../assets/wrappers/SearchBar";
 
 interface SearchBarProps {
@@ -9,10 +10,13 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
-  placeholder = "Buscar mutirão pelo título...",
+  placeholder,
   initialQuery = "",
 }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+
+  const defaultPlaceholder = t('search.placeholder');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +30,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           type="search"
           name="search"
           className="search-input"
-          placeholder={placeholder}
+          placeholder={placeholder || defaultPlaceholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

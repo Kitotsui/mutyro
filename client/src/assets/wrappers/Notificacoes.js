@@ -144,6 +144,10 @@ const Wrapper = styled.div`
     border: 1.5px solid #ef561d;
     background: #fff7ed;
   }
+  .notificacoes-card.favorita {
+    border: 1.5px solid #ffd700;
+    background: #fffef7;
+  }
   .notificacoes-card-icone {
     width: 3.2rem;
     height: 3.2rem;
@@ -209,6 +213,12 @@ const Wrapper = styled.div`
     transition: color 0.2s;
     &:hover {
       color: #ff9100;
+    }
+  }
+  .notificacoes-btn-fav.favoritada {
+    color: #ffd700;
+    &:hover {
+      color: #ffed4e;
     }
   }
   .notificacoes-vazio {

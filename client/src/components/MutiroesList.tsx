@@ -1,24 +1,24 @@
 import { Link } from "react-router-dom";
 import Wrapper from "../assets/wrappers/MutiroesList";
-
 import getImageUrl from "../utils/imageUrlHelper";
-
-interface Mutirao {
-  _id: string;
-  titulo: string;
-  data: string;
-  descricao: string;
-  imagemCapa: string;
-  criadoPor?: { nome: string } | string;
-  finalizado?: boolean;
-}
+import { useTranslation } from "react-i18next";
 
 interface MutiroesListProps {
-  mutiroes: Mutirao[];
+  mutiroes: Array<{
+    _id: string;
+    titulo: string;
+    descricao: string;
+    data: string;
+    imagemCapa?: string;
+    criadoPor?: string | { nome: string };
+    finalizado?: boolean;
+  }>;
   filtrosElement?: React.ReactNode;
 }
 
 const MutiroesList = ({ mutiroes, filtrosElement }: MutiroesListProps) => {
+  const { t } = useTranslation();
+
   return (
     <Wrapper>
       <div
@@ -30,7 +30,7 @@ const MutiroesList = ({ mutiroes, filtrosElement }: MutiroesListProps) => {
           marginBottom: 24,
         }}
       >
-        <h2 style={{ margin: 0 }}>Últimos Mutirões</h2>
+        <h2 style={{ margin: 0 }}>{t('mutiroes.titulo')}</h2>
         {filtrosElement}
       </div>
       <div className="mutiroes-grid">

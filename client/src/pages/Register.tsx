@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import {
@@ -9,6 +10,7 @@ import {
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 type ApiError = {
   response?: {
@@ -28,52 +30,55 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const { setUsuario } = useAuth();
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [formData, setFormData] = useState({
+    nome: "",
+    email: "",
+    // cpf: "", // Temporariamente removido
+    senha: "",
+    confirmarSenha: "",
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
 
     try {
       // Primeiro faz o cadastro
-      const response = await customFetch.post("/auth/cadastro", data);
+      const response = await customFetch.post("/auth/cadastro", formData);
       console.log("Resposta do cadastro:", response);
 
       if (response.data && response.data.msg) {
         toast.success(response.data.msg);
       } else {
-        toast.success("Cadastro realizado com sucesso!");
+        toast.success(t('geral.cadastroSucesso'));
       }
 
       // Depois faz o login automático
       try {
         const loginResponse = await customFetch.post("/auth/login", {
-          email: data.email,
-          senha: data.senha,
+          email: formData.email,
+          senha: formData.senha,
         });
 
         const from = location.state?.from || "/user"; // Redireciona para user ou para .from
 
         if (loginResponse.data && loginResponse.data.usuario) {
           setUsuario(loginResponse.data.usuario);
-          toast.success("Login realizado com sucesso!");
+          toast.success(t('geral.loginSucesso'));
           if (closeModal) closeModal();
           navigate(from, { replace: true });
         } else {
-          toast.warn(
-            "Cadastro realizado, mas houve um problema ao logar automaticamente. Por favor, faça o login."
-          );
+          toast.warn(t('geral.loginAutomaticoErro'));
           if (closeModal) closeModal();
           if (switchToLogin) switchToLogin(); // Switch to login modal
         }
       } catch (loginError) {
         console.error("Erro no login automático:", loginError);
-        toast.error(
-          "Cadastro realizado, mas o login automático falhou. Por favor, tente fazer login manualmente."
-        );
+        toast.error(t('geral.loginAutomaticoFalhou'));
         // Se falhar o login, apenas fecha o modal de cadastro
         if (closeModal) closeModal();
         if (switchToLogin) switchToLogin();
@@ -84,51 +89,69 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
       toast.error(
         apiError?.response?.data?.msg ||
           apiError?.message ||
-          "Erro desconhecido"
+          t('geral.erro')
       );
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <Wrapper>
       <Form onSubmit={handleSubmit} className="form">
-        <h4>Cadastro</h4>
+        <h4>{t('navbar.cadastro')}</h4>
         <FormRow
-          placeHolder="Nome"
           type="text"
           name="nome"
-          defaultValue="Usuario"
+          value={formData.nome}
+          handleChange={handleInputChange}
+          labelText={t('usuario.nome')}
+          placeHolder={t('usuario.nome')}
         />
         <FormRow
-          placeHolder="Email"
           type="email"
           name="email"
-          defaultValue="usuario@gmail.com"
+          value={formData.email}
+          handleChange={handleInputChange}
+          labelText={t('usuario.email')}
+          placeHolder={t('usuario.email')}
         />
+        {/* Temporariamente removendo CPF para teste
         <FormRow
-          placeHolder="CPF"
           type="text"
           name="cpf"
-          defaultValue="00000000000"
+          value={formData.cpf}
+          handleChange={handleInputChange}
+          labelText={t('usuario.cpf')}
+          placeHolder={t('usuario.cpf')}
         />
+        */}
         <FormRow
-          placeHolder="Senha"
           type="password"
           name="senha"
-          defaultValue="88888888"
+          value={formData.senha}
+          handleChange={handleInputChange}
+          labelText={t('usuario.senha')}
+          placeHolder={t('usuario.senha')}
         />
         <FormRow
-          placeHolder="Confirmar Senha"
           type="password"
           name="confirmarSenha"
-          defaultValue="88888888"
+          value={formData.confirmarSenha}
+          handleChange={handleInputChange}
+          labelText={t('usuario.confirmarSenha')}
+          placeHolder={t('usuario.confirmarSenha')}
         />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
-          {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+          {isSubmitting ? t('navbar.cadastrando') : t('navbar.cadastrar')}
         </button>
         <div className="divider">
           <div className="line"></div>
-          <span>ou</span>
+          <span>{t('geral.ou')}</span>
           <div className="line"></div>
         </div>
         <button type="button" className="btn-link">
@@ -155,12 +178,12 @@ const Register = ({ switchToLogin, closeModal }: Props) => {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             ></path>
           </svg>
-          Continuar com Google
+          {t('navbar.continuarComGoogle')}
         </button>
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <span>Já é membro? </span>
+          <span>{t('usuario.jaTemConta')} </span>
           <button type="button" onClick={switchToLogin} className="switch-btn">
-            Login
+            {t('navbar.login')}
           </button>
         </div>
       </Form>

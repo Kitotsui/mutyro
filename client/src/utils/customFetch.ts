@@ -12,6 +12,13 @@ const customFetch = axios.create({
 
 // Adicione um interceptor de requisição
 customFetch.interceptors.request.use((config) => {
+  console.log('Requisição sendo enviada:', {
+    url: config.url,
+    method: config.method,
+    data: config.data,
+    headers: config.headers
+  });
+  
   // Para requisições FormData, não definir Content-Type
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type'];

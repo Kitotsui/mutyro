@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import CustomCalendar from "./Calendar";
+
 
 import React, { useMemo, useState } from "react";
 
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import Wrapper from "../assets/wrappers/UserSidebar";
+
+import { useTranslation } from "react-i18next";
+import Wrapper from '../assets/wrappers/UserSidebar';
 
 interface UserSidebarProps {
   date: Date;
@@ -21,6 +23,7 @@ const UserSidebar = ({
   proximosMutiroes = [],
 }: UserSidebarProps) => {
   const [popupDate, setPopupDate] = React.useState<Date | null>(null);
+  const { t } = useTranslation();
 
   const eventDatesStrings = useMemo(() => {
     return new Set(proximosMutiroes.map((mutirao) => mutirao.data));
@@ -58,7 +61,7 @@ const UserSidebar = ({
     return classes.length > 0 ? classes.join(" ") : null;
   };
 
-  const handleCalendarDateChange = (value: any) => {
+  const handleCalendarDateChange: React.ComponentProps<typeof Calendar>["onChange"] = (value) => {
     let newSelectedDate: Date | null = null;
     if (value instanceof Date) {
       newSelectedDate = value;
@@ -163,8 +166,8 @@ const UserSidebar = ({
         {/* Próximos Mutirões */}
         <div className="card next-mutiroes">
           <div className="header">
-            <h2>Seus próximos mutirões</h2>
-            <Link to="/mutiroes">Ver todos</Link>
+            <h2>{t('mutiroes.titulo')}</h2>
+            <Link to="/mutiroes">{t('mutiroes.verTodos')}</Link>
           </div>
           {proximosMutiroes.length === 0 ? (
             <div
@@ -175,11 +178,10 @@ const UserSidebar = ({
                 textAlign: "center",
               }}
             >
-              Você não tem nenhum mutirão
+              {t('mutiroes.semMutiroes')}
               <br />
               <span style={{ fontSize: 13 }}>
-                Os mutirões para os quais se inscreveu e/ou criou aparecerão
-                aqui.
+                {t('mutiroes.semMutiroesDesc')}
               </span>
             </div>
           ) : (
@@ -198,11 +200,11 @@ const UserSidebar = ({
             <h2>Seus Interesses</h2>
             <button>Ver todos</button>
           </div>
-          <div className="tags">
-            {interesses.map((interesse) => (
-              <span key={interesse}>{interesse}</span>
+          <ul>
+            {interesses.map((interesse, idx) => (
+              <li key={idx}>{interesse}</li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </Wrapper>

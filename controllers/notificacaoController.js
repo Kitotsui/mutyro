@@ -1,6 +1,7 @@
 import Notificacao from '../models/Notificacao.js';
 import { StatusCodes } from 'http-status-codes';
 import { BadRequestError, NotFoundError } from '../errors/index.js';
+import { criarNotificacaoPadronizada } from '../utils/notificacaoUtils.js';
 
 // Buscar notificações do usuário
 export const getNotificacoes = async (req, res) => {
@@ -11,9 +12,20 @@ export const getNotificacoes = async (req, res) => {
     query.lida = lida === 'true';
   }
 
-  const notificacoes = await Notificacao.find(query)
+  let notificacoes = await Notificacao.find(query)
     .sort({ data: -1 })
     .populate('mutiraoId', 'titulo data');
+
+  // Preencher variaveis.mutirao se estiver faltando
+  notificacoes = notificacoes.map((notif) => {
+    if (
+      (!notif.variaveis || !notif.variaveis.mutirao) &&
+      notif.mutiraoId && notif.mutiraoId.titulo
+    ) {
+      notif.variaveis = { ...notif.variaveis, mutirao: notif.mutiraoId.titulo };
+    }
+    return notif;
+  });
 
   res.status(StatusCodes.OK).json({ notificacoes });
 };
@@ -37,39 +49,34 @@ export const marcarComoLida = async (req, res) => {
 
 // Criar nova notificação (admin)
 export const criarNotificacao = async (req, res) => {
-  const { usuarioId, tipo, titulo, mensagem, mutiraoId } = req.body;
+  const { usuarioId, tipo, mutiraoId, ...variaveis } = req.body;
 
-  if (!usuarioId || !tipo || !titulo || !mensagem) {
+  if (!usuarioId || !tipo) {
     throw new BadRequestError('Por favor, forneça todos os campos necessários');
   }
 
-  const notificacao = await Notificacao.create({
-    usuarioId,
-    tipo,
-    titulo,
-    mensagem,
-    mutiraoId
-  });
+  const notificacao = await Notificacao.create(
+    criarNotificacaoPadronizada({ usuarioId, tipo, variaveis, mutiraoId })
+  );
+  console.log('Notificação criada:', JSON.stringify(notificacao, null, 2));
 
   res.status(StatusCodes.CREATED).json({ notificacao });
 };
 
 // Criar notificação automática para mutirão
-export const criarNotificacaoMutirao = async (mutiraoId, tipo, titulo, mensagem) => {
+export const criarNotificacaoMutirao = async (mutiraoId, tipo, variaveis = {}) => {
   const mutirao = await Mutirao.findById(mutiraoId).populate('participantes');
-  
   if (!mutirao) {
     throw new NotFoundError('Mutirão não encontrado');
   }
-
-  const notificacoes = mutirao.participantes.map(participante => ({
-    usuarioId: participante._id,
-    tipo,
-    titulo,
-    mensagem,
-    mutiraoId
-  }));
-
+  const notificacoes = mutirao.participantes.map(participante => (
+    criarNotificacaoPadronizada({
+      usuarioId: participante._id,
+      tipo,
+      variaveis: { ...variaveis, mutirao: mutirao.titulo },
+      mutiraoId
+    })
+  ));
   await Notificacao.insertMany(notificacoes);
 };
 
@@ -106,4 +113,23 @@ export const excluirNotificacao = async (req, res) => {
   }
 
   res.status(StatusCodes.OK).json({ msg: 'Notificação excluída com sucesso' });
+};
+
+// Favoritar/desfavoritar notificação
+export const toggleFavorita = async (req, res) => {
+  const { id } = req.params;
+  
+  const notificacao = await Notificacao.findOne({ _id: id, usuarioId: req.user.userId });
+  
+  if (!notificacao) {
+    throw new NotFoundError('Notificação não encontrada');
+  }
+
+  notificacao.favorita = !notificacao.favorita;
+  await notificacao.save();
+
+  res.status(StatusCodes.OK).json({ 
+    notificacao,
+    msg: notificacao.favorita ? 'Notificação favoritada' : 'Notificação desfavoritada'
+  });
 }; 

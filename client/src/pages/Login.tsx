@@ -1,109 +1,87 @@
+import { useState } from "react";
 import { FormRow } from "../components";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-import { Form, useNavigate, useLocation } from "react-router-dom";
-import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
+import customFetch from "../utils/customFetch";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-type ApiError = {
-  response?: {
-    data?: {
-      msg?: string;
-    };
-  };
-  message?: string;
-};
-
-type Props = {
-  switchToRegister?: () => void;
+interface LoginProps {
+  switchToRegister: () => void;
   closeModal?: () => void;
-};
+}
 
-const Login = ({ switchToRegister, closeModal }: Props) => {
+const Login = ({ switchToRegister, closeModal }: LoginProps) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    senha: "",
+  });
+  const { t } = useTranslation();
   const { setUsuario } = useAuth();
-
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
 
     try {
-      console.log("Enviando dados para login:", data);
-      const response = await customFetch.post("/auth/login", data);
-      console.log("Resposta completa do login:", response);
-
-      // Direcionamento de navegação após o login padrão /user ou do .from
-      const from = location.state?.from || "/user";
-
+      const response = await customFetch.post("/auth/login", formData);
       if (response.data && response.data.usuario) {
-        console.log("Dados do usuário recebidos:", response.data.usuario);
         setUsuario(response.data.usuario);
-        toast.success("Login feito com sucesso!");
-        if (closeModal) closeModal();
-        navigate(from, { replace: true });
-      } else {
-        console.log("Tentando buscar usuário atual...");
-        const userResponse = await customFetch.get("/usuarios/atual-usuario");
-        console.log("Resposta do usuário atual:", userResponse);
-
-        if (userResponse.data && userResponse.data.usuario) {
-          console.log(
-            "Dados do usuário atual recebidos:",
-            userResponse.data.usuario
-          );
-          setUsuario(userResponse.data.usuario);
-          toast.success("Login feito com sucesso!");
-          if (closeModal) closeModal();
-          navigate(from, { replace: true });
-        } else {
-          throw new Error("Não foi possível obter os dados do usuário");
+        toast.success(t('geral.loginSucesso'));
+        if (closeModal) {
+          closeModal();
         }
+        navigate("/user");
       }
-    } catch (error) {
-      console.error("Erro detalhado no login:", error);
-      const apiError = error as ApiError;
-      toast.error(
-        apiError?.response?.data?.msg ||
-          apiError?.message ||
-          "Erro desconhecido ao tentar fazer login"
-      );
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'response' in error 
+        ? (error.response as { data?: { msg?: string } })?.data?.msg 
+        : undefined;
+      toast.error(errorMessage || t('geral.erro'));
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <Wrapper>
-      <Form onSubmit={handleSubmit} className="form">
-        <h4>Login</h4>
+      <form className="form" onSubmit={handleSubmit}>
+        <h4>{t('navbar.login')}</h4>
         <FormRow
-          placeHolder="Usuário ou Email"
           type="email"
           name="email"
-          defaultValue="grosbilda@gmail.com"
+          value={formData.email}
+          handleChange={handleInputChange}
+          labelText={t('usuario.email')}
+          placeHolder={t('usuario.email')}
         />
         <FormRow
-          placeHolder="Senha"
           type="password"
           name="senha"
-          defaultValue="secret123"
+          value={formData.senha}
+          handleChange={handleInputChange}
+          labelText={t('usuario.senha')}
+          placeHolder={t('usuario.senha')}
         />
         <button type="submit" className="btn btn-block">
-          Login
+          {t('navbar.login')}
         </button>
-        <a href="#" className="link-esqueci">
-          Esqueceu sua senha?
-        </a>
-        <div className="divider">
-          <div className="line"></div>
-          <span>ou</span>
-          <div className="line"></div>
-        </div>
-        <button type="button" className="btn-link" onClick={switchToRegister}>
-          Criar uma conta
+        <p>
+          {t('usuario.naoTemConta')}{" "}
+          <button
+            type="button"
+            className="member-btn"
+            onClick={switchToRegister}
+          >
+            {t('navbar.cadastro')}
         </button>
-      </Form>
+        </p>
+      </form>
     </Wrapper>
   );
 };

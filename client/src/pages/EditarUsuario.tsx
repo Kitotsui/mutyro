@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import customFetch from "@/utils/customFetch";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const EditarUsuario = () => {
-  const { usuario, setUsuario } = useAuth();
+  const { usuario } = useAuth();
+  const { t } = useTranslation();
 
   console.log(usuario);
 
@@ -84,7 +86,7 @@ const EditarUsuario = () => {
         throw new Error(response.data.error);
       }
 
-      toast.success("Usuário atualizado com sucesso!");
+      toast.success(t('editarUsuario.sucesso'));
       navigate("/user");
     } catch (err: unknown) {
       const error = err as {
@@ -92,7 +94,7 @@ const EditarUsuario = () => {
         message?: string;
       };
       const errorMsg =
-        error.response?.data?.msg || error.message || "Erro ao editar usuário";
+        error.response?.data?.msg || error.message || t('editarUsuario.erro');
       toast.error(errorMsg);
     }
   };
@@ -100,11 +102,11 @@ const EditarUsuario = () => {
   return (
     <Wrapper>
       <div className="container">
-        <h1>Editar Usuário</h1>
+        <h1>{t('editarUsuario.titulo')}</h1>
         <div className="form-container">
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="image-section">
-              <h3>Foto de Perfil</h3>
+              <h3>{t('editarUsuario.fotoPerfil')}</h3>
               <div className="image-upload">
                 {foto ? (
                   <img
@@ -113,14 +115,14 @@ const EditarUsuario = () => {
                     className="preview-image"
                   />
                 ) : (
-                  <div className="upload-placeholder">Foto</div>
+                  <div className="upload-placeholder">{t('editarUsuario.foto')}</div>
                 )}
                 <button
                   type="button"
                   className="upload-btn"
                   onClick={() => document.getElementById("foto-input")?.click()}
                 >
-                  Enviar Foto
+                                      {t('editarUsuario.enviarFoto')}
                 </button>
                 <input
                   type="file"
@@ -134,51 +136,51 @@ const EditarUsuario = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="nome">Nome</label>
+              <label htmlFor="nome">{t('editarUsuario.nome')}</label>
               <input
                 type="text"
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                placeholder="Nome completo"
+                placeholder={t('editarUsuario.nomePlaceholder')}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t('editarUsuario.email')}</label>
               <input
                 type="text"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Email"
+                placeholder={t('editarUsuario.emailPlaceholder')}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="endereco">Endereço</label>
+              <label htmlFor="endereco">{t('editarUsuario.endereco')}</label>
               <input
                 type="text"
                 name="endereco"
                 value={formData.endereco}
                 onChange={handleChange}
-                placeholder="Rua, número, bairro..."
+                placeholder={t('editarUsuario.enderecoPlaceholder')}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="cpf">CPF</label>
+              <label htmlFor="cpf">{t('editarUsuario.cpf')}</label>
               <input
                 type="text"
                 name="cpf"
                 value={formData.cpf}
                 onChange={handleChange}
-                placeholder="000.000.000-00"
+                placeholder={t('editarUsuario.cpfPlaceholder')}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="dataNascimento">Data de Nascimento</label>
+              <label htmlFor="dataNascimento">{t('editarUsuario.dataNascimento')}</label>
               <input
                 type="date"
                 name="dataNascimento"
@@ -193,10 +195,10 @@ const EditarUsuario = () => {
                 className="cancel-btn"
                 onClick={() => navigate(-1)}
               >
-                Cancelar
+                {t('editarUsuario.cancelar')}
               </button>
               <button type="submit" className="submit-btn">
-                Salvar
+                                  {t('editarUsuario.salvar')}
               </button>
             </div>
           </form>

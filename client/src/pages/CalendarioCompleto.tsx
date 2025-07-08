@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   useLoaderData,
@@ -6,18 +7,16 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import publicFetch from "../utils/publicFetch";
 import customFetch from "../utils/customFetch";
 import { SearchBar, Card } from "../components";
 import Wrapper from "../assets/wrappers/CalendarioCompleto";
 
-import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
+import { Calendar as BigCalendar, dateFnsLocalizer, View } from "react-big-calendar";
 import { format } from "date-fns";
 import { parse, startOfWeek, getDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Views } from "react-big-calendar";
 
 import getImageUrl from "../utils/imageUrlHelper";
 
@@ -58,6 +57,7 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 
 const CalendarioCompleto = () => {
+  const { t } = useTranslation();
   const { mutiroes, searchTerm } = useLoaderData() as {
     mutiroes: Mutirao[];
     searchTerm: string;
@@ -72,7 +72,7 @@ const CalendarioCompleto = () => {
   );
 
   const [calendarDate, setCalendarDate] = useState(new Date());
-  const [calendarView, setCalendarView] = useState(Views.MONTH);
+  const [calendarView, setCalendarView] = useState<View>("month");
 
   const handleSearch = (query: string) => {
     if (query) {
@@ -165,7 +165,7 @@ const CalendarioCompleto = () => {
     });
   };
 
-  const handleCalendarView = (newView: any) => {
+  const handleCalendarView = (newView: View) => {
     setCalendarView(newView);
   };
 
@@ -175,7 +175,7 @@ const CalendarioCompleto = () => {
 
   return (
     <Wrapper>
-      <h2 className="page-title">Encontre um Mutirão</h2>
+      <h2 className="page-title">{t('calendario.titulo')}</h2>
       <SearchBar onSearch={handleSearch} initialQuery={searchTerm} />
 
       <div className="view-toggle">
@@ -183,19 +183,19 @@ const CalendarioCompleto = () => {
           onClick={() => setViewMode("agenda")}
           className={viewMode === "agenda" ? "active" : ""}
         >
-          Agenda
+          {t('calendario.agenda')}
         </button>
         <button
           onClick={() => setViewMode("month")}
           className={viewMode === "month" ? "active" : ""}
         >
-          Calendário
+          {t('calendario.calendario')}
         </button>
         <button
           onClick={() => setViewMode("grid")}
           className={viewMode === "grid" ? "active" : ""}
         >
-          Grade
+          {t('calendario.grade')}
         </button>
       </div>
 
@@ -204,11 +204,11 @@ const CalendarioCompleto = () => {
           <>
             <div className="mutiroes-header">
               {searchTerm
-                ? `Resultados para "${searchTerm}"`
-                : "Todos Mutirões"}
+                ? t('calendario.resultadosPara', { searchTerm })
+                : t('calendario.todosMutiroes')}
             </div>
             {mutiroes.length === 0 ? (
-              <p className="no-results">Nenhum mutirão encontrado.</p>
+              <p className="no-results">{t('calendario.nenhumMutirao')}</p>
             ) : (
               <div className="mutiroes-list">
                 {mutiroes.map((mutirao) => (
@@ -218,7 +218,7 @@ const CalendarioCompleto = () => {
                     image={getImageUrl(mutirao.imagemCapa)}
                     title={mutirao.titulo}
                     date={mutirao.data}
-                    user={mutirao.criadoPor?.nome || "Usuário desconhecido"}
+                    user={mutirao.criadoPor?.nome || t('calendario.usuarioDesconhecido')}
                   />
                 ))}
               </div>
@@ -229,7 +229,7 @@ const CalendarioCompleto = () => {
         {viewMode === "agenda" && (
           <div className="agenda-view">
             {mutiroes.length === 0 && (
-              <p className="no-results">Nenhum mutirão encontrado.</p>
+              <p className="no-results">{t('calendario.nenhumMutirao')}</p>
             )}
             {eventsForAgenda.map(([date, eventsOnDate]) => (
               <div key={date} className="agenda-day-group">
@@ -242,7 +242,7 @@ const CalendarioCompleto = () => {
                       className="agenda-event"
                     >
                       <span className="agenda-event-time">
-                        {event.horario || "Dia todo"}
+                        {event.horario || t('calendario.diaTodo')}
                       </span>
                       <div className="agenda-event-details">
                         <span className="agenda-event-title">
@@ -275,18 +275,18 @@ const CalendarioCompleto = () => {
               onView={handleCalendarView}
               view={calendarView}
               messages={{
-                allDay: "Dia inteiro",
-                previous: "Anterior",
-                next: "Próximo",
-                today: "Hoje",
-                month: "Mês",
-                week: "Semana",
-                day: "Dia",
-                agenda: "Agenda",
-                date: "Data",
-                time: "Hora",
-                event: "Evento",
-                noEventsInRange: "Não há eventos neste período.",
+                allDay: t('calendario.diaInteiro'),
+                previous: t('calendario.anterior'),
+                next: t('calendario.proximo'),
+                today: t('calendario.hoje'),
+                month: t('calendario.mes'),
+                week: t('calendario.semana'),
+                day: t('calendario.dia'),
+                agenda: t('calendario.agenda'),
+                date: t('calendario.data'),
+                time: t('calendario.hora'),
+                event: t('calendario.evento'),
+                noEventsInRange: t('calendario.semEventos'),
               }}
               views={["month"]}
               // views={["month", "week", "day", "agenda"]}

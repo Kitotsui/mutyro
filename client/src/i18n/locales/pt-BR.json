@@ -1,0 +1,252 @@
+{
+  "navbar": {
+    "inicio": "Início",
+    "home": "Início",
+    "mutiroes": "Mutirões",
+    "sobre": "Sobre",
+    "login": "Login",
+    "cadastro": "Cadastro",
+    "cadastrar": "Cadastrar",
+    "cadastrando": "Cadastrando...",
+    "continuarComGoogle": "Continuar com Google",
+    "sair": "Sair"
+  },
+  "sidebar": {
+    "perfil": "Perfil",
+    "mutiroes": "Mutirões",
+    "notificacoes": "Notificações",
+    "faq": "FAQ",
+    "configuracoes": "Configurações"
+  },
+  "configuracoes": {
+    "titulo": "Configurações",
+    "tema": "Tema do site",
+    "claro": "Claro",
+    "escuro": "Escuro",
+    "notificacoes": "Notificações",
+    "receberNotificacoes": "Receber notificações por e-mail",
+    "idioma": "Idioma",
+    "salvar": "Preferências salvas!",
+    "botaoSalvar": "Salvar configurações"
+  },
+  "faq": {
+    "titulo": "Perguntas Frequentes (FAQ)",
+    "perguntas": {
+      "mutirao": {
+        "pergunta": "O que é um mutirão?",
+        "resposta": "Um mutirão é uma ação coletiva, geralmente voluntária, para realizar tarefas em benefício de uma comunidade ou causa social."
+      },
+      "participar": {
+        "pergunta": "Como posso participar de um mutirão?",
+        "resposta": "Basta acessar a aba 'Mutirões', escolher um evento de interesse e clicar em 'Participar'. Você receberá todas as informações necessárias por e-mail."
+      },
+      "ajudar": {
+        "pergunta": "Como posso ajudar além de participar presencialmente?",
+        "resposta": "Você pode ajudar divulgando os mutirões, doando materiais, convidando amigos ou até mesmo sugerindo novas ações para a comunidade."
+      },
+      "objetivo": {
+        "pergunta": "Qual o objetivo dos mutirões?",
+        "resposta": "Nosso objetivo é promover a colaboração, fortalecer laços comunitários e gerar impacto positivo através do trabalho voluntário."
+      },
+      "cancelar": {
+        "pergunta": "Posso cancelar minha participação?",
+        "resposta": "Sim, você pode cancelar sua participação a qualquer momento na página do mutirão em que se inscreveu."
+      },
+      "certificado": {
+        "pergunta": "Recebo certificado ao participar?",
+        "resposta": "Alguns mutirões oferecem certificado de participação. Verifique na descrição do evento ou entre em contato com o organizador."
+      },
+      "gratuito": {
+        "pergunta": "Preciso pagar para participar?",
+        "resposta": "Não, todos os mutirões são gratuitos para os voluntários."
+      },
+      "organizar": {
+        "pergunta": "Quem pode organizar um mutirão?",
+        "resposta": "Qualquer pessoa cadastrada pode sugerir e organizar um mutirão, sujeito à aprovação da equipe do site."
+      },
+      "aceito": {
+        "pergunta": "Como saber se fui aceito em um mutirão?",
+        "resposta": "Você receberá uma notificação e um e-mail de confirmação assim que sua inscrição for aprovada."
+      },
+      "restricoes": {
+        "pergunta": "Tenho restrições físicas, posso participar?",
+        "resposta": "Sim! Muitos mutirões possuem tarefas diversas, inclusive atividades leves. Consulte a descrição do evento ou fale com o organizador."
+      },
+      "contato": {
+        "pergunta": "Como entro em contato com os organizadores?",
+        "resposta": "Na página de cada mutirão há um campo para dúvidas e comentários, além do contato do responsável pelo evento."
+      }
+    }
+  },
+  "hero": {
+    "titulo": "Mutyro",
+    "subtitulo": "Juntos fazemos a diferença"
+  },
+  "mutiroes": {
+    "titulo": "Mutirões",
+    "novoMutirao": "Novo Mutirão",
+    "participar": "Participar",
+    "verTodos": "Ver todos",
+    "semMutiroes": "Você não tem nenhum mutirão",
+    "semMutiroesDesc": "Os mutirões para os quais se inscreveu e/ou criou aparecerão aqui."
+  },
+  "usuario": {
+    "nome": "Nome",
+    "email": "E-mail",
+    "cpf": "CPF",
+    "senha": "Senha",
+    "confirmarSenha": "Confirmar Senha",
+    "bemVindo": "Bem vindo, {{nome}}! 👋",
+    "descricao": "Comece criando um mutirão ou encontre um para se voluntariar. Juntos, podemos transformar o mundo!",
+    "naoTemConta": "Não tem uma conta?",
+    "jaTemConta": "Já é membro?"
+  },
+  "footer": {
+    "termos": "Termos",
+    "privacidade": "Privacidade",
+    "contato": "Contato"
+  },
+  "geral": {
+    "voltar": "Voltar",
+    "salvar": "Salvar",
+    "cancelar": "Cancelar",
+    "editar": "Editar",
+    "excluir": "Excluir",
+    "confirmar": "Confirmar",
+    "carregando": "Carregando...",
+    "erro": "Erro",
+    "sucesso": "Sucesso",
+    "ou": "ou",
+    "todosDireitosReservados": "Todos os direitos reservados.",
+    "loginSucesso": "Login realizado com sucesso!",
+    "cadastroSucesso": "Cadastro realizado com sucesso!",
+    "loginAutomaticoErro": "Cadastro realizado, mas houve um problema ao logar automaticamente. Por favor, faça o login.",
+    "loginAutomaticoFalhou": "Cadastro realizado, mas o login automático falhou. Por favor, tente fazer login manualmente."
+  },
+  "novoMutirao": {
+    "titulo": "Seu mutirão está quase pronto!",
+    "capaTitulo": "Capa do Mutirão",
+    "foto": "Foto",
+    "enviarFoto": "Enviar foto",
+    "tituloLabel": "Título",
+    "tituloPlaceholder": "Digite o título do mutirão",
+    "data": "Data",
+    "horario": "Horário",
+    "descricao": "Descrição",
+    "descricaoPlaceholder": "Descreva o objetivo do mutirão",
+    "numeroComplemento": "Número e Complemento",
+    "numeroComplementoPlaceholder": "Ex: 123, Bloco A, Próximo ao...",
+    "tarefas": "Tarefas",
+    "tarefaPlaceholder": "Descreva a tarefa",
+    "remover": "Remover",
+    "adicionarTarefa": "Adicionar Tarefa",
+    "necessitaMateriais": "Necessita de Ferramentas, Materiais e (ou) Habilidades Específicas?",
+    "sim": "Sim",
+    "nao": "Não",
+    "materiaisPlaceholder": "Liste os materiais necessários",
+    "tipoMutirao": "Tipo de Mutirão",
+    "tipos": {
+      "social": "Social",
+      "construcaoReforma": "Construção / Reforma",
+      "ambientalAgricola": "Ambiental / Agrícola",
+      "culturaEducacao": "Cultura / Educação",
+      "saude": "Saúde",
+      "tecnologia": "Tecnologia"
+    },
+    "termos": "Eu concordo em organizar este mutirão de forma responsável, respeitando as diretrizes da comunidade e garantindo um ambiente seguro e inclusivo para todos os participantes.",
+    "cancelar": "Cancelar",
+    "criarMutirao": "Criar Mutirão",
+    "erroLogin": "Você precisa estar logado para criar um mutirão.",
+    "erroEndereco": "Por favor, preencha o endereço base selecionando uma sugestão.",
+    "erroEnderecoObrigatorio": "Endereço base obrigatório.",
+    "sucesso": "Mutirão criado com sucesso!"
+  },
+  "editarUsuario": {
+    "titulo": "Editar Usuário",
+    "fotoPerfil": "Foto de Perfil",
+    "foto": "Foto",
+    "enviarFoto": "Enviar Foto",
+    "nome": "Nome",
+    "nomePlaceholder": "Nome completo",
+    "email": "Email",
+    "emailPlaceholder": "Email",
+    "endereco": "Endereço",
+    "enderecoPlaceholder": "Rua, número, bairro...",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "dataNascimento": "Data de Nascimento",
+    "cancelar": "Cancelar",
+    "salvar": "Salvar",
+    "sucesso": "Usuário atualizado com sucesso!",
+    "erro": "Erro ao editar usuário"
+  },
+  "calendario": {
+    "titulo": "Encontre um Mutirão",
+    "agenda": "Agenda",
+    "calendario": "Calendário",
+    "grade": "Grade",
+    "resultadosPara": "Resultados para \"{{searchTerm}}\"",
+    "todosMutiroes": "Todos Mutirões",
+    "nenhumMutirao": "Nenhum mutirão encontrado.",
+    "usuarioDesconhecido": "Usuário desconhecido",
+    "diaTodo": "Dia todo",
+    "diaInteiro": "Dia inteiro",
+    "anterior": "Anterior",
+    "proximo": "Próximo",
+    "hoje": "Hoje",
+    "mes": "Mês",
+    "semana": "Semana",
+    "dia": "Dia",
+    "data": "Data",
+    "hora": "Hora",
+    "evento": "Evento",
+    "semEventos": "Não há eventos neste período."
+  },
+  "notificacoes": {
+    "categorias": {
+      "todas": "Todas",
+      "naoLidas": "Não lidas",
+      "importantes": "Importantes",
+      "equipe": "Equipe",
+      "anuncios": "Anúncios",
+      "seguranca": "Segurança"
+    },
+    "titulo": "Notificações",
+    "subtitulo": "Suas mensagens e atualizações",
+    "marcarTodasComoLidas": "Marcar todas como lidas",
+    "todasMarcadasComoLidas": "Todas as notificações foram marcadas como lidas!",
+    "configuracoes": "Configurações",
+    "carregando": "Carregando...",
+    "erro": "Erro ao buscar notificações",
+    "erroMarcarTodas": "Erro ao marcar todas como lidas",
+    "erroFavoritar": "Erro ao favoritar/desfavoritar notificação",
+    "excluidaSucesso": "Notificação excluída com sucesso!",
+    "favoritar": "Favoritar",
+    "desfavoritar": "Desfavoritar",
+    "excluir": "Excluir",
+    "nenhuma": "Nenhuma notificação encontrada.",
+    "dataFormato": "dd 'de' MMMM 'às' HH:mm",
+    "baixarCertificado": "Baixar Certificado",
+    "tipos": {
+      "inscricao_confirmada": {
+        "titulo": "Inscrição Confirmada",
+        "mensagem": "Sua inscrição no mutirão \"{{mutirao}}\" foi confirmada com sucesso!"
+      },
+      "inscricao_cancelada": {
+        "titulo": "Inscrição Cancelada",
+        "mensagem": "Sua inscrição no mutirão \"{{mutirao}}\" foi cancelada. Esperamos ver você em outros mutirões!"
+      },
+      "sucesso": {
+        "titulo": "Sucesso",
+        "mensagem": "Operação realizada com sucesso."
+      },
+      "alerta": {
+        "titulo": "Alerta",
+        "mensagem": "Atenção: ocorreu um alerta no sistema."
+      }
+    }
+  },
+  "search": {
+    "placeholder": "Buscar mutirão pelo título..."
+  }
+} 

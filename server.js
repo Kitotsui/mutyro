@@ -62,7 +62,7 @@ async function iniciarVerificacaoPeriodica() {
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // URL do seu frontend
+    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177"], // URLs do seu frontend
     credentials: true, // Permite enviar cookies
   })
 );

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import { contarNotificacoesNaoLidas } from "../services/notificacaoService";
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
   menuItems?: { icon: React.ReactNode; label: string; onClick?: () => void }[];
@@ -12,6 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   menuItems,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [naoLidas, setNaoLidas] = useState<number>(0);
 
   useEffect(() => {
@@ -31,11 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   const defaultMenu = [
     {
       icon: <FaUser />,
-      label: "Perfil",
+      label: t('sidebar.perfil'),
       active: true,
-      onClick: () => navigate("/editarusuario"), // Aqui é o redirecionamento para a página EditarUsuario
+      onClick: () => navigate("/editarusuario"),
     },
-    { icon: <FaCalendarAlt />, label: "Mutirões", onClick: () => navigate('/mutiroes') },
+    { icon: <FaCalendarAlt />, label: t('sidebar.mutiroes'), onClick: () => navigate('/mutiroes') },
     {
       icon: (
         <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32 }}>
@@ -45,11 +47,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           )}
         </span>
       ),
-      label: "Notificações",
+      label: t('sidebar.notificacoes'),
       onClick: () => navigate('/notificacoes'),
     },
-    { icon: <FaComments />, label: "FAQ", onClick: () => navigate('/faq') },
-    { icon: <FaCog />, label: "Configurações", onClick: () => navigate('/configuracoes') },
+    { icon: <FaComments />, label: t('sidebar.faq'), onClick: () => navigate('/faq') },
+    { icon: <FaCog />, label: t('sidebar.configuracoes'), onClick: () => navigate('/configuracoes') },
   ];
 
   const menuItemsToUse = menuItems || defaultMenu;

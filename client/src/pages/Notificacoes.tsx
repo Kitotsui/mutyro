@@ -2,38 +2,30 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "../assets/wrappers/Notificacoes.js";
 import {
   FaStar,
-  FaUsers,
-  FaBullhorn,
-  FaShieldAlt,
   FaInbox,
   FaEnvelopeOpenText,
   FaTrash,
 } from "react-icons/fa";
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { getNotificacoes, marcarTodasComoLidas, excluirNotificacao } from "../services/notificacaoService";
+import { getNotificacoes, marcarTodasComoLidas, excluirNotificacao, toggleFavorita } from "../services/notificacaoService";
 import { toast } from 'react-toastify';
+import { useTranslation } from "react-i18next";
 
 type Notificacao = {
   _id: string;
-  titulo: string;
-  mensagem: string;
+  titulo?: string;
+  mensagem?: string;
   data: string;
   lida: boolean;
+  favorita: boolean;
   tipo: string;
   mutiraoId?: string;
+  variaveis?: Record<string, unknown>;
 };
 
-const categorias = [
-  { key: "todas", label: "Todas", icon: <FaInbox /> },
-  { key: "nao-lidas", label: "Não lidas", icon: <FaEnvelopeOpenText /> },
-  { key: "importantes", label: "Importantes", icon: <FaStar /> },
-  { key: "equipe", label: "Equipe", icon: <FaUsers /> },
-  { key: "anuncios", label: "Anúncios", icon: <FaBullhorn /> },
-  { key: "seguranca", label: "Segurança", icon: <FaShieldAlt /> },
-];
-
 const Notificacoes = () => {
+  const { t } = useTranslation();
   const [categoria, setCategoria] = useState("todas");
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,18 +39,35 @@ const Notificacoes = () => {
         const data = await getNotificacoes();
         setNotificacoes(data.notificacoes || []);
       } catch {
-        setErro("Erro ao buscar notificações");
+        setErro(t('notificacoes.erro'));
       } finally {
         setLoading(false);
       }
     };
     fetchNotificacoes();
-  }, []);
+  }, [t]);
+
+  const traduzirNotificacao = (notif: Notificacao) => {
+    const tipoKey = notif.tipo || 'padrao';
+    const tituloKey = `notificacoes.tipos.${tipoKey}.titulo`;
+    const mensagemKey = `notificacoes.tipos.${tipoKey}.mensagem`;
+
+    // Fallback para mutirao
+    const idioma = t('notificacoes.tipos.sucesso.titulo') === 'Success' ? 'en' : 'pt';
+    const mutiraoFallback = idioma === 'en' ? 'the event' : 'o mutirão';
+    const variaveis: Record<string, unknown> = { ...notif, ...(notif.variaveis || {}) };
+    if (!('mutirao' in variaveis) || !variaveis.mutirao) variaveis.mutirao = mutiraoFallback;
+
+    return {
+      titulo: String(t(tituloKey, { ...variaveis, defaultValue: tipoKey })),
+      mensagem: String(t(mensagemKey, { ...variaveis, defaultValue: tipoKey }))
+    };
+  };
 
   const filtrarNotificacoes = () => {
     if (categoria === "todas") return notificacoes;
     if (categoria === "nao-lidas") return notificacoes.filter((n) => !n.lida);
-    // Outras categorias podem ser implementadas conforme necessário
+    if (categoria === "importantes") return notificacoes.filter((n) => n.favorita);
     return notificacoes;
   };
 
@@ -74,8 +83,9 @@ const Notificacoes = () => {
     try {
       await marcarTodasComoLidas();
       setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
+      toast.success(t('notificacoes.todasMarcadasComoLidas'));
     } catch {
-      setErro("Erro ao marcar todas como lidas");
+      setErro(t('notificacoes.erroMarcarTodas'));
     }
   };
 
@@ -83,11 +93,31 @@ const Notificacoes = () => {
     try {
       await excluirNotificacao(id);
       setNotificacoes((prev) => prev.filter((n) => n._id !== id));
-      toast.success('Notificação excluída com sucesso!');
-    } catch (error) {
-      toast.error('Erro ao excluir notificação');
+      toast.success(t('notificacoes.excluidaSucesso'));
+    } catch {
+      toast.error(t('notificacoes.erroExcluir'));
     }
   };
+
+  const handleToggleFavorita = async (id: string) => {
+    try {
+      const response = await toggleFavorita(id);
+      setNotificacoes((prev) =>
+        prev.map((notif) =>
+          notif._id === id ? { ...notif, favorita: response.notificacao.favorita } : notif
+        )
+      );
+      toast.success(response.msg);
+    } catch {
+      toast.error(t('notificacoes.erroFavoritar'));
+    }
+  };
+
+  const categorias = [
+    { key: "todas", label: t('notificacoes.categorias.todas'), icon: <FaInbox /> },
+    { key: "nao-lidas", label: t('notificacoes.categorias.naoLidas'), icon: <FaEnvelopeOpenText /> },
+    { key: "importantes", label: t('notificacoes.categorias.importantes'), icon: <FaStar /> },
+  ];
 
   return (
     <Wrapper>
@@ -108,6 +138,8 @@ const Notificacoes = () => {
                     ? notificacoes.length
                     : cat.key === "nao-lidas"
                     ? notificacoes.filter((n) => !n.lida).length
+                    : cat.key === "importantes"
+                    ? notificacoes.filter((n) => n.favorita).length
                     : 0}
                 </span>
               </button>
@@ -120,73 +152,77 @@ const Notificacoes = () => {
           {/* Header */}
           <div className="notificacoes-header">
             <div>
-              <h1 className="notificacoes-title">Notificações</h1>
-              <p className="notificacoes-subtitle">Suas mensagens e atualizações</p>
+              <h1 className="notificacoes-title">{t('notificacoes.titulo')}</h1>
+              <p className="notificacoes-subtitle">{t('notificacoes.subtitulo')}</p>
             </div>
             <div className="notificacoes-header-actions">
-              <button className="notificacoes-btn-link" onClick={handleMarcarTodasComoLidas}>Marcar todas como lidas</button>
-              <button className="notificacoes-btn-orange">
-                <span style={{ marginRight: 8 }}>⚙️</span> Configurações
+              <button className="notificacoes-btn-orange" onClick={handleMarcarTodasComoLidas}>
+                {t('notificacoes.marcarTodasComoLidas')}
               </button>
             </div>
           </div>
 
           {/* Lista de notificações */}
           <div className="notificacoes-lista-cards">
-            {loading && <div className="notificacoes-vazio">Carregando...</div>}
+            {loading && <div className="notificacoes-vazio">{t('notificacoes.carregando')}</div>}
             {erro && <div className="notificacoes-vazio">{erro}</div>}
             {!loading && !erro && filtrarNotificacoes().length === 0 && (
-              <div className="notificacoes-vazio">Nenhuma notificação encontrada.</div>
+              <div className="notificacoes-vazio">{t('notificacoes.nenhuma')}</div>
             )}
-            {!loading && !erro && filtrarNotificacoes().map((notif) => (
-              <div
-                key={notif._id}
-                className={`notificacoes-card ${!notif.lida ? "nao-lida" : ""}`}
-                onClick={() => !notif.lida && handleMarcarComoLida(notif._id)}
-                style={{ cursor: !notif.lida ? 'pointer' : 'default' }}
-              >
-                <div className="notificacoes-card-icone">
-                  {/* Ícone por tipo */}
-                  <span className="notificacoes-card-icone-inner">🔔</span>
-                </div>
-                <div className="notificacoes-card-content">
-                  <div className="notificacoes-card-header">
-                    <h3 className="notificacoes-card-title">{notif.titulo}</h3>
-                    <div className="notificacoes-card-meta">
-                      <span className="notificacoes-card-data">
-                        {notif.data ? format(new Date(notif.data), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR }) : ""}
-                      </span>
-                      {!notif.lida && <div className="notificacoes-card-dot" />}
+            {!loading && !erro && filtrarNotificacoes().map((notif) => {
+              const notificacaoTraduzida = traduzirNotificacao(notif);
+              return (
+                <div
+                  key={notif._id}
+                  className={`notificacoes-card ${!notif.lida ? "nao-lida" : ""} ${notif.favorita ? "favorita" : ""}`}
+                  onClick={() => !notif.lida && handleMarcarComoLida(notif._id)}
+                  style={{ cursor: !notif.lida ? 'pointer' : 'default' }}
+                >
+                  <div className="notificacoes-card-icone">
+                    {/* Ícone por tipo */}
+                    <span className="notificacoes-card-icone-inner">🔔</span>
+                  </div>
+                  <div className="notificacoes-card-content">
+                    <div className="notificacoes-card-header">
+                      <h3 className="notificacoes-card-title">{notificacaoTraduzida.titulo}</h3>
+                      <div className="notificacoes-card-meta">
+                        <span className="notificacoes-card-data">
+                          {notif.data ? format(new Date(notif.data), t('notificacoes.dataFormato'), { locale: ptBR }) : ""}
+                        </span>
+                        {!notif.lida && <div className="notificacoes-card-dot" />}
+                      </div>
+                    </div>
+                    <p className="notificacoes-card-msg">{notificacaoTraduzida.mensagem}</p>
+                    <div className="notificacoes-card-actions">
+                      {/* Exemplo: botão de ação */}
+                      {notif.tipo === "sucesso" && (
+                        <button className="notificacoes-btn-orange">{t('notificacoes.baixarCertificado')}</button>
+                      )}
+                      <button 
+                        className={`notificacoes-btn-fav ${notif.favorita ? 'favoritada' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleFavorita(notif._id);
+                        }}
+                        title={notif.favorita ? t('notificacoes.desfavoritar') : t('notificacoes.favoritar')}
+                      >
+                        <FaStar />
+                      </button>
+                      <button 
+                        className="notificacoes-btn-delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleExcluirNotificacao(notif._id);
+                        }}
+                        title={t('notificacoes.excluir')}
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
                   </div>
-                  <p className="notificacoes-card-msg">{notif.mensagem}</p>
-                  <div className="notificacoes-card-actions">
-                    {/* Exemplo: botão de ação */}
-                    {notif.tipo === "sucesso" && (
-                      <button className="notificacoes-btn-orange">Baixar Certificado</button>
-                    )}
-                    <button 
-                      className="notificacoes-btn-fav"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Lógica para favoritar
-                      }}
-                    >
-                      <FaStar />
-                    </button>
-                    <button 
-                      className="notificacoes-btn-delete"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExcluirNotificacao(notif._id);
-                      }}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </main>
       </div>

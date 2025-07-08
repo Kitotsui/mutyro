@@ -4,6 +4,7 @@ import { Form, useNavigate, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import AddressAutocomplete from "../components/AddressAutocomplete";
+import { useTranslation } from "react-i18next";
 
 //import { MUTIRAO_TIPOS } from "/home/lamouniers/Documentos/Estudos/mutyro/utils/constantes.js";
 
@@ -37,16 +38,7 @@ export const action = async ({ request }: { request: Request }) => {
     formData.append("tarefas", tarefa);
   });
 
-  const mutirao = {
-    titulo: formData.get("titulo"),
-    data: formData.get("data"),
-    horario: formData.get("horario"),
-    descricao: formData.get("descricao"),
-    local: formData.get("local"),
-    materiais: formData.get("materiais") || "",
-    tarefas: tarefas.filter(Boolean),
-    mutiraoTipo: formData.get("mutiraoTipo"),
-  };
+
 
   const local = formData.get("local") as string;
   const latitude = formData.get("latitude") as string;
@@ -67,7 +59,7 @@ export const action = async ({ request }: { request: Request }) => {
     toast.error(
       "Localização inválida. Por favor, selecione um endereço da lista de sugestões."
     );
-    return { error: "Coordenadas inválidas ou não selecionadas." }; // Or return null
+    return { error: "Coordenadas inválidas ou não selecionadas." };
   }
 
   try {
@@ -105,6 +97,7 @@ interface FormData {
 
 const NovoMutirao = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     titulo: "",
     data: "",
@@ -210,11 +203,11 @@ const NovoMutirao = () => {
         {/*<NavBar />*/}
         <div className="container">
           <main>
-            <h2>Seu mutirão está quase pronto!</h2>
+            <h2>{t('novoMutirao.titulo')}</h2>
             <div className="form-container">
               <Form method="post" encType="multipart/form-data">
                 <div className="image-section">
-                  <h3>Capa do Mutirão</h3>
+                  <h3>{t('novoMutirao.capaTitulo')}</h3>
                   <div className="image-upload">
                     {selectedImage ? (
                       <img
@@ -224,7 +217,7 @@ const NovoMutirao = () => {
                       />
                     ) : (
                       <div className="upload-placeholder">
-                        <span>Foto</span>
+                        <span>{t('novoMutirao.foto')}</span>
                       </div>
                     )}
                     <button
@@ -234,7 +227,7 @@ const NovoMutirao = () => {
                         document.getElementById("foto-input")?.click()
                       }
                     >
-                      Enviar foto
+                      {t('novoMutirao.enviarFoto')}
                     </button>
                     <input
                       type="file"
@@ -249,7 +242,7 @@ const NovoMutirao = () => {
 
                 <div className="form-section">
                   <div className="form-group">
-                    <label htmlFor="titulo">Título</label>
+                    <label htmlFor="titulo">{t('novoMutirao.tituloLabel')}</label>
                     <input
                       type="text"
                       id="titulo"
@@ -257,13 +250,13 @@ const NovoMutirao = () => {
                       value={formData.titulo}
                       onChange={handleChange}
                       required
-                      placeholder="Digite o título do mutirão"
+                      placeholder={t('novoMutirao.tituloPlaceholder')}
                     />
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label htmlFor="data">Data</label>
+                      <label htmlFor="data">{t('novoMutirao.data')}</label>
                       <input
                         type="date"
                         id="data"
@@ -275,7 +268,7 @@ const NovoMutirao = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="horario">Horário</label>
+                      <label htmlFor="horario">{t('novoMutirao.horario')}</label>
                       <input
                         type="time"
                         id="horario"
@@ -288,14 +281,14 @@ const NovoMutirao = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="descricao">Descrição</label>
+                    <label htmlFor="descricao">{t('novoMutirao.descricao')}</label>
                     <textarea
                       id="descricao"
                       name="descricao"
                       value={formData.descricao}
                       onChange={handleChange}
                       required
-                      placeholder="Descreva o objetivo do mutirão"
+                      placeholder={t('novoMutirao.descricaoPlaceholder')}
                     />
                   </div>
 
@@ -309,7 +302,7 @@ const NovoMutirao = () => {
 
                   <div className="form-group">
                     <label htmlFor="numeroEComplemento">
-                      Número e Complemento
+                      {t('novoMutirao.numeroComplemento')}
                     </label>
                     <input
                       type="text"
@@ -317,7 +310,7 @@ const NovoMutirao = () => {
                       name="numeroEComplemento"
                       value={numeroEComplemento}
                       onChange={handleNumeroEComplementoChange}
-                      placeholder="Ex: 123, Bloco A, Próximo ao..."
+                      placeholder={t('novoMutirao.numeroComplementoPlaceholder')}
                     />
                   </div>
 
@@ -338,7 +331,7 @@ const NovoMutirao = () => {
                   )}
 
                   <div className="form-group">
-                    <label>Tarefas</label>
+                    <label>{t('novoMutirao.tarefas')}</label>
                     {formData.tarefas.map((tarefa, index) => (
                       <div key={index} className="tarefa-input">
                         <input
@@ -348,7 +341,7 @@ const NovoMutirao = () => {
                           onChange={(e) =>
                             handleTarefaChange(index, e.target.value)
                           }
-                          placeholder="Descreva a tarefa"
+                          placeholder={t('novoMutirao.tarefaPlaceholder')}
                           required
                         />
                         {formData.tarefas.length > 1 && (
@@ -357,7 +350,7 @@ const NovoMutirao = () => {
                             className="remove-btn"
                             onClick={() => removerTarefa(index)}
                           >
-                            Remover
+                            {t('novoMutirao.remover')}
                           </button>
                         )}
                       </div>
@@ -367,14 +360,13 @@ const NovoMutirao = () => {
                       className="add-btn"
                       onClick={adicionarTarefa}
                     >
-                      Adicionar Tarefa
+                      {t('novoMutirao.adicionarTarefa')}
                     </button>
                   </div>
 
                   <div className="form-group">
                     <label>
-                      Necessita de Ferramentas, Materiais e (ou) Habilidades
-                      Específicas?
+                      {t('novoMutirao.necessitaMateriais')}
                     </label>
                     <div className="radio-group">
                       <label>
@@ -387,7 +379,7 @@ const NovoMutirao = () => {
                             setFormData((prev) => ({ ...prev, materiais: " " }))
                           }
                         />
-                        Sim
+                        {t('novoMutirao.sim')}
                       </label>
                       <label>
                         <input
@@ -399,7 +391,7 @@ const NovoMutirao = () => {
                             setFormData((prev) => ({ ...prev, materiais: "" }))
                           }
                         />
-                        Não
+                        {t('novoMutirao.nao')}
                       </label>
                     </div>
                     {formData.materiais && (
@@ -407,13 +399,13 @@ const NovoMutirao = () => {
                         name="materiais"
                         value={formData.materiais}
                         onChange={handleChange}
-                        placeholder="Liste os materiais necessários"
+                        placeholder={t('novoMutirao.materiaisPlaceholder')}
                       />
                     )}
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="tipo">Tipo de Mutirão</label>
+                    <label htmlFor="tipo">{t('novoMutirao.tipoMutirao')}</label>
                     <select
                       id="mutiraoTipo"
                       name="mutiraoTipo"
@@ -421,28 +413,25 @@ const NovoMutirao = () => {
                       onChange={handleChange}
                       required
                     >
-                      <option value="SOCIAL">Social</option>
+                      <option value="SOCIAL">{t('novoMutirao.tipos.social')}</option>
                       <option value="CONSTRUCAO_REFORMA">
-                        Construção / Reforma
+                        {t('novoMutirao.tipos.construcaoReforma')}
                       </option>
                       <option value="AMBIENTAL_AGRICOLA">
-                        Ambiental / Agrícola
+                        {t('novoMutirao.tipos.ambientalAgricola')}
                       </option>
                       <option value="CULTURA_EDUCACAO">
-                        Cultura / Educação
+                        {t('novoMutirao.tipos.culturaEducacao')}
                       </option>
-                      <option value="SAUDE">Saúde</option>
-                      <option value="TECNOLOGIA">Tecnologia </option>
+                      <option value="SAUDE">{t('novoMutirao.tipos.saude')}</option>
+                      <option value="TECNOLOGIA">{t('novoMutirao.tipos.tecnologia')}</option>
                     </select>
                   </div>
 
                   <div className="terms">
                     <label>
                       <input type="checkbox" required />
-                      Eu concordo em organizar este mutirão de forma
-                      responsável, respeitando as diretrizes da comunidade e
-                      garantindo um ambiente seguro e inclusivo para todos os
-                      participantes.
+                      {t('novoMutirao.termos')}
                     </label>
                   </div>
                 </div>
@@ -453,10 +442,10 @@ const NovoMutirao = () => {
                     className="cancel-btn"
                     onClick={() => navigate(-1)}
                   >
-                    Cancelar
+                    {t('novoMutirao.cancelar')}
                   </button>
                   <button type="submit" className="submit-btn">
-                    Criar Mutirão
+                    {t('novoMutirao.criarMutirao')}
                   </button>
                 </div>
               </Form>

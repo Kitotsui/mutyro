@@ -5,6 +5,7 @@ import Register from "../pages/Register";
 import Wrapper from "../assets/wrappers/Navbar";
 import logo from "../assets/images/mutyrologo.svg";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface Usuario {
   _id: string;
@@ -28,6 +29,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const handleHomeNavigation = () => {
     setIsOpen(false);
@@ -150,7 +152,7 @@ const NavBar = () => {
                   className="nav-link"
                   onClick={handleHomeNavigation}
                 >
-                  Início
+                  {t('navbar.inicio')}
                 </Link>
               </li>
               <li>
@@ -162,7 +164,7 @@ const NavBar = () => {
                     setShowUserDropdown(false);
                   }}
                 >
-                  Mutirões
+                  {t('navbar.mutiroes')}
                 </Link>
               </li>
               <li>
@@ -174,7 +176,7 @@ const NavBar = () => {
                     setShowUserDropdown(false);
                   }}
                 >
-                  Sobre
+                  {t('navbar.sobre')}
                 </Link>
               </li>
               <li>
@@ -185,13 +187,13 @@ const NavBar = () => {
                         className="btn register-link"
                         onClick={handleRegisterClick}
                       >
-                        Cadastro
+                        {t('navbar.cadastro')}
                       </button>
                       <button
                         className="btn login-link"
                         onClick={handleLoginClick}
                       >
-                        Login
+                        {t('navbar.login')}
                       </button>
                     </>
                   ) : (
@@ -238,7 +240,7 @@ const NavBar = () => {
                             className="dropdown-btn"
                             onClick={handleLogout}
                           >
-                            Sair
+                            {t('navbar.sair')}
                           </button>
                         </div>
                       )}

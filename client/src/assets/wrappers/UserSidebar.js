@@ -153,12 +153,58 @@ const Wrapper = styled.div`
         transform: translate(-50%, -50%);
         width: 2rem;
         height: 2rem;
-        background: var(--primary-color);
+        //background: var(--primary-50);
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
         border-radius: 50%;
         z-index: -1;
       }
     }
+  }
+
+  /* Destaca o dia com mutirão */
+  .react-calendar__tile.day-with-event,
+  .react-calendar__tile--now.day-with-event,
+  .react-calendar__tile--active.day-with-event {
+    background: var(--primary-50) !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+    font-weight: bold;
+    position: relative;
+  }
+
+  /* Remover a bolinha branca extra */
+  .react-calendar__tile.day-with-event::after,
+  .react-calendar__tile--now.day-with-event::after,
+  .react-calendar__tile--active.day-with-event::after {
+    display: none !important;
+  }
+
+  /* Estilo do popup do calendário */
+  .calendar-popup {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    min-width: 220px;
+    max-width: 320px;
+    z-index: 9999;
+    font-size: 15px;
+    color: #222;
+    position: absolute !important;
+  }
+
+  .calendar-popup .hint-date {
+    font-weight: bold;
+    color: #ff9800;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .calendar-popup .hint-title {
+    margin: 0.3rem 0;
+    font-size: 15px;
+    color: #333;
   }
 `;
 

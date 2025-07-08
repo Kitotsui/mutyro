@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import getImageUrl from "@/utils/imageUrlHelper";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -140,13 +141,15 @@ const Blog = ({ mutiroes }: BlogProps) => {
      // Filtra os mutirões que não estão finalizados
   const mutiroesAtivos = mutiroes.filter((mutirao) => mutirao.finalizado === false);
 
+  const { t } = useTranslation();
+
   return (
     <Wrapper>
       <FilterBar />
       {/* BLOG CARDS */}
       <div className="blog-heading">
         <img src={logo} alt="Blog Heading Logo" draggable={false} />
-        <h2>Mutirões Ativos</h2>
+        <h2>{t('mutiroes.titulo')}</h2>
       </div>
       <div className="carousel-container">
         <div className="carousel-label-wrapper">
@@ -173,7 +176,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
       {/* Próximos Mutirões */}
       <div className="next-events-wrapper">
         <div className="left-column">
-          <h2>Próximos Mutirões</h2>
+          <h2>{t('mutiroes.titulo')}</h2>
           <ul className="upcoming-events-list">
             {" "}
             {/* Changed to ul for semantics */}
@@ -203,7 +206,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
             state={{ initialView: "month" }}
           >
             <i className="fas fa-calendar" style={{ paddingRight: "10px" }}></i>
-            Calendário Completo
+            {t('mutiroes.verTodos')}
           </Link>
         </div>
 
@@ -227,6 +230,7 @@ const Blog = ({ mutiroes }: BlogProps) => {
         </div>
 
         <div className="right-column">
+          <h2>{t('mutiroes.titulo')}</h2>
           <ul className="next-events-list">
             {mutiroesOnSelectedDate.length > 0 ? (
               <>

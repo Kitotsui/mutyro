@@ -5,7 +5,8 @@ import {
   criarNotificacao,
   contarNotificacoesNaoLidas,
   marcarTodasComoLidas,
-  excluirNotificacao
+  excluirNotificacao,
+  toggleFavorita
 } from '../controllers/notificacaoController.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
 
@@ -15,6 +16,7 @@ router.get('/', authenticateUser, getNotificacoes);
 router.get('/contar', authenticateUser, contarNotificacoesNaoLidas);
 router.post('/', authenticateUser, criarNotificacao);
 router.patch('/:id/marcar-lida', authenticateUser, marcarComoLida);
+router.patch('/:id/favorita', authenticateUser, toggleFavorita);
 router.patch('/todas/marcar-lidas', authenticateUser, marcarTodasComoLidas);
 router.delete('/:id', authenticateUser, excluirNotificacao);
 

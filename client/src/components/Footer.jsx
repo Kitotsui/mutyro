@@ -1,7 +1,11 @@
 import logo from "../assets/images/mutyroinnerlogo.png";
 import Wrapper from "../assets/wrappers/Footer";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const currentYear = new Date().getFullYear();
+
   return (
     <Wrapper>
       <footer className="footer">
@@ -11,22 +15,21 @@ const Footer = () => {
           </div>
           <ul className="footer-links">
             <li>
-              <a href="/">Home</a>
+              <a href="/">{t('navbar.home')}</a>
             </li>
             <li>
-              <a href="#">Termos</a>
+              <a href="#">{t('footer.termos')}</a>
             </li>
             <li>
-              <a href="#">Privacidade</a>
+              <a href="#">{t('footer.privacidade')}</a>
             </li>
             <li>
-              <a href="mailto:">Contato</a>
+              <a href="mailto:">{t('footer.contato')}</a>
             </li>
           </ul>
         </div>
         <p className="footer-copy">
-          &copy; {new Date().getFullYear()} Mutyro. Todos os direitos
-          reservados.
+          &copy; {currentYear} Mutyro. {t('geral.todosDireitosReservados')}
         </p>
       </footer>
     </Wrapper>

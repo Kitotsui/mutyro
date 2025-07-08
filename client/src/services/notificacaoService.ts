@@ -35,4 +35,9 @@ export const marcarTodasComoLidas = async () => {
 export const excluirNotificacao = async (id: string) => {
   const response = await customFetch.delete(`/notificacoes/${id}`);
   return response.data;
+};
+
+export const toggleFavorita = async (id: string) => {
+  const response = await customFetch.patch(`/notificacoes/${id}/favorita`);
+  return response.data;
 }; 

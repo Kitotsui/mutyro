@@ -4,6 +4,7 @@ import Usuario from "../models/usuarioModel.js";
 import { MUTIRAO_TIPOS } from "../utils/constantes.js";
 import fs from "fs/promises";
 import Notificacao from "../models/Notificacao.js";
+import { criarNotificacaoPadronizada } from '../utils/notificacaoUtils.js';
 
 import nodemailer from "nodemailer";
 import usuarioModel from "../models/usuarioModel.js";
@@ -386,13 +387,19 @@ export const inscreverUsuario = async (req, res) => {
     "no mutirão:",
     multirao.titulo
   );
-  await Notificacao.create({
-    usuarioId: userId,
-    tipo: "sucesso",
-    titulo: "Inscrição Confirmada",
-    mensagem: `Parabéns, você acaba de se cadastrar no mutirão "${multirao.titulo}" que acontecerá no dia ${multirao.data} às ${multirao.horario} no endereço ${multirao.local}. Sua inscrição foi confirmada!`,
-    mutiraoId: multirao._id,
-  });
+  await Notificacao.create(
+    criarNotificacaoPadronizada({
+      usuarioId: userId,
+      tipo: "inscricao_confirmada",
+      variaveis: {
+        mutirao: multirao.titulo,
+        data: multirao.data,
+        horario: multirao.horario,
+        local: multirao.local
+      },
+      mutiraoId: multirao._id
+    })
+  );
   console.log("Notificação criada com sucesso!");
 
   const transporter = nodemailer.createTransport({
@@ -424,17 +431,24 @@ export const inscreverUsuario = async (req, res) => {
 export const cancelarInscricao = async (req, res) => {
   const { id } = req.params;
   const { userId } = req.user;
-  const mutiraoInscricao = await Mutirao.findByIdAndUpdate(id, {
+  // Buscar o mutirão atualizado para garantir que o campo titulo está presente
+  const mutiraoInscricao = await Mutirao.findById(id);
+  if (!mutiraoInscricao) {
+    return res.status(404).json({ msg: "Mutirão não encontrado" });
+  }
+  // Remover o usuário dos inscritos
+  await Mutirao.findByIdAndUpdate(id, {
     $pull: { inscritos: userId },
   });
   // Cria notificação de cancelamento
-  await Notificacao.create({
-    usuarioId: userId,
-    tipo: "alerta",
-    titulo: "Inscrição Cancelada",
-    mensagem: `Sua inscrição no mutirão "${mutiraoInscricao.titulo}" foi cancelada. Esperamos ver você em outros mutirões!`,
-    mutiraoId: mutiraoInscricao._id,
-  });
+  await Notificacao.create(
+    criarNotificacaoPadronizada({
+      usuarioId: userId,
+      tipo: "inscricao_cancelada",
+      variaveis: { mutirao: mutiraoInscricao.titulo },
+      mutiraoId: mutiraoInscricao._id
+    })
+  );
   res
     .status(StatusCodes.OK)
     .json(

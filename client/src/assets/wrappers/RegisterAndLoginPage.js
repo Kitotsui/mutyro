@@ -32,9 +32,16 @@ const Wrapper = styled.section`
     color: var(--dark-color);
   }
 
+  .input-container {
+    position: relative;
+    width: 100%;
+    
+  }
+
   input {
     width: 100%;
     padding: 0.75rem 1rem;
+    padding-right: 3rem;
     border-radius: 8px;
     background: var(--grey-150);
     border: 1px solid transparent;
@@ -44,6 +51,43 @@ const Wrapper = styled.section`
       border-color: var(--primary-500);
       background: var(--white);
       box-shadow: none;
+    }
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--grey-500);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      color: var(--primary-500);
+      background: transparent;
+    }
+    
+    &:focus {
+      outline: none;
+      color: var(--primary-500);
+      background: transparent;
+    }
+    
+    &:active {
+      background: transparent;
+    }
+    
+    svg {
+      width: 16px;
+      height: 16px;
     }
   }
 
@@ -69,9 +113,18 @@ const Wrapper = styled.section`
     }
   }
   .member-btn {
+    background: transparent;
+    border: none;
     color: var(--primary-100);
-    letter-spacing: var(--letter-spacing);
-    margin-left: 0.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    &:hover {
+      color: var(--primary-50);
+      text-decoration: underline;
+    }
   }
 
   .link-esqueci {

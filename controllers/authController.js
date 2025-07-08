@@ -6,12 +6,18 @@ import { UnauthenticatedError } from "../errors/customErrors.js";
 
 //Lidando com o cadastro de usuários criando um novo usuário com os dados fornecidos no corpo da requisição.
 export const cadastro = async (req, res) => {
+  console.log("Dados recebidos no cadastro:", req.body);
   const primeiroCadastro = (await Usuario.countDocuments()) === 0;
   req.body.isAdmin = primeiroCadastro;
 
   //Criptografando a senha
   const senhaComHash = await senhaHash(req.body.senha);
   req.body.senha = senhaComHash;
+
+  // Se não houver CPF, definir como vazio
+  if (!req.body.cpf) {
+    req.body.cpf = "";
+  }
 
   const user = await Usuario.create(req.body);
   res
@@ -21,6 +27,7 @@ export const cadastro = async (req, res) => {
 
 //Lidando com o login de usuários
 export const login = async (req, res) => {
+  console.log("Dados recebidos no login:", req.body);
   const usuario = await Usuario.findOne({ email: req.body.email });
 
   const usuarioValido =

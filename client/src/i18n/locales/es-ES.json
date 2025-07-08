@@ -1,0 +1,266 @@
+{
+  "navbar": {
+    "inicio": "Inicio",
+    "home": "Inicio",
+    "mutiroes": "Mutirões",
+    "sobre": "Acerca de",
+    "login": "Iniciar sesión",
+    "cadastro": "Registrarse",
+    "cadastrar": "Registrarse",
+    "cadastrando": "Registrando...",
+    "continuarComGoogle": "Continuar con Google",
+    "sair": "Cerrar sesión"
+  },
+  "sidebar": {
+    "perfil": "Perfil",
+    "mutiroes": "Mutirões",
+    "notificacoes": "Notificaciones",
+    "faq": "FAQ",
+    "configuracoes": "Configuración"
+  },
+  "configuracoes": {
+    "titulo": "Configuración",
+    "tema": "Tema del sitio",
+    "claro": "Claro",
+    "escuro": "Oscuro",
+    "notificacoes": "Notificaciones",
+    "receberNotificacoes": "Recibir notificaciones por correo electrónico",
+    "idioma": "Idioma",
+    "salvar": "¡Preferencias guardadas!",
+    "botaoSalvar": "Guardar configuración"
+  },
+  "faq": {
+    "titulo": "Preguntas Frecuentes (FAQ)",
+    "perguntas": {
+      "mutirao": {
+        "pergunta": "¿Qué es un mutirão?",
+        "resposta": "Un mutirão es una acción colectiva, generalmente voluntaria, para realizar tareas en beneficio de una comunidad o causa social."
+      },
+      "participar": {
+        "pergunta": "¿Cómo puedo participar en un mutirão?",
+        "resposta": "Simplemente accede a la pestaña 'Mutirões', elige un evento de interés y haz clic en 'Participar'. Recibirás toda la información necesaria por correo electrónico."
+      },
+      "ajudar": {
+        "pergunta": "¿Cómo puedo ayudar además de participar presencialmente?",
+        "resposta": "Puedes ayudar difundiendo los mutirões, donando materiales, invitando amigos o incluso sugiriendo nuevas acciones para la comunidad."
+      },
+      "objetivo": {
+        "pergunta": "¿Cuál es el objetivo de los mutirões?",
+        "resposta": "Nuestro objetivo es promover la colaboración, fortalecer los lazos comunitarios y generar un impacto positivo a través del trabajo voluntario."
+      },
+      "cancelar": {
+        "pergunta": "¿Puedo cancelar mi participación?",
+        "resposta": "Sí, puedes cancelar tu participación en cualquier momento en la página del mutirão donde te registraste."
+      },
+      "certificado": {
+        "pergunta": "¿Recibo un certificado al participar?",
+        "resposta": "Algunos mutirões ofrecen certificado de participación. Verifica en la descripción del evento o contacta al organizador."
+      },
+      "gratuito": {
+        "pergunta": "¿Necesito pagar para participar?",
+        "resposta": "No, todos los mutirões son gratuitos para los voluntarios."
+      },
+      "organizar": {
+        "pergunta": "¿Quién puede organizar un mutirão?",
+        "resposta": "Cualquier persona registrada puede sugerir y organizar un mutirão, sujeto a la aprobación del equipo del sitio."
+      },
+      "aceito": {
+        "pergunta": "¿Cómo sé si fui aceptado en un mutirão?",
+        "resposta": "Recibirás una notificación y un correo electrónico de confirmación una vez que tu registro sea aprobado."
+      },
+      "restricoes": {
+        "pergunta": "Tengo restricciones físicas, ¿puedo participar?",
+        "resposta": "¡Sí! Muchos mutirões tienen tareas diversas, incluyendo actividades ligeras. Consulta la descripción del evento o habla con el organizador."
+      },
+      "contato": {
+        "pergunta": "¿Cómo me pongo en contacto con los organizadores?",
+        "resposta": "En la página de cada mutirão hay un campo para dudas y comentarios, además del contacto de la persona responsable del evento."
+      }
+    }
+  },
+  "hero": {
+    "titulo": "Mutyro",
+    "subtitulo": "Juntos hacemos la diferencia"
+  },
+  "mutiroes": {
+    "titulo": "Mutirões",
+    "novoMutirao": "Nuevo Mutirão",
+    "participar": "Participar",
+    "verTodos": "Ver todos",
+    "semMutiroes": "No tienes ningún mutirão",
+    "semMutiroesDesc": "Los mutirões para los que te registraste y/o creaste aparecerán aquí."
+  },
+  "usuario": {
+    "nome": "Nombre",
+    "email": "Correo electrónico",
+    "cpf": "CPF",
+    "senha": "Contraseña",
+    "confirmarSenha": "Confirmar contraseña",
+    "bemVindo": "¡Bienvenido, {{nome}}! 👋",
+    "descricao": "¡Comienza creando un mutirão o encuentra uno para ser voluntario. Juntos, podemos transformar el mundo!",
+    "naoTemConta": "¿No tienes una cuenta?",
+    "jaTemConta": "¿Ya eres miembro?"
+  },
+  "footer": {
+    "termos": "Términos",
+    "privacidade": "Privacidad",
+    "contato": "Contacto"
+  },
+  "geral": {
+    "voltar": "Volver",
+    "salvar": "Guardar",
+    "cancelar": "Cancelar",
+    "editar": "Editar",
+    "excluir": "Eliminar",
+    "confirmar": "Confirmar",
+    "carregando": "Cargando...",
+    "erro": "Error",
+    "sucesso": "Éxito",
+    "ou": "o",
+    "todosDireitosReservados": "Todos los derechos reservados.",
+    "loginSucesso": "¡Inicio de sesión exitoso!",
+    "cadastroSucesso": "¡Registro exitoso!",
+    "loginAutomaticoErro": "Registro completado, pero hubo un problema al iniciar sesión automáticamente. Por favor, inicia sesión.",
+    "loginAutomaticoFalhou": "Registro completado, pero el inicio de sesión automático falló. Por favor, intenta iniciar sesión manualmente."
+  },
+  "novoMutirao": {
+    "titulo": "¡Tu mutirão está casi listo!",
+    "capaTitulo": "Portada del Mutirão",
+    "foto": "Foto",
+    "enviarFoto": "Enviar foto",
+    "tituloLabel": "Título",
+    "tituloPlaceholder": "Ingresa el título del mutirão",
+    "data": "Fecha",
+    "horario": "Hora",
+    "descricao": "Descripción",
+    "descricaoPlaceholder": "Describe el objetivo del mutirão",
+    "numeroComplemento": "Número y Complemento",
+    "numeroComplementoPlaceholder": "Ej: 123, Bloque A, Cerca de...",
+    "tarefas": "Tareas",
+    "tarefaPlaceholder": "Describe la tarea",
+    "remover": "Eliminar",
+    "adicionarTarefa": "Agregar Tarea",
+    "necessitaMateriais": "¿Necesitas Herramientas, Materiales y/o Habilidades Específicas?",
+    "sim": "Sí",
+    "nao": "No",
+    "materiaisPlaceholder": "Lista los materiales necesarios",
+    "tipoMutirao": "Tipo de Mutirão",
+    "tipos": {
+      "social": "Social",
+      "construcaoReforma": "Construcción / Renovación",
+      "ambientalAgricola": "Ambiental / Agrícola",
+      "culturaEducacao": "Cultura / Educación",
+      "saude": "Salud",
+      "tecnologia": "Tecnología"
+    },
+    "termos": "Acepto organizar este mutirão de manera responsable, respetando las directrices de la comunidad y garantizando un entorno seguro e inclusivo para todos los participantes.",
+    "cancelar": "Cancelar",
+    "criarMutirao": "Crear Mutirão",
+    "erroLogin": "Necesitas estar conectado para crear un mutirão.",
+    "erroEndereco": "Por favor, completa la dirección base seleccionando una sugerencia.",
+    "erroEnderecoObrigatorio": "Dirección base obligatoria.",
+    "sucesso": "¡Mutirão creado exitosamente!"
+  },
+  "editarUsuario": {
+    "titulo": "Editar Usuario",
+    "fotoPerfil": "Foto de Perfil",
+    "foto": "Foto",
+    "enviarFoto": "Enviar Foto",
+    "nome": "Nombre",
+    "nomePlaceholder": "Nombre completo",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Correo electrónico",
+    "endereco": "Dirección",
+    "enderecoPlaceholder": "Calle, número, barrio...",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "dataNascimento": "Fecha de Nacimiento",
+    "cancelar": "Cancelar",
+    "salvar": "Guardar",
+    "sucesso": "¡Usuario actualizado exitosamente!",
+    "erro": "Error al editar usuario"
+  },
+  "calendario": {
+    "titulo": "Encuentra un Mutirão",
+    "agenda": "Agenda",
+    "calendario": "Calendario",
+    "grade": "Cuadrícula",
+    "resultadosPara": "Resultados para \"{{searchTerm}}\"",
+    "todosMutiroes": "Todos los Mutirões",
+    "nenhumMutirao": "No se encontraron mutirões.",
+    "usuarioDesconhecido": "Usuario desconocido",
+    "diaTodo": "Todo el día",
+    "diaInteiro": "Todo el día",
+    "anterior": "Anterior",
+    "proximo": "Siguiente",
+    "hoje": "Hoy",
+    "mes": "Mes",
+    "semana": "Semana",
+    "dia": "Día",
+    "data": "Fecha",
+    "hora": "Hora",
+    "evento": "Evento",
+    "semEventos": "No hay eventos en este período."
+  },
+  "notificacoes": {
+    "categorias": {
+      "todas": "Todas",
+      "naoLidas": "No leídas",
+      "importantes": "Importantes",
+      "equipe": "Equipo",
+      "anuncios": "Anuncios",
+      "seguranca": "Seguridad"
+    },
+    "titulo": "Notificaciones",
+    "subtitulo": "Tus mensajes y actualizaciones",
+    "marcarTodasComoLidas": "Marcar todas como leídas",
+    "configuracoes": "Configuraciones",
+    "carregando": "Cargando...",
+    "erro": "Error al buscar notificaciones",
+    "erroMarcarTodas": "Error al marcar todas como leídas",
+    "erroExcluir": "Error al eliminar notificación",
+    "excluidaSucesso": "¡Notificación eliminada exitosamente!",
+    "favoritar": "Favorito",
+    "excluir": "Eliminar",
+    "nenhuma": "No se encontraron notificaciones.",
+    "dataFormato": "dd 'de' MMMM 'a las' HH:mm",
+    "baixarCertificado": "Descargar Certificado",
+    "tipos": {
+      "inscricao_cancelada": {
+        "titulo": "Inscripción Cancelada",
+        "mensagem": "Tu inscripción en el mutirão ha sido cancelada exitosamente."
+      },
+      "inscricao_aprovada": {
+        "titulo": "Inscripción Aprobada",
+        "mensagem": "¡Felicitaciones! Tu inscripción en el mutirão ha sido aprobada."
+      },
+      "mutirao_criado": {
+        "titulo": "Mutirão Creado",
+        "mensagem": "Tu mutirão ha sido creado exitosamente y está disponible para inscripciones."
+      },
+      "mutirao_atualizado": {
+        "titulo": "Mutirão Actualizado",
+        "mensagem": "La información de tu mutirão ha sido actualizada."
+      },
+      "mutirao_cancelado": {
+        "titulo": "Mutirão Cancelado",
+        "mensagem": "El mutirão ha sido cancelado. Verifica los detalles para más información."
+      },
+      "lembrete": {
+        "titulo": "Recordatorio",
+        "mensagem": "Recordatorio: tienes un mutirão programado para mañana."
+      },
+      "sucesso": {
+        "titulo": "Éxito",
+        "mensagem": "Operación completada exitosamente."
+      },
+      "padrao": {
+        "titulo": "Notificación",
+        "mensagem": "Has recibido una nueva notificación."
+      }
+    }
+  },
+  "search": {
+    "placeholder": "Buscar mutirão por título..."
+  }
+} 
