@@ -103,7 +103,7 @@ export const googleCallback = async (req, res) => {
     });
 
     // Redireciona para a página de usuário no frontend
-    res.redirect("http://localhost:5173/user");
+    res.redirect(`${process.env.FRONTEND_URL}/user`);
   } catch (error) {
     console.error("Erro ao processar autenticação via Google:", error);
     res.redirect("/"); // Redireciona para a página inicial em caso de erro
@@ -116,7 +116,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5100/api/v1/auth/google/callback",
+      callbackURL: `${process.env.BACKEND_URL}/api/v1/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -168,7 +168,6 @@ export const enviarLinkRedefinicao = async (req, res) => {
       expiresIn: "1h",
     });
 
-
     // Configurar transporte de e-mail
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -179,7 +178,7 @@ export const enviarLinkRedefinicao = async (req, res) => {
     });
 
     // Enviar e-mail com o link de redefinição
-    const link = `http://localhost:5173/redefinir-senha/${token}`;
+    const link = `${process.env.FRONTEND_URL}/redefinir-senha/${token}`;
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -201,8 +200,8 @@ export const enviarLinkRedefinicao = async (req, res) => {
 export const redefinirSenha = async (req, res) => {
   const { token, novaSenha } = req.body;
 
-    console.log("Token recebido:", token);
-    console.log("Nova senha recebida:", novaSenha);
+  console.log("Token recebido:", token);
+  console.log("Nova senha recebida:", novaSenha);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

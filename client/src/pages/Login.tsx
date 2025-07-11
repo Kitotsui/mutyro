@@ -28,17 +28,18 @@ const Login = ({ switchToRegister, closeModal }: LoginProps) => {
       const response = await customFetch.post("/auth/login", formData);
       if (response.data && response.data.usuario) {
         setUsuario(response.data.usuario);
-        toast.success(t('geral.loginSucesso'));
+        toast.success(t("geral.loginSucesso"));
         if (closeModal) {
           closeModal();
         }
         navigate("/user");
       }
     } catch (error: unknown) {
-      const errorMessage = error && typeof error === 'object' && 'response' in error 
-        ? (error.response as { data?: { msg?: string } })?.data?.msg 
-        : undefined;
-      toast.error(errorMessage || t('geral.erro'));
+      const errorMessage =
+        error && typeof error === "object" && "response" in error
+          ? (error.response as { data?: { msg?: string } })?.data?.msg
+          : undefined;
+      toast.error(errorMessage || t("geral.erro"));
     }
   };
 
@@ -51,7 +52,7 @@ const Login = ({ switchToRegister, closeModal }: LoginProps) => {
   return (
     <Wrapper>
       <form className="form" onSubmit={handleSubmit}>
-        <h4>{t('navbar.login')}</h4>
+        <h4>{t("navbar.login")}</h4>
         <FormRow
           type="email"
           name="email"
@@ -65,7 +66,7 @@ const Login = ({ switchToRegister, closeModal }: LoginProps) => {
           handleChange={handleInputChange}
         />
         <button type="submit" className="btn btn-block">
-          {t('navbar.login')}
+          {t("navbar.login")}
         </button>
         <a href="/redefinir-senha" className="link-esqueci">
           Esqueceu sua senha?
@@ -75,13 +76,7 @@ const Login = ({ switchToRegister, closeModal }: LoginProps) => {
           <span>ou</span>
           <div className="line"></div>
         </div>
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => {
-            window.location.href = "http://localhost:5100/api/v1/auth/google";
-          }}
-        >
+        <a href="/api/v1/auth/google" className="btn btn-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -106,7 +101,7 @@ const Login = ({ switchToRegister, closeModal }: LoginProps) => {
             ></path>
           </svg>
           Continuar com Google
-        </button>
+        </a>
         <button
           type="button"
           className="btn btn-link"
